@@ -1,0 +1,15 @@
+common/common.c
+src/sysinfo/main.c
+src/sysinfo/sysinfo-window.c
+src/sysinfo/rpd-dialog.c
+src/sysinfo/calendar-dialog.c
+src/sysinfo/gooroom-security-status-view.desktop.in
+src/settings/main.c
+src/settings/settings-window.c
+src/settings/gooroom-security-status-settings.desktop.in
+data/kr.gooroom.security.status.tools.policy.in.in
+[type: gettext/glade]src/sysinfo/sysinfo-window.ui
+[type: gettext/glade]src/sysinfo/rpd-dialog.ui
+[type: gettext/glade]src/sysinfo/calendar-dialog.ui
+[type: gettext/glade]src/settings/settings-window.ui
+[type: gettext/glade]src/sysinfo/log-filter-popover.ui

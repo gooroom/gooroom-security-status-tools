@@ -1,0 +1,14 @@
+#! /usr/bin/env python3
+
+#-----------------------------------------------------------------------
+import datetime
+
+#-----------------------------------------------------------------------
+LOGPARSER_SEEKTIME_PATH = '/var/tmp/GOOROOM-SECURITY-LOGPARSER-SEEKTIME'
+
+#-----------------------------------------------------------------------
+if __name__ == '__main__':
+
+    seek_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S.%f')
+    with open(LOGPARSER_SEEKTIME_PATH, 'w') as f:
+        f.write(seek_time)

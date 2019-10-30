@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/kr/gooroom/security/status/sysinfo">
+    <file preprocess="xml-stripblanks">sysinfo-window.ui</file>
+    <file preprocess="xml-stripblanks">rpd-dialog.ui</file>
+    <file preprocess="xml-stripblanks">calendar-dialog.ui</file>
+    <file preprocess="xml-stripblanks">log-filter-popover.ui</file>
+  </gresource>
+</gresources>

@@ -1,0 +1,8 @@
+[Desktop Entry]
+_Name=Gooroom Management Settings
+Icon=preferences-system
+Exec=gooroom-security-status-settings
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GTK;Utility;

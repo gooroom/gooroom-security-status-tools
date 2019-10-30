@@ -1,0 +1,596 @@
+# English(United Kingdom) translations for gooroom-security-status-tools package.
+# Copyright (C) 2015-2019 THE gooroom-security-status-tools'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gooroom-security-status-tools package.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: gooroom-security-status-tools 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-30 14:30+0900\n"
+"PO-Revision-Date: 2019-08-23 11:54+0900\n"
+"Language-Team: Gooroom <gooroom@gooroom.kr>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../src/sysinfo/sysinfo-window.c:347 ../src/sysinfo/sysinfo-window.c:1581
+msgid "unset"
+msgstr "unset"
+
+#: ../src/sysinfo/sysinfo-window.c:350
+msgid "immediately"
+msgstr "immediately"
+
+#: ../src/sysinfo/sysinfo-window.c:352
+msgid "day"
+msgstr "day"
+
+#: ../src/sysinfo/sysinfo-window.c:354
+msgid "days"
+msgstr "days"
+
+#: ../src/sysinfo/sysinfo-window.c:509
+msgid "Connected"
+msgstr "Connected"
+
+#: ../src/sysinfo/sysinfo-window.c:511
+msgid "Disconnected"
+msgstr "Disconnected"
+
+#: ../src/sysinfo/sysinfo-window.c:523 ../src/sysinfo/sysinfo-window.c:546
+#: ../src/sysinfo/sysinfo-window.c:621 ../src/sysinfo/sysinfo-window.c:717
+#: ../src/sysinfo/sysinfo-window.c:1204 ../src/sysinfo/sysinfo-window.c:1326
+#: ../src/sysinfo/sysinfo-window.c:1399 ../src/sysinfo/sysinfo-window.c:1434
+#: ../src/sysinfo/sysinfo-window.c:1435 ../src/sysinfo/sysinfo-window.c:1436
+#: ../src/sysinfo/sysinfo-window.c:1599 ../src/sysinfo/sysinfo-window.c:1689
+#: ../src/sysinfo/sysinfo-window.c:1940 ../src/settings/settings-window.c:210
+#: ../src/settings/settings-window.c:213 ../src/settings/settings-window.c:216
+#: ../src/settings/settings-window.c:219 ../src/settings/settings-window.c:222
+#: ../src/sysinfo/sysinfo-window.ui.h:3 ../src/settings/settings-window.ui.h:4
+msgid "Unknown"
+msgstr "Unknown"
+
+#: ../src/sysinfo/sysinfo-window.c:719
+msgid "Latest"
+msgstr "Latest"
+
+#: ../src/sysinfo/sysinfo-window.c:723
+#, c-format
+msgid "There is %s package to update."
+msgstr "There is %s package to update."
+
+#: ../src/sysinfo/sysinfo-window.c:725
+#, c-format
+msgid "There are %s packages to update."
+msgstr "There are %s packages to update."
+
+#: ../src/sysinfo/sysinfo-window.c:822
+msgid "ACCEPT"
+msgstr "ACCEPT"
+
+#: ../src/sysinfo/sysinfo-window.c:824
+msgid "DROP"
+msgstr "DROP"
+
+#: ../src/sysinfo/sysinfo-window.c:826
+msgid "REJECT"
+msgstr "REJECT"
+
+#: ../src/sysinfo/sysinfo-window.c:889
+msgid "Accept"
+msgstr "Accept"
+
+#: ../src/sysinfo/sysinfo-window.c:891
+msgid "Drop"
+msgstr "Drop"
+
+#: ../src/sysinfo/sysinfo-window.c:926
+msgid "INPUT"
+msgstr "INPUT"
+
+#: ../src/sysinfo/sysinfo-window.c:927
+msgid "OUTPUT"
+msgstr "OUTPUT"
+
+#: ../src/sysinfo/sysinfo-window.c:928
+msgid "FORWARD"
+msgstr "FORWARD"
+
+#: ../src/sysinfo/sysinfo-window.c:954
+msgid "Could not find firewall policy."
+msgstr "Could not find firewall policy."
+
+#: ../src/sysinfo/sysinfo-window.c:1199
+msgid "Safety"
+msgstr "Safety"
+
+#: ../src/sysinfo/sysinfo-window.c:1201
+msgid "Vulnerable"
+msgstr "Vulnerable"
+
+#: ../src/sysinfo/sysinfo-window.c:1410
+msgid "Standalone Mode"
+msgstr "Standalone Mode"
+
+#: ../src/sysinfo/sysinfo-window.c:1412
+msgid "Server Managed Mode"
+msgstr "Server Managed Mode"
+
+#: ../src/sysinfo/sysinfo-window.c:1583
+msgid "minute"
+msgstr "minute"
+
+#: ../src/sysinfo/sysinfo-window.c:1585
+msgid "minutes"
+msgstr "minutes"
+
+#: ../src/sysinfo/sysinfo-window.c:1595
+msgid "Enabled"
+msgstr "Enabled"
+
+#: ../src/sysinfo/sysinfo-window.c:1597
+msgid "Disabled"
+msgstr "Disabled"
+
+#: ../src/sysinfo/sysinfo-window.c:1662
+msgid "Could not find trusted urls information."
+msgstr "Could not find trusted urls information."
+
+#: ../src/sysinfo/sysinfo-window.c:1683
+msgid "ReadOnly"
+msgstr "ReadOnly"
+
+#: ../src/sysinfo/sysinfo-window.c:1685 ../src/sysinfo/rpd-dialog.c:110
+#: ../src/sysinfo/rpd-dialog.c:299 ../src/sysinfo/rpd-dialog.c:319
+msgid "Allow"
+msgstr "Allow"
+
+#: ../src/sysinfo/sysinfo-window.c:1687 ../src/sysinfo/rpd-dialog.c:301
+msgid "Disallow"
+msgstr "Disallow"
+
+#: ../src/sysinfo/sysinfo-window.c:1702
+msgid "More"
+msgstr "More"
+
+#: ../src/sysinfo/sysinfo-window.c:1800 ../src/sysinfo/rpd-dialog.c:340
+msgid "Could not find information."
+msgstr "Could not find information."
+
+#: ../src/sysinfo/sysinfo-window.c:1864
+msgid "Do you want to allow push update?"
+msgstr "Do you want to allow push update?"
+
+#: ../src/sysinfo/sysinfo-window.c:1864
+msgid "Do you want to deny push update?"
+msgstr "Do you want to deny push update?"
+
+#: ../src/sysinfo/sysinfo-window.c:1875
+msgid "_Yes"
+msgstr "_Yes"
+
+#: ../src/sysinfo/sysinfo-window.c:1876
+msgid "_No"
+msgstr "_No"
+
+#: ../src/sysinfo/sysinfo-window.c:1879
+msgid "Push Update Settings"
+msgstr "Push Update Settings"
+
+#: ../src/sysinfo/sysinfo-window.c:2088
+msgid "Please make sure to check log search period."
+msgstr "Please make sure to check log search period."
+
+#: ../src/sysinfo/sysinfo-window.c:2091
+msgid "Log Search Period Settings"
+msgstr "Log Search Period Settings"
+
+#: ../src/sysinfo/sysinfo-window.c:2441
+msgid "Details Security Status Of Gooroom System"
+msgstr "Details Security Status Of Gooroom System"
+
+#: ../src/sysinfo/rpd-dialog.c:112
+msgid "Block"
+msgstr "Block"
+
+#: ../src/sysinfo/rpd-dialog.c:116
+msgid "default_network"
+msgstr "default_network"
+
+#: ../src/sysinfo/rpd-dialog.c:134
+msgid "rule"
+msgstr "Rule"
+
+#: ../src/sysinfo/rpd-dialog.c:188
+msgid "ports"
+msgstr "ports"
+
+#: ../src/sysinfo/rpd-dialog.c:289
+msgid "Mac Address"
+msgstr "Mac Address"
+
+#: ../src/sysinfo/rpd-dialog.c:290 ../src/sysinfo/sysinfo-window.ui.h:42
+msgid "Access Authority"
+msgstr "Access Authority"
+
+#: ../src/sysinfo/rpd-dialog.c:306
+msgid "default_bluetooth"
+msgstr "default_bluetooth"
+
+#: ../src/sysinfo/rpd-dialog.c:416
+msgid "View more detail"
+msgstr "View more detail"
+
+#: ../src/sysinfo/calendar-dialog.c:62
+msgid "Invalid date"
+msgstr "Invalid date"
+
+#: ../src/sysinfo/calendar-dialog.c:65
+#, c-format
+msgid "The date for searching log can only be set after January 1, %d."
+msgstr "The date for searching log can only be set after January 1, %d."
+
+#: ../src/sysinfo/calendar-dialog.c:85
+msgid "Date Selection"
+msgstr "Date Selection"
+
+#: ../src/sysinfo/gooroom-security-status-view.desktop.in.h:1
+msgid "Gooroom Security Status View"
+msgstr "Gooroom Security Status View"
+
+#: ../src/settings/settings-window.c:83
+msgid "Service was started successfully"
+msgstr "Service was started successfully."
+
+#: ../src/settings/settings-window.c:83
+msgid "Service was stopped successfully"
+msgstr "Service was stopped successfully."
+
+#: ../src/settings/settings-window.c:94
+msgid "Notifications"
+msgstr "Notifications"
+
+#: ../src/settings/settings-window.c:286
+msgid "Program is not installed"
+msgstr "Program is not installed"
+
+#: ../src/settings/settings-window.c:289
+msgid "Please install the gooroom-client-server-register."
+msgstr "Please install the gooroom-client-server-register."
+
+#: ../src/settings/settings-window.c:402
+#: ../src/settings/gooroom-security-status-settings.desktop.in.h:1
+#: ../data/kr.gooroom.security.status.tools.policy.in.in.h:1
+msgid "Gooroom Management Settings"
+msgstr "Gooroom Management Settings"
+
+#: ../data/kr.gooroom.security.status.tools.policy.in.in.h:2
+msgid "Authentication is required to control service."
+msgstr "Authentication is required to control service."
+
+#: ../data/kr.gooroom.security.status.tools.policy.in.in.h:3
+msgid "Authentication is required to run gooroom-client-server-register."
+msgstr "Authentication is required to run gooroom-client-server-register."
+
+#: ../data/kr.gooroom.security.status.tools.policy.in.in.h:4
+msgid "Gooroom System Configuration"
+msgstr "Gooroom System Configuration"
+
+#: ../data/kr.gooroom.security.status.tools.policy.in.in.h:5
+msgid "Authentication is required to change push update settings."
+msgstr "Authentication is required to change push update settings."
+
+#: ../src/sysinfo/sysinfo-window.ui.h:1
+msgid "Security Status"
+msgstr "Security Status"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:2 ../src/settings/settings-window.ui.h:3
+msgid ":"
+msgstr ":"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:4
+msgid "View Log"
+msgstr "View Log"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:5
+msgid "Take Safety Measures"
+msgstr "Take Safety Measures"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:6
+msgid "Trusted Booting"
+msgstr "Trusted Booting"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:7
+msgid "Protect executable files"
+msgstr "Protect executable files"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:8
+msgid "Protecting OS"
+msgstr "Protecting OS"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:9
+msgid "Resources Control"
+msgstr "Resources Control"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:10
+msgid "Activated Security Functions"
+msgstr "Activated Security Functions"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:11
+msgid "Target packages num"
+msgstr "Target packages num"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:12
+msgid "Qunatification score"
+msgstr "Qunatification score"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:13
+msgid "Updating..."
+msgstr "Updating..."
+
+#: ../src/sysinfo/sysinfo-window.ui.h:14
+msgid "Safety Quantification Score"
+msgstr "Safety Quantification Score"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:15 ../src/settings/settings-window.ui.h:2
+msgid "Device ID"
+msgstr "Device ID"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:16
+msgid "OS"
+msgstr "OS"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:17
+msgid "Kernel Version"
+msgstr "Kernel Version"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:18
+msgid "Serial Number"
+msgstr "Serial Number"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:19
+msgid "Update Status"
+msgstr "Update Status"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:20
+msgid "Operation Mode"
+msgstr "Operation Mode"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:21
+msgid "Server Connecting Status"
+msgstr "Server Connecting Status"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:22
+msgid "Management Server IP"
+msgstr "Management Server IP"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:23
+msgid "Port"
+msgstr "Port"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:24
+msgid "System Info"
+msgstr "System Info"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:25
+msgid "Security Status Info"
+msgstr "Security Status Info"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:26
+msgid "Allow Push Update"
+msgstr "Allow Push Update"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:27
+msgid "Update Policy"
+msgstr "Update Policy"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:28
+#: ../src/sysinfo/log-filter-popover.ui.h:1
+msgid "Debug"
+msgstr "Debug"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:29
+#: ../src/sysinfo/log-filter-popover.ui.h:2
+msgid "Info"
+msgstr "Info"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:30
+#: ../src/sysinfo/log-filter-popover.ui.h:7
+msgid "Alert"
+msgstr "Alert"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:31
+#: ../src/sysinfo/log-filter-popover.ui.h:8
+msgid "Emerg"
+msgstr "Emerg"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:32
+#: ../src/sysinfo/log-filter-popover.ui.h:5
+msgid "Err"
+msgstr "Err"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:33
+#: ../src/sysinfo/log-filter-popover.ui.h:6
+msgid "Crit"
+msgstr "Crit"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:34
+#: ../src/sysinfo/log-filter-popover.ui.h:3
+msgid "Notice"
+msgstr "Notice"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:35
+#: ../src/sysinfo/log-filter-popover.ui.h:4
+msgid "Warning"
+msgstr "Warning"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:36
+msgid "Notification Display Condition (Log Level)"
+msgstr "Notification Display Condition (Log Level)"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:37
+msgid "Login PW Change Cycle"
+msgstr "Login PW Change Cycle"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:38
+msgid "Screen Saver Time Setting"
+msgstr "Screen Saver Time Setting"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:39
+msgid "Packages Change Blocking"
+msgstr "Packages Change Blocking"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:40
+msgid "Device Security Policy"
+msgstr "Device Security Policy"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:41
+msgid "Resources"
+msgstr "Resources"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:43
+msgid "Whitelist"
+msgstr "Whitelist"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:44
+msgid "Details"
+msgstr "Details"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:45
+msgid "Resources Control Policy"
+msgstr "Resources Control Policy"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:46
+msgid "Trusted URLs"
+msgstr "Trusted URLs"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:47
+msgid "Browser Policy"
+msgstr "Browser Policy"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:48
+msgid "Status"
+msgstr "Status"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:49
+msgid "Direction"
+msgstr "Direction"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:50
+msgid "Source"
+msgstr "Source"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:51
+msgid "Destination"
+msgstr "Destination"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:52
+msgid "Protocol"
+msgstr "Protocol"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:53
+msgid "Firewall Policy - IPV4"
+msgstr "Firewall Policy - IPV4"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:54
+msgid "Firewall Policy - IPV6"
+msgstr "Firewall Policy - IPV6"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:55
+msgid "Authority Policy Info"
+msgstr "Authority Policy Info"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:56
+msgid "Period"
+msgstr "Period"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:57
+msgid "2015-01-01"
+msgstr "2015-01-01"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:58
+msgid "~"
+msgstr "~"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:59
+msgid "Log Filter Settings"
+msgstr "Log Filter Settings"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:60
+msgid "Date"
+msgstr "Date"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:61
+msgid "Time"
+msgstr "Time"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:62
+msgid "Type"
+msgstr "Type"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:63
+msgid "Description"
+msgstr "Description"
+
+#: ../src/sysinfo/sysinfo-window.ui.h:64
+msgid "Log Info"
+msgstr "Log Info"
+
+#: ../src/sysinfo/rpd-dialog.ui.h:1
+msgid "Unconfigured"
+msgstr "Unconfigured"
+
+#: ../src/sysinfo/rpd-dialog.ui.h:2
+msgid "Property"
+msgstr "Property"
+
+#: ../src/sysinfo/rpd-dialog.ui.h:3
+msgid "Value"
+msgstr "Value"
+
+#: ../src/sysinfo/calendar-dialog.ui.h:1
+msgid "Select"
+msgstr "Select"
+
+#: ../src/settings/settings-window.ui.h:1
+msgid "Gooroom Agent Service"
+msgstr "Gooroom Agent Service"
+
+#: ../src/settings/settings-window.ui.h:5
+msgid "Device Type"
+msgstr "Device Type"
+
+#: ../src/settings/settings-window.ui.h:6
+msgid "Device Certificate Location"
+msgstr "Device Certificate Location"
+
+#: ../src/settings/settings-window.ui.h:7
+msgid "General"
+msgstr "General"
+
+#: ../src/settings/settings-window.ui.h:8
+msgid "Domain"
+msgstr "Domain"
+
+#: ../src/settings/settings-window.ui.h:9
+msgid "Server Certificates Location"
+msgstr "Server Certificates Location"
+
+#: ../src/settings/settings-window.ui.h:10
+msgid "Device (re)registration"
+msgstr "Device (re)registration"
+
+#: ../src/settings/settings-window.ui.h:11
+msgid "Gooroom Management Server"
+msgstr "Gooroom Management Server"
+
+#: ../src/settings/settings-window.ui.h:12
+msgid "Allow Duplicate Notifications"
+msgstr "Allow Duplicate Notifications"
+
+#: ../src/settings/settings-window.ui.h:13
+msgid "Notifications Settings"
+msgstr "Notifications Settings"

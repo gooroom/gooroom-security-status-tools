@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/kr/gooroom/security/status/settings">
+    <file preprocess="xml-stripblanks">settings-window.ui</file>
+  </gresource>
+</gresources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+"-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+"http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+
+  <vendor>The Gooroom Project</vendor>
+  <action id="kr.gooroom.security.status.tools.logparser.seektime">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-logparser-seektime-helper</annotate>
+  </action>
+
+  <action id="kr.gooroom.security.status.tools.logparser.run">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-security-logparser-wrapper</annotate>
+  </action>
+
+  <action id="kr.gooroom.security.status.tools.product-uuid-helper">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-product-uuid-helper</annotate>
+  </action>
+
+  <action id="kr.gooroom.security.status.tools.iptables-wrapper">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-iptables-wrapper</annotate>
+  </action>
+
+  <action id="kr.gooroom.security.status.tools.ip6tables-wrapper">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-ip6tables-wrapper</annotate>
+  </action>
+
+  <action id="kr.gooroom.security.status.tools.systemctl">
+    <_description>Gooroom Management Settings</_description>
+    <_message>Authentication is required to control service.</_message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-systemd-control-helper</annotate>
+<!--
+    <annotate key="org.freedesktop.policykit.imply">org.freedesktop.systemd1.manage-units</annotate>
+-->
+  </action>
+
+  <action id="kr.gooroom.security.status.tools.gcsr">
+    <_description>Gooroom Management Settings</_description>
+    <_message>Authentication is required to run gooroom-client-server-register.</_message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-client-server-register-wrapper</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="kr.gooroom.security.status.tools.set-push-update">
+    <_description>Gooroom System Configuration</_description>
+    <_message>Authentication is required to change push update settings.</_message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+
+</policyconfig>

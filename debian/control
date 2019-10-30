@@ -1,0 +1,23 @@
+Source: gooroom-security-status-tools
+Section: misc
+Priority: optional
+Maintainer: Gooroom Maintainers <gooroom@gooroom.kr>
+Build-Depends: automake (>= 1.13),
+               debhelper (>= 10),
+               gnome-pkg-tools (>= 0.17),
+               gnome-common (>=3.18.0),
+               intltool (>= 0.35.0),
+               libglib2.0-dev,
+               libgtk-3-dev,
+               libpolkit-gobject-1-dev,
+               libjson-c-dev
+Standards-Version: 3.9.8
+Homepage: http://www.gooroom.kr
+Vcs-Git: https://github.com/gooroom/gooroom-security-status-tools.git
+Vcs-Browser: https://github.com/gooroom/gooroom-security-status-tools
+
+Package: gooroom-security-status-tools
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Description: Tools to view or set the security status of the Gooroom.

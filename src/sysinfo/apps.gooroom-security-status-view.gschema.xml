@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gooroom-security-status-view">
+
+  <schema id="apps.gooroom-security-status-view" path="/apps/gooroom-security-status-view/">
+
+    <key name="log-filter" type="u">
+      <default>255</default>
+      <summary>Set the log level to show</summary>
+      <description>Set the log filtering level</description>
+    </key>
+
+  </schema>
+</schemalist>
