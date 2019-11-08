@@ -57,6 +57,13 @@ enum {
 	SECURITY_STATUS_UNKNOWN
 };
 
+enum {
+    ACCOUNT_TYPE_LOCAL = 0,
+    ACCOUNT_TYPE_GOOROOM,
+    ACCOUNT_TYPE_GOOGLE,
+    ACCOUNT_TYPE_NAVER,
+    ACCOUNT_TYPE_UNKNOWN
+};
 
 
 json_object *JSON_OBJECT_GET                      (json_object *obj,
@@ -65,6 +72,7 @@ json_object *JSON_OBJECT_GET                      (json_object *obj,
 gboolean     is_online_user                       (void);
 gboolean     is_admin_group                       (void);
 gboolean     is_standalone_mode                   (void);
+int          get_account_type                     (const char *user);
 
 gboolean     run_security_log_parser_async        (gchar    *seektime,
                                                    GIOFunc   callback_func,

@@ -43,6 +43,35 @@ JSON_OBJECT_GET (json_object *obj, const gchar *key)
 	return ret_obj;
 }
 
+int
+get_account_type (const char *user)
+{
+    int account_type = ACCOUNT_TYPE_LOCAL;
+    struct passwd *user_entry = getpwnam (user);
+
+    if (!user_entry)
+        return ACCOUNT_TYPE_UNKNOWN;
+
+    char **tokens = g_strsplit (user_entry->pw_gecos, ",", -1);
+    if (tokens && (g_strv_length (tokens) > 4)) {
+        if (tokens[4]) {
+            if (g_str_equal (tokens[4], "gooroom-account")) {
+                account_type = ACCOUNT_TYPE_GOOROOM;
+            } else if (g_str_equal (tokens[4], "google-account")) {
+                account_type = ACCOUNT_TYPE_GOOGLE;
+            } else if (g_str_equal (tokens[4], "naver-account")) {
+                account_type = ACCOUNT_TYPE_NAVER;
+            } else {
+                account_type = ACCOUNT_TYPE_LOCAL;
+            }
+        }
+    }
+
+    g_strfreev (tokens);
+
+    return account_type;
+}
+
 static gboolean
 is_gooroom_online_account (const gchar *username)
 {
@@ -64,7 +93,6 @@ is_gooroom_online_account (const gchar *username)
 
 	return ret;
 }
-
 
 gboolean
 is_online_user (void)

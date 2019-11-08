@@ -120,6 +120,7 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *box_port_num;
 	GtkWidget *box_pkgs_change_blocking;
 
+	GtkWidget *box_change_pw_cycle;
 	GtkWidget *lbl_change_pw_cycle;
 	GtkWidget *lbl_screen_saver_time;
 	GtkWidget *lbl_pkgs_change_blocking;
@@ -1557,11 +1558,17 @@ system_device_security_update (SysinfoWindow *window)
 
 	gchar *text = NULL;
 
-	if (is_online_user ()) {
+	int account_type = get_account_type (g_get_user_name ());
+
+	if (account_type == ACCOUNT_TYPE_GOOROOM) {
 		int maxdays = get_password_max_days_for_online_user ();
 		set_password_max_day (maxdays, window);
-	} else {
+	} else if (account_type == ACCOUNT_TYPE_LOCAL) {
 		set_password_max_days_from_command (window);
+	} else if (account_type == ACCOUNT_TYPE_GOOGLE ||
+               account_type == ACCOUNT_TYPE_NAVER) {
+		gtk_widget_hide (priv->box_change_pw_cycle);
+	} else {
 	}
 
 	/* get screensaver time */
@@ -2396,6 +2403,7 @@ sysinfo_window_class_init (SysinfoWindowClass *class)
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_op_mode);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_port_num);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_kernel_ver);
+	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_change_pw_cycle);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_change_pw_cycle);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_screen_saver_time);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_pkgs_change_blocking);

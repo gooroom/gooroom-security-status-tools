@@ -87,7 +87,6 @@ child_watch_func (GPid     pid,
 				GTK_MESSAGE_INFO,
 				GTK_BUTTONS_OK,
 				NULL);
-//				GTK_BUTTONS_OK, "%s", message);
 
 		gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dlg), "%s", message);
 
