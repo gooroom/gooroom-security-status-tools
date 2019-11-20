@@ -60,30 +60,27 @@ G_DEFINE_TYPE_WITH_PRIVATE (RPDDialog, rpd_dialog, GTK_TYPE_DIALOG)
 static void
 build_ui (RPDDialog *dialog)
 {
-	gchar *file = NULL;
-	gchar *data = NULL;
-	gboolean ret = FALSE;
-	const gchar *files[] = {"/etc/gooroom/grac.d/user.rules", "/etc/gooroom/grac.d/default.rules", NULL};
-
 	RPDDialogPrivate *priv;
 	priv = rpd_dialog_get_instance_private (dialog);
 
 	if (!g_str_equal (priv->resource, "network") && !g_str_equal (priv->resource, "bluetooth"))
 		goto error;
 
-	guint i = 0;
-	for (i; i < G_N_ELEMENTS (files); i++) {
-		if (g_file_test (files[i], G_FILE_TEST_EXISTS)) {
-			file = g_strdup (files[i]);
-			break;
-		}
+	gboolean ret = FALSE;
+	gchar *grac_rules = NULL, *data = NULL, *output = NULL;
+
+	if (g_spawn_command_line_sync (GOOROOM_WHICH_GRAC_RULE, &output, NULL, NULL, NULL)) {
+		gchar **lines = g_strsplit (output, "\n", -1);
+		if (g_strv_length (lines) > 0)
+			grac_rules = g_strdup (lines[0]);
+		g_strfreev (lines);
 	}
 
-	if (!file) goto error;
+	if (grac_rules && g_file_test (grac_rules, G_FILE_TEST_EXISTS))
+		g_file_get_contents (grac_rules, &data, NULL, NULL);
 
-	g_file_get_contents (file, &data, NULL, NULL);
-
-	g_free (file);
+	g_free (output);
+	g_free (grac_rules);
 
 	if (!data) goto error;
 

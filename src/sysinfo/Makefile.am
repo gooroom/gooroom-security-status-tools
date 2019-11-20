@@ -8,6 +8,7 @@ gooroom_security_status_view_CPPFLAGS = \
 	-DGOOROOM_IPTABLES_WRAPPER=\"$(pkglibexecdir)/gooroom-iptables-wrapper\" \
 	-DGOOROOM_IP6TABLES_WRAPPER=\"$(pkglibexecdir)/gooroom-ip6tables-wrapper\" \
 	-DGOOROOM_PRODUCT_UUID_HELPER=\"$(pkglibexecdir)/gooroom-product-uuid-helper\" \
+	-DGOOROOM_WHICH_GRAC_RULE=\"/usr/lib/gooroom-resource-access-control/which-grac-rule.py\" \
 	$(AM_CPPFLAGS)
 
 

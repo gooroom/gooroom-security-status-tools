@@ -1749,20 +1749,21 @@ system_resource_control_update (SysinfoWindow *window)
 {
 	SysinfoWindowPrivate *priv = window->priv;
 
-	guint i;
-	gchar *data = NULL;
 	gboolean ret = FALSE;
-	const gchar *files[] = {"/etc/gooroom/grac.d/user.rules", "/etc/gooroom/grac.d/default.rules", NULL};
+	gchar *grac_rules = NULL, *data = NULL, *output = NULL;
 
-	for (i = 0; files[i] != NULL; i++) {
-		if (g_file_test (files[i], G_FILE_TEST_EXISTS)) {
-			gchar *file = g_strdup (files[i]);
-			g_file_get_contents (file, &data, NULL, NULL);
-			g_free (file);
-		}
-		if (!data) continue;
-		break;
+	if (g_spawn_command_line_sync (GOOROOM_WHICH_GRAC_RULE, &output, NULL, NULL, NULL)) {
+		gchar **lines = g_strsplit (output, "\n", -1);
+		if (g_strv_length (lines) > 0)
+			grac_rules = g_strdup (lines[0]);
+		g_strfreev (lines);
 	}
+
+	if (grac_rules && g_file_test (grac_rules, G_FILE_TEST_EXISTS))
+		g_file_get_contents (grac_rules, &data, NULL, NULL);
+
+	g_free (output);
+	g_free (grac_rules);
 
 	if (!data) goto error;
 

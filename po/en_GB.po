@@ -594,3 +594,78 @@ msgstr "Allow Duplicate Notifications"
 #: ../src/settings/settings-window.ui.h:13
 msgid "Notifications Settings"
 msgstr "Notifications Settings"
+
+msgid "keyboard"
+msgstr "usb keyboard"
+
+msgid "printer"
+msgstr "printer"
+
+msgid "sound"
+msgstr "sound"
+
+msgid "usb_memory"
+msgstr "usb_memory"
+
+msgid "cd_dvd"
+msgstr "cd_dvd"
+
+msgid "clipboard"
+msgstr "clipboard"
+
+msgid "network"
+msgstr "network"
+
+msgid "mouse"
+msgstr "usb mouse"
+
+msgid "bluetooth"
+msgstr "bluetooth"
+
+msgid "screen_capture"
+msgstr "screen capture"
+
+msgid "wireless"
+msgstr "wireless"
+
+msgid "camera"
+msgstr "camera"
+
+msgid "microphone"
+msgstr "recording"
+
+msgid "All"
+msgstr "All"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "ALL"
+msgstr "ALL"
+
+msgid "DEBUG"
+msgstr "DEBUG"
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid "NOTICE"
+msgstr "NOTICE"
+
+msgid "WARNING"
+msgstr "WARNING"
+
+msgid "ERR"
+msgstr "ERR"
+
+msgid "CRIT"
+msgstr "CRIT"
+
+msgid "ALERT"
+msgstr "ALERT"
+
+msgid "EMERG"
+msgstr "EMERG"

@@ -594,3 +594,78 @@ msgstr "중복 알림 허용"
 #: ../src/settings/settings-window.ui.h:13
 msgid "Notifications Settings"
 msgstr "알림설정"
+
+msgid "keyboard"
+msgstr "USB 키보드"
+
+msgid "printer"
+msgstr "프린터"
+
+msgid "sound"
+msgstr "사운드"
+
+msgid "usb_memory"
+msgstr "USB 메모리"
+
+msgid "cd_dvd"
+msgstr "CD/DVD"
+
+msgid "clipboard"
+msgstr "클립보드"
+
+msgid "network"
+msgstr "네트워크"
+
+msgid "mouse"
+msgstr "USB 마우스"
+
+msgid "bluetooth"
+msgstr "블루투스"
+
+msgid "screen_capture"
+msgstr "스크린캡쳐"
+
+msgid "wireless"
+msgstr "무선랜"
+
+msgid "camera"
+msgstr "카메라"
+
+msgid "microphone"
+msgstr "녹음"
+
+msgid "All"
+msgstr "모두"
+
+msgid "Normal"
+msgstr "정상"
+
+msgid "Error"
+msgstr "오류"
+
+msgid "ALL"
+msgstr "모두"
+
+msgid "DEBUG"
+msgstr "디버깅"
+
+msgid "INFO"
+msgstr "정보"
+
+msgid "NOTICE"
+msgstr "알림"
+
+msgid "WARNING"
+msgstr "경고"
+
+msgid "ERR"
+msgstr "오류"
+
+msgid "CRIT"
+msgstr "위험"
+
+msgid "ALERT"
+msgstr "경보"
+
+msgid "EMERG"
+msgstr "긴급"
