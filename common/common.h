@@ -69,7 +69,7 @@ enum {
 json_object *JSON_OBJECT_GET                      (json_object *obj,
                                                    const gchar *key);
 
-gboolean     is_online_user                       (void);
+gboolean     is_local_user                        (void);
 gboolean     is_admin_group                       (void);
 gboolean     is_standalone_mode                   (void);
 int          get_account_type                     (const char *user);

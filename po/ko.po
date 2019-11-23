@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gooroom-security-status-tools 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-30 14:30+0900\n"
+"POT-Creation-Date: 2019-11-23 21:52+0900\n"
 "PO-Revision-Date: 2019-08-23 11:54+0900\n"
 "Language-Team: Gooroom <gooroom@gooroom.kr>\n"
 "Language: ko\n"
@@ -16,211 +16,211 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../src/sysinfo/sysinfo-window.c:347 ../src/sysinfo/sysinfo-window.c:1581
+#: ../src/sysinfo/sysinfo-window.c:348 ../src/sysinfo/sysinfo-window.c:1588
 msgid "unset"
 msgstr "설정되지 않음"
 
-#: ../src/sysinfo/sysinfo-window.c:350
+#: ../src/sysinfo/sysinfo-window.c:351
 msgid "immediately"
 msgstr "즉시"
 
-#: ../src/sysinfo/sysinfo-window.c:352
+#: ../src/sysinfo/sysinfo-window.c:353
 msgid "day"
 msgstr "일"
 
-#: ../src/sysinfo/sysinfo-window.c:354
+#: ../src/sysinfo/sysinfo-window.c:355
 msgid "days"
 msgstr "일"
 
-#: ../src/sysinfo/sysinfo-window.c:509
+#: ../src/sysinfo/sysinfo-window.c:510
 msgid "Connected"
 msgstr "연결됨"
 
-#: ../src/sysinfo/sysinfo-window.c:511
+#: ../src/sysinfo/sysinfo-window.c:512
 msgid "Disconnected"
 msgstr "연결끊김"
 
-#: ../src/sysinfo/sysinfo-window.c:523 ../src/sysinfo/sysinfo-window.c:546
-#: ../src/sysinfo/sysinfo-window.c:621 ../src/sysinfo/sysinfo-window.c:717
-#: ../src/sysinfo/sysinfo-window.c:1204 ../src/sysinfo/sysinfo-window.c:1326
-#: ../src/sysinfo/sysinfo-window.c:1399 ../src/sysinfo/sysinfo-window.c:1434
-#: ../src/sysinfo/sysinfo-window.c:1435 ../src/sysinfo/sysinfo-window.c:1436
-#: ../src/sysinfo/sysinfo-window.c:1599 ../src/sysinfo/sysinfo-window.c:1689
-#: ../src/sysinfo/sysinfo-window.c:1940 ../src/settings/settings-window.c:210
-#: ../src/settings/settings-window.c:213 ../src/settings/settings-window.c:216
-#: ../src/settings/settings-window.c:219 ../src/settings/settings-window.c:222
+#: ../src/sysinfo/sysinfo-window.c:524 ../src/sysinfo/sysinfo-window.c:547
+#: ../src/sysinfo/sysinfo-window.c:622 ../src/sysinfo/sysinfo-window.c:718
+#: ../src/sysinfo/sysinfo-window.c:1205 ../src/sysinfo/sysinfo-window.c:1327
+#: ../src/sysinfo/sysinfo-window.c:1400 ../src/sysinfo/sysinfo-window.c:1435
+#: ../src/sysinfo/sysinfo-window.c:1436 ../src/sysinfo/sysinfo-window.c:1437
+#: ../src/sysinfo/sysinfo-window.c:1606 ../src/sysinfo/sysinfo-window.c:1696
+#: ../src/sysinfo/sysinfo-window.c:1948 ../src/settings/settings-window.c:209
+#: ../src/settings/settings-window.c:212 ../src/settings/settings-window.c:215
+#: ../src/settings/settings-window.c:218 ../src/settings/settings-window.c:221
 #: ../src/sysinfo/sysinfo-window.ui.h:3 ../src/settings/settings-window.ui.h:4
 msgid "Unknown"
 msgstr "알수없음"
 
-#: ../src/sysinfo/sysinfo-window.c:719
+#: ../src/sysinfo/sysinfo-window.c:720
 msgid "Latest"
 msgstr "최신 상태"
 
-#: ../src/sysinfo/sysinfo-window.c:723
+#: ../src/sysinfo/sysinfo-window.c:724
 #, c-format
 msgid "There is %s package to update."
 msgstr "%s 개의 업데이트 패키지가 존재합니다."
 
-#: ../src/sysinfo/sysinfo-window.c:725
+#: ../src/sysinfo/sysinfo-window.c:726
 #, c-format
 msgid "There are %s packages to update."
 msgstr "%s 개의 업데이트 패키지가 존재합니다."
 
-#: ../src/sysinfo/sysinfo-window.c:822
+#: ../src/sysinfo/sysinfo-window.c:823
 msgid "ACCEPT"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:824
+#: ../src/sysinfo/sysinfo-window.c:825
 msgid "DROP"
 msgstr "차단"
 
-#: ../src/sysinfo/sysinfo-window.c:826
+#: ../src/sysinfo/sysinfo-window.c:827
 msgid "REJECT"
 msgstr "차단"
 
-#: ../src/sysinfo/sysinfo-window.c:889
+#: ../src/sysinfo/sysinfo-window.c:890
 msgid "Accept"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:891
+#: ../src/sysinfo/sysinfo-window.c:892
 msgid "Drop"
 msgstr "비허용"
 
-#: ../src/sysinfo/sysinfo-window.c:926
+#: ../src/sysinfo/sysinfo-window.c:927
 msgid "INPUT"
 msgstr "인바운드"
 
-#: ../src/sysinfo/sysinfo-window.c:927
+#: ../src/sysinfo/sysinfo-window.c:928
 msgid "OUTPUT"
 msgstr "아웃바운드"
 
-#: ../src/sysinfo/sysinfo-window.c:928
+#: ../src/sysinfo/sysinfo-window.c:929
 msgid "FORWARD"
 msgstr "포워드"
 
-#: ../src/sysinfo/sysinfo-window.c:954
+#: ../src/sysinfo/sysinfo-window.c:955
 msgid "Could not find firewall policy."
 msgstr "방화벽 정책을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1199
+#: ../src/sysinfo/sysinfo-window.c:1200
 msgid "Safety"
 msgstr "안전"
 
-#: ../src/sysinfo/sysinfo-window.c:1201
+#: ../src/sysinfo/sysinfo-window.c:1202
 msgid "Vulnerable"
 msgstr "취약"
 
-#: ../src/sysinfo/sysinfo-window.c:1410
+#: ../src/sysinfo/sysinfo-window.c:1411
 msgid "Standalone Mode"
 msgstr "독립 운영 모드"
 
-#: ../src/sysinfo/sysinfo-window.c:1412
+#: ../src/sysinfo/sysinfo-window.c:1413
 msgid "Server Managed Mode"
 msgstr "서버 관리 모드"
 
-#: ../src/sysinfo/sysinfo-window.c:1583
+#: ../src/sysinfo/sysinfo-window.c:1590
 msgid "minute"
 msgstr "분"
 
-#: ../src/sysinfo/sysinfo-window.c:1585
+#: ../src/sysinfo/sysinfo-window.c:1592
 msgid "minutes"
 msgstr "분"
 
-#: ../src/sysinfo/sysinfo-window.c:1595
+#: ../src/sysinfo/sysinfo-window.c:1602
 msgid "Enabled"
 msgstr "켜짐"
 
-#: ../src/sysinfo/sysinfo-window.c:1597
+#: ../src/sysinfo/sysinfo-window.c:1604
 msgid "Disabled"
 msgstr "꺼짐"
 
-#: ../src/sysinfo/sysinfo-window.c:1662
+#: ../src/sysinfo/sysinfo-window.c:1669
 msgid "Could not find trusted urls information."
 msgstr "신뢰할 수 있는 URL 목록을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1683
+#: ../src/sysinfo/sysinfo-window.c:1690
 msgid "ReadOnly"
 msgstr "읽기전용"
 
-#: ../src/sysinfo/sysinfo-window.c:1685 ../src/sysinfo/rpd-dialog.c:110
-#: ../src/sysinfo/rpd-dialog.c:299 ../src/sysinfo/rpd-dialog.c:319
+#: ../src/sysinfo/sysinfo-window.c:1692 ../src/sysinfo/rpd-dialog.c:107
+#: ../src/sysinfo/rpd-dialog.c:296 ../src/sysinfo/rpd-dialog.c:316
 msgid "Allow"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:1687 ../src/sysinfo/rpd-dialog.c:301
+#: ../src/sysinfo/sysinfo-window.c:1694 ../src/sysinfo/rpd-dialog.c:298
 msgid "Disallow"
 msgstr "허용안함"
 
-#: ../src/sysinfo/sysinfo-window.c:1702
+#: ../src/sysinfo/sysinfo-window.c:1709
 msgid "More"
 msgstr "더 보기"
 
-#: ../src/sysinfo/sysinfo-window.c:1800 ../src/sysinfo/rpd-dialog.c:340
+#: ../src/sysinfo/sysinfo-window.c:1808 ../src/sysinfo/rpd-dialog.c:337
 msgid "Could not find information."
 msgstr "매체제어 정책을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1864
+#: ../src/sysinfo/sysinfo-window.c:1872
 msgid "Do you want to allow push update?"
 msgstr "푸쉬 업데이트를 허용 하겠습니까?"
 
-#: ../src/sysinfo/sysinfo-window.c:1864
+#: ../src/sysinfo/sysinfo-window.c:1872
 msgid "Do you want to deny push update?"
 msgstr "푸쉬 업데이트를 허용하지 않겠습니까?"
 
-#: ../src/sysinfo/sysinfo-window.c:1875
+#: ../src/sysinfo/sysinfo-window.c:1883
 msgid "_Yes"
 msgstr "예"
 
-#: ../src/sysinfo/sysinfo-window.c:1876
+#: ../src/sysinfo/sysinfo-window.c:1884
 msgid "_No"
 msgstr "아니오"
 
-#: ../src/sysinfo/sysinfo-window.c:1879
+#: ../src/sysinfo/sysinfo-window.c:1887
 msgid "Push Update Settings"
 msgstr "푸쉬 업데이트 설정"
 
-#: ../src/sysinfo/sysinfo-window.c:2088
+#: ../src/sysinfo/sysinfo-window.c:2096
 msgid "Please make sure to check log search period."
 msgstr "로그 검색 기간을 확인해 주시기 바랍니다."
 
-#: ../src/sysinfo/sysinfo-window.c:2091
+#: ../src/sysinfo/sysinfo-window.c:2099
 msgid "Log Search Period Settings"
 msgstr "로그 검색 기간 설정"
 
-#: ../src/sysinfo/sysinfo-window.c:2441
+#: ../src/sysinfo/sysinfo-window.c:2450
 msgid "Details Security Status Of Gooroom System"
 msgstr "구름 시스템 보안 상태 자세히 보기"
 
-#: ../src/sysinfo/rpd-dialog.c:112
+#: ../src/sysinfo/rpd-dialog.c:109
 msgid "Block"
 msgstr "차단"
 
-#: ../src/sysinfo/rpd-dialog.c:116
+#: ../src/sysinfo/rpd-dialog.c:113
 msgid "default_network"
 msgstr "네트워크 기본"
 
-#: ../src/sysinfo/rpd-dialog.c:134
+#: ../src/sysinfo/rpd-dialog.c:131
 msgid "rule"
 msgstr "Rule"
 
-#: ../src/sysinfo/rpd-dialog.c:188
+#: ../src/sysinfo/rpd-dialog.c:185
 msgid "ports"
 msgstr "포트"
 
-#: ../src/sysinfo/rpd-dialog.c:289
+#: ../src/sysinfo/rpd-dialog.c:286
 msgid "Mac Address"
 msgstr "하드웨어 주소"
 
-#: ../src/sysinfo/rpd-dialog.c:290 ../src/sysinfo/sysinfo-window.ui.h:42
+#: ../src/sysinfo/rpd-dialog.c:287 ../src/sysinfo/sysinfo-window.ui.h:42
 msgid "Access Authority"
 msgstr "접근 권한"
 
-#: ../src/sysinfo/rpd-dialog.c:306
+#: ../src/sysinfo/rpd-dialog.c:303
 msgid "default_bluetooth"
 msgstr "블루투스 기본"
 
-#: ../src/sysinfo/rpd-dialog.c:416
+#: ../src/sysinfo/rpd-dialog.c:413
 msgid "View more detail"
 msgstr "세부 정보 보기"
 
@@ -249,19 +249,19 @@ msgstr "서비스를 시작하였습니다."
 msgid "Service was stopped successfully"
 msgstr "서비스를 중지하였습니다."
 
-#: ../src/settings/settings-window.c:94
+#: ../src/settings/settings-window.c:93
 msgid "Notifications"
 msgstr "알림"
 
-#: ../src/settings/settings-window.c:286
+#: ../src/settings/settings-window.c:285
 msgid "Program is not installed"
 msgstr "프로그램이 설치 되지 않았습니다."
 
-#: ../src/settings/settings-window.c:289
+#: ../src/settings/settings-window.c:288
 msgid "Please install the gooroom-client-server-register."
 msgstr "gooroom-client-server-register 프로그램을 설치하십시오."
 
-#: ../src/settings/settings-window.c:402
+#: ../src/settings/settings-window.c:401
 #: ../src/settings/gooroom-security-status-settings.desktop.in.h:1
 #: ../data/kr.gooroom.security.status.tools.policy.in.in.h:1
 msgid "Gooroom Management Settings"

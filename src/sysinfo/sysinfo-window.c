@@ -440,7 +440,7 @@ get_password_max_days_for_online_user (void)
 	gchar *file = NULL;
 	gchar *data = NULL;
 
-	file = g_strdup_printf ("/var/run/user/%d/gooroom/%s", getuid (), GRM_USER);
+	file = g_strdup_printf ("%s/.gooroom/%s", g_get_home_dir (), GRM_USER);
 
 	if (!g_file_test (file, G_FILE_TEST_EXISTS)) {
 		g_error ("No such file or directory : %s", file);
@@ -2289,7 +2289,7 @@ sysinfo_window_init (SysinfoWindow *self)
 		gtk_widget_hide (priv->frm_push_update);
 	}
 
-	if (is_admin_group () && !is_online_user ()) {
+	if (is_admin_group () && is_local_user ()) {
 		gtk_widget_set_sensitive (priv->btn_safety_measure, FALSE);
 		g_signal_connect (G_OBJECT (priv->btn_safety_measure), "clicked",
 						G_CALLBACK (on_safety_measure_button_clicked), self);
