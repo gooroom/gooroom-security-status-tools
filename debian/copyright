@@ -1,13 +1,13 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Source: http://git.gooroom.kr/gooroom-security-status-tools
+Source: http://github.com/gooroom/gooroom-security-status-tools
 
 Files: *
-Copyright: 2015-2019 Gooroom <gooroom@gooroom.kr>
+Copyright: 2018-2019 Gooroom <gooroom@gooroom.kr>
 License: GPL-2+
 
 Files: common/gooroom-systemd-control-helper.c
 Copyright: 2013 Intel, Inc
-           2015-2019 Gooroom <gooroom@gooroom.kr>
+           2018-2019 Gooroom <gooroom@gooroom.kr>
 License: GPL-2+
 
 License: GPL-2+

@@ -12,9 +12,6 @@ Build-Depends: automake (>= 1.13),
                libpolkit-gobject-1-dev,
                libjson-c-dev
 Standards-Version: 3.9.8
-Homepage: http://www.gooroom.kr
-Vcs-Git: https://github.com/gooroom/gooroom-security-status-tools.git
-Vcs-Browser: https://github.com/gooroom/gooroom-security-status-tools
 
 Package: gooroom-security-status-tools
 Architecture: any

@@ -1,5 +1,5 @@
 # English(United Kingdom) translations for gooroom-security-status-tools package.
-# Copyright (C) 2015-2019 THE gooroom-security-status-tools'S COPYRIGHT HOLDER
+# Copyright (C) 2018-2019 THE gooroom-security-status-tools'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gooroom-security-status-tools package.
 #
 #, fuzzy
