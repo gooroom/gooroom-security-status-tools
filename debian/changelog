@@ -1,3 +1,15 @@
+gooroom-security-status-tools (0.1.1+grm2u1) unstable; urgency=medium
+
+  [ cjheo ]
+  * [3bcc108a] Hide label for password changing cycle when cloud login
+  * [5ea62c6b] Update sources for signing rules of GRAC
+  * [80b3d0e5] File path for .grm-user has changed
+  * [a5a396a1] Update sources regarding copyright
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Sun, 01 Dec 2019 19:16:37 +0900
+
 gooroom-security-status-tools (0.1.0+grm2) unstable; urgency=medium
 
   * Initial Release.
