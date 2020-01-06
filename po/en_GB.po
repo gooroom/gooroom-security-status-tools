@@ -273,7 +273,7 @@ msgstr "Authentication is required to control service."
 
 #: ../data/kr.gooroom.security.status.tools.policy.in.in.h:3
 msgid "Authentication is required to run gooroom-client-server-register."
-msgstr "Authentication is required to run gooroom-client-server-register."
+msgstr "This task requires authentication."
 
 #: ../data/kr.gooroom.security.status.tools.policy.in.in.h:4
 msgid "Gooroom System Configuration"

@@ -273,7 +273,7 @@ msgstr "서비스 제어를 위한 인증이 필요합니다."
 
 #: ../data/kr.gooroom.security.status.tools.policy.in.in.h:3
 msgid "Authentication is required to run gooroom-client-server-register."
-msgstr "gooroom-client-server-register를 실행하기 위한 인증이 필요합니다."
+msgstr "해당작업(단말등록/재등록)을 수행하기 위한 인증이 필요합니다."
 
 #: ../data/kr.gooroom.security.status.tools.policy.in.in.h:4
 msgid "Gooroom System Configuration"
