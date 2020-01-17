@@ -834,8 +834,8 @@ iptables_policy_parse (GtkTreeView *treeview, const gchar *direction, const gcha
 
 	/* ignore "opt" */
 	prot = argv[1];
-	src  = argv[2];
-	dst  = argv[3];
+	src  = argv[3];
+	dst  = argv[4];
 
 	gtk_list_store_append (GTK_LIST_STORE (model), &iter);
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
