@@ -2002,7 +2002,7 @@ treeview_cursor_changed_cb (GtkTreeView       *tree_view,
 	selected = gtk_tree_selection_get_selected (gtk_tree_view_get_selection (tree_view), &model, &iter);
 	if (selected) {
 		gboolean depth = FALSE;
-		gtk_tree_model_get (model, &iter, 3, &depth, -1);
+		gtk_tree_model_get (model, &iter, 4, &depth, -1);
 		sensitive = depth;
 	}
 
