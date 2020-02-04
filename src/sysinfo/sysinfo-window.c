@@ -44,11 +44,6 @@
 #define	UPDATE_PACKAGES_CHECK_TIMEOUT			60000
 #define	AGENT_CONNECTION_STATUS_CHECK_TIMEOUT	10000
 
-typedef struct {
-	gint setting_ipv4;
-	SysinfoWindow *window;
-} ARGV;
-
 static struct {
 	const char *widget_name;
 	const char *tr_type;
@@ -70,7 +65,7 @@ static struct {
 
 static void     on_log_filter_changed_cb (GtkToggleButton *button, gpointer data);
 static gboolean on_push_update_changed   (GtkSwitch *widget, gboolean state, gpointer data);
-static void     run_iptables_command     (const char *command, gpointer data);
+static void     run_iptables_command     (const char *command, SysinfoWindow *window);
 
 
 
@@ -165,6 +160,9 @@ struct _SysinfoWindowPrivate {
 	gint64 search_from_utime;
 
 	gboolean standalone_mode;
+
+	gboolean iptable_cmd_lock;
+	gboolean setting_ipv4;
 };
 
 
@@ -190,6 +188,16 @@ static void
 g_spawn_async_done_cb (GPid pid, gint status, gpointer data)
 {
 	g_spawn_close_pid (pid);
+}
+
+static void
+iptables_command_done_cb (GPid pid, gint status, gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+
+	g_spawn_close_pid (pid);
+
+	window->priv->iptable_cmd_lock = FALSE;
 }
 
 static gchar *
@@ -416,7 +424,7 @@ set_password_max_days_from_command (SysinfoWindow *window)
                                   NULL,
                                   NULL)) {
 
-		g_child_watch_add (pid, (GChildWatchFunc)g_spawn_async_done_cb, window);
+		g_child_watch_add (pid, (GChildWatchFunc)g_spawn_async_done_cb, NULL);
 
 		GIOChannel *io_channel = g_io_channel_unix_new (stdout_fd);
 		g_io_channel_set_flags (io_channel, G_IO_FLAG_NONBLOCK, NULL);
@@ -424,7 +432,7 @@ set_password_max_days_from_command (SysinfoWindow *window)
 		g_io_channel_set_buffered (io_channel, FALSE);
 		g_io_channel_set_close_on_unref (io_channel, TRUE);
 		g_io_add_watch (io_channel, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP, (GIOFunc) parse_chage_l_cb, window);
-		g_io_channel_unref(io_channel);
+		g_io_channel_unref (io_channel);
 	}
 
 	g_free (cmd);
@@ -861,15 +869,10 @@ iptables_output_parse (GIOChannel   *source,
 {
 	gchar  buff[1024] = {0, };
 	gsize  bytes_read;
-	gboolean visible = FALSE, setting_ipv4;
+	gboolean visible = FALSE;
 
-	ARGV *argv = (ARGV *)data;
-
-	SysinfoWindow *window = argv->window;
-	setting_ipv4 = argv->setting_ipv4;
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
-
-	g_free (argv);
 
 	GString *outputs = g_string_new ("");
 
@@ -893,7 +896,7 @@ iptables_output_parse (GIOChannel   *source,
 				} else {
 					markup = g_markup_printf_escaped ("<i>""</i>");
 				}
-				if (setting_ipv4) {
+				if (priv->setting_ipv4) {
 					gtk_label_set_markup (GTK_LABEL (priv->lbl_firewall4_policy), markup);
 				} else {
 					gtk_label_set_markup (GTK_LABEL (priv->lbl_firewall6_policy), markup);
@@ -929,7 +932,7 @@ iptables_output_parse (GIOChannel   *source,
 					else if (forward) direction =  _("FORWARD");
 					else continue;
 
-					if (setting_ipv4) {
+					if (priv->setting_ipv4) {
 						visible = iptables_policy_parse (GTK_TREE_VIEW (priv->trv_firewall4), direction, lines[i]);
 					} else {
 						visible = iptables_policy_parse (GTK_TREE_VIEW (priv->trv_firewall6), direction, lines[i]);
@@ -944,7 +947,7 @@ iptables_output_parse (GIOChannel   *source,
 	g_string_free (outputs, TRUE);
 
 	if (visible) {
-		if (setting_ipv4) {
+		if (priv->setting_ipv4) {
 			gtk_widget_show (priv->scl_firewall4);
 			gtk_widget_hide (priv->lbl_firewall4);
 		} else {
@@ -954,7 +957,7 @@ iptables_output_parse (GIOChannel   *source,
 	} else {
 		gchar *markup = g_markup_printf_escaped ("<i>%s</i>", _("Could not find firewall policy."));
 
-		if (setting_ipv4) {
+		if (priv->setting_ipv4) {
 			gtk_widget_show (priv->lbl_firewall4);
 			gtk_widget_hide (priv->scl_firewall4);
 			gtk_label_set_markup (GTK_LABEL (priv->lbl_firewall4), markup);
@@ -970,29 +973,29 @@ iptables_output_parse (GIOChannel   *source,
 	return FALSE;
 }
 
+
 static void
-run_iptables_command (const char *command, gpointer data)
+run_iptables_command (const char *command, SysinfoWindow *window)
 {
 	GPid pid;
 	gint stdout_fd;
-	gint setting_ipv4;
+	gchar **arr_cmd;
 	gchar *pkexec, *cmdline = NULL;
 
-	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
 
 	if (g_str_equal (command, GOOROOM_IPTABLES_WRAPPER)) {
-		setting_ipv4 = 1;
+		priv->setting_ipv4 = TRUE;
 	} else if (g_str_equal (command, GOOROOM_IP6TABLES_WRAPPER)) {
-		setting_ipv4 = 0;
+		priv->setting_ipv4 = FALSE;
 	} else {
-		return;
+		goto done;
 	}
 
 	pkexec = g_find_program_in_path ("pkexec");
 	cmdline = g_strdup_printf ("%s %s", pkexec, command);
 
-	gchar **arr_cmd = g_strsplit (cmdline, " ", -1);
+	arr_cmd = g_strsplit (cmdline, " ", -1);
 
 	if (g_spawn_async_with_pipes (NULL,
                                   arr_cmd,
@@ -1004,34 +1007,47 @@ run_iptables_command (const char *command, gpointer data)
                                   NULL,
                                   &stdout_fd,
                                   NULL,
-                                  NULL)) {
+                                  NULL))
+	{
+		priv->iptable_cmd_lock = TRUE;
 
-		g_child_watch_add (pid, (GChildWatchFunc)g_spawn_async_done_cb, data);
-
-		ARGV *argv = g_new0 (ARGV, 1);
-		argv->setting_ipv4 = setting_ipv4;
-		argv->window = window;
+		g_child_watch_add (pid, (GChildWatchFunc)iptables_command_done_cb, window);
 
 		GIOChannel *io_channel = g_io_channel_unix_new (stdout_fd);
 		g_io_channel_set_flags (io_channel, G_IO_FLAG_NONBLOCK, NULL);
 		g_io_channel_set_encoding (io_channel, NULL, NULL);
 		g_io_channel_set_buffered (io_channel, FALSE);
 		g_io_channel_set_close_on_unref (io_channel, TRUE);
-		g_io_add_watch (io_channel, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP, iptables_output_parse, argv);
+		g_io_add_watch (io_channel, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP, iptables_output_parse, window);
 		g_io_channel_unref (io_channel);
+	}
+	else
+	{
+		goto done;
 	}
 
 	g_free (pkexec);
 	g_free (cmdline);
 
 	g_strfreev (arr_cmd);
+
+	return;
+
+done:
+	priv->iptable_cmd_lock = FALSE;
 }
 
 static void
-system_firewall_check (gpointer data)
+system_firewall_check (SysinfoWindow *window)
 {
-	run_iptables_command (GOOROOM_IPTABLES_WRAPPER, data);
-	run_iptables_command (GOOROOM_IP6TABLES_WRAPPER, data);
+	window->priv->iptable_cmd_lock = FALSE;
+
+	run_iptables_command (GOOROOM_IPTABLES_WRAPPER, window);
+
+	while (window->priv->iptable_cmd_lock)
+		gtk_main_iteration ();
+
+	run_iptables_command (GOOROOM_IP6TABLES_WRAPPER, window);
 }
 
 static void
@@ -1056,7 +1072,7 @@ package_updating_check (gpointer data)
                                   NULL,
                                   NULL)) {
 
-		g_child_watch_add (pid, (GChildWatchFunc)g_spawn_async_done_cb, data);
+		g_child_watch_add (pid, (GChildWatchFunc)g_spawn_async_done_cb, NULL);
 
 		GIOChannel *io_channel = g_io_channel_unix_new (stdout_fd);
 		g_io_channel_set_flags (io_channel, G_IO_FLAG_NONBLOCK, NULL);
@@ -1064,7 +1080,7 @@ package_updating_check (gpointer data)
 		g_io_channel_set_buffered (io_channel, FALSE);
 		g_io_channel_set_close_on_unref (io_channel, TRUE);
 		g_io_add_watch (io_channel, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP, (GIOFunc) update_watch_output, window);
-		g_io_channel_unref(io_channel);
+		g_io_channel_unref (io_channel);
 	}
 }
 
@@ -1455,7 +1471,7 @@ system_basic_info_update (SysinfoWindow *window)
 	/* check update pacakges */
 	package_updating_check (window);
 
-	/* execute iptables -L command */
+	/* execute iptables or ip6tables command */
 	system_firewall_check (window);
 
 	priv->update_check_timeout_id = g_timeout_add (UPDATE_PACKAGES_CHECK_TIMEOUT, (GSourceFunc) package_updating_check_continually, window);
