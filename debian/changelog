@@ -1,3 +1,15 @@
+gooroom-security-status-tools (0.1.2+grm2u1) unstable; urgency=medium
+
+  [ cjheo ]
+  * [2cd1de02] Update translation ko,en
+  * [b58b7173] [Bug:1792] 방화벽 설정상태 출력값 파싱시 오류수정
+  * [b6aaaaf2] [Bug:1944] iptables 명령어가 동시에 실행되어 lock되는 버그 수정
+  * [9debdbbd] [Bug:1942] 매체제어정책의 '자세히보기' 버튼의 활성/비활성 오류 수정
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Tue, 11 Feb 2020 10:33:25 +0900
+
 gooroom-security-status-tools (0.1.1+grm2u1) unstable; urgency=medium
 
   [ cjheo ]
