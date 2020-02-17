@@ -811,7 +811,7 @@ check_function_from_agent (SysinfoWindow *window, const gchar *task_name)
 }
 
 static gboolean
-iptables_policy_parse (GtkTreeView *treeview, const gchar *direction, const gchar *policy)
+iptables_policy_parse (GtkTreeView *treeview, const gchar *direction, const gchar *policy, gboolean ipv6)
 {
 	g_return_val_if_fail (policy != NULL, FALSE);
 
@@ -844,6 +844,10 @@ iptables_policy_parse (GtkTreeView *treeview, const gchar *direction, const gcha
 	prot = argv[1];
 	src  = argv[3];
 	dst  = argv[4];
+	if (ipv6) {
+		src  = argv[2];
+		dst  = argv[3];
+	}
 
 	gtk_list_store_append (GTK_LIST_STORE (model), &iter);
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
@@ -933,9 +937,9 @@ iptables_output_parse (GIOChannel   *source,
 					else continue;
 
 					if (priv->setting_ipv4) {
-						visible = iptables_policy_parse (GTK_TREE_VIEW (priv->trv_firewall4), direction, lines[i]);
+						visible = iptables_policy_parse (GTK_TREE_VIEW (priv->trv_firewall4), direction, lines[i], FALSE);
 					} else {
-						visible = iptables_policy_parse (GTK_TREE_VIEW (priv->trv_firewall6), direction, lines[i]);
+						visible = iptables_policy_parse (GTK_TREE_VIEW (priv->trv_firewall6), direction, lines[i], TRUE);
 					}
 				}
 			}
