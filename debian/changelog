@@ -1,3 +1,12 @@
+gooroom-security-status-tools (0.1.3+grm2u1) unstable; urgency=medium
+
+  [ cjheo ]
+  * [8beeba76] 방화벽 설정 상태(IPv6) 출력시 파싱오류 수정
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 20 Feb 2020 19:20:24 +0900
+
 gooroom-security-status-tools (0.1.2+grm2u1) unstable; urgency=medium
 
   [ cjheo ]
