@@ -25,8 +25,10 @@ gooroom_security_status_view_SOURCES = \
 	sysinfo-window.c	\
 	rpd-dialog.h		\
 	rpd-dialog.c		\
-	calendar-dialog.h	\
-	calendar-dialog.c
+	calendar-popover.h	\
+	calendar-popover.c	\
+	logfilter-popover.h	\
+	logfilter-popover.c
 
 gooroom_security_status_view_CFLAGS =  \
 	$(GLIB_CFLAGS)      \

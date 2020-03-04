@@ -40,7 +40,6 @@ struct _SettingsWindowPrivate
 	GtkWidget *lbl_group;
 	GtkWidget *lbl_client_crt;
 	GtkWidget *btn_gms_settings;
-	GtkWidget *btn_close;
 	GtkWidget *chk_adn;
 };
 
@@ -339,7 +338,6 @@ static void
 settings_window_init (SettingsWindow *self)
 {
 	GSettingsSchema *schema;
-
 	SettingsWindowPrivate *priv;
 
 	priv = self->priv = settings_window_get_instance_private (self);
@@ -363,9 +361,6 @@ settings_window_init (SettingsWindow *self)
 	g_signal_connect (G_OBJECT (priv->btn_gms_settings), "clicked",
                       G_CALLBACK (on_gms_settings_button_clicked), self);
 
-	g_signal_connect_swapped (G_OBJECT (priv->btn_close), "clicked",
-                      G_CALLBACK (gtk_widget_destroy), self);
-
 	g_signal_connect (G_OBJECT (priv->chk_adn), "toggled",
                       G_CALLBACK (on_allow_duplicate_notification_toggled_cb), self);
 }
@@ -387,7 +382,6 @@ settings_window_class_init (SettingsWindowClass *class)
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SettingsWindow, lbl_group);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SettingsWindow, lbl_client_crt);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SettingsWindow, btn_gms_settings);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SettingsWindow, btn_close);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SettingsWindow, chk_adn);
 }
 
@@ -398,8 +392,5 @@ settings_window_new (GtkApplication *application)
 
 	return g_object_new (SETTINGS_TYPE_WINDOW,
                          "application", application,
-                         "title", _("Gooroom Management Settings"),
-                         "icon-name", "preferences-system",
-                         "window-position", GTK_WIN_POS_CENTER,
                          NULL);
 }

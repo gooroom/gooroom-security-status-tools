@@ -19,7 +19,8 @@
 
 #include "common.h"
 #include "rpd-dialog.h"
-#include "calendar-dialog.h"
+#include "calendar-popover.h"
+#include "logfilter-popover.h"
 #include "sysinfo-window.h"
 
 #include <stdlib.h>
@@ -45,34 +46,35 @@
 #define	AGENT_CONNECTION_STATUS_CHECK_TIMEOUT	10000
 
 static struct {
-	const char *widget_name;
 	const char *tr_type;
 	const char *type;
 	guint level;
 } LOG_DATA[] = {
-	{ "chk-log-debug"  ,"DEBUG"   ,"debug"   ,LOG_LEVEL_DEBUG   },
-	{ "chk-log-info"   ,"INFO"    ,"info"    ,LOG_LEVEL_INFO    },
-	{ "chk-log-notice" ,"NOTICE"  ,"notice"  ,LOG_LEVEL_NOTICE  },
-	{ "chk-log-warning","WARNING" ,"warning" ,LOG_LEVEL_WARNING },
-	{ "chk-log-err"    ,"ERR"     ,"err"     ,LOG_LEVEL_ERR     },
-	{ "chk-log-crit"   ,"CRIT"    ,"crit"    ,LOG_LEVEL_CRIT    },
-	{ "chk-log-alert"  ,"ALERT"   ,"alert"   ,LOG_LEVEL_ALERT   },
-	{ "chk-log-emerg"  ,"EMERG"   ,"emerg"   ,LOG_LEVEL_EMERG   },
-	{ NULL             ,NULL      ,NULL      ,0                 }
+	{ "DEBUG"   ,"debug"   ,LOG_LEVEL_DEBUG   },
+	{ "INFO"    ,"info"    ,LOG_LEVEL_INFO    },
+	{ "NOTICE"  ,"notice"  ,LOG_LEVEL_NOTICE  },
+	{ "WARNING" ,"warning" ,LOG_LEVEL_WARNING },
+	{ "ERR"     ,"err"     ,LOG_LEVEL_ERR     },
+	{ "CRIT"    ,"crit"    ,LOG_LEVEL_CRIT    },
+	{ "ALERT"   ,"alert"   ,LOG_LEVEL_ALERT   },
+	{ "EMERG"   ,"emerg"   ,LOG_LEVEL_EMERG   },
+	{ NULL      ,NULL      ,0                 }
 };
 
 
 
-static void     on_log_filter_changed_cb (GtkToggleButton *button, gpointer data);
-static gboolean on_push_update_changed   (GtkSwitch *widget, gboolean state, gpointer data);
-static void     run_iptables_command     (const char *command, SysinfoWindow *window);
+static void     log_filter_clicked_cb        (GtkToggleButton *button, gpointer data);
+static void     btn_calendar_to_clicked_cb   (GtkToggleButton *button, gpointer data);
+static void     btn_calendar_from_clicked_cb (GtkToggleButton *button, gpointer data);
+static void     run_iptables_command         (const char *command, SysinfoWindow *window);
+static gboolean on_push_update_changed       (GtkSwitch *widget, gboolean state, gpointer data);
 
 
 
 struct _SysinfoWindowPrivate {
 	GSettings *settings;
 
-	GtkWidget *ntb_main;
+	GtkWidget *stack;
 
 	GtkWidget *frm_push_update;
 
@@ -140,9 +142,10 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *btn_safety_measure;
 	GtkWidget *lbl_update;
 	GtkWidget *swt_push_update;
-	GtkWidget *popover;
 	GtkWidget *btn_log_filter;
-	GtkWidget *btn_close;
+
+	CalendarPopover *calendar_popover;
+	LogfilterPopover *logfilter_popover;
 
 	guint agent_check_timeout_id;
 	guint update_check_timeout_id;
@@ -163,6 +166,8 @@ struct _SysinfoWindowPrivate {
 
 	gboolean iptable_cmd_lock;
 	gboolean setting_ipv4;
+
+	gboolean log_date_from;
 };
 
 
@@ -1988,7 +1993,7 @@ on_view_log_button_clicked (GtkButton *button, gpointer data)
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
 
-	gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->ntb_main), 2);
+	gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "log-page");
 }
 
 static void
@@ -2055,56 +2060,6 @@ update_security_log (gpointer data)
 }
 
 static void
-btn_search_clicked_cb (GtkButton *button, gpointer data)
-{
-	g_timeout_add (100, (GSourceFunc) update_security_log, data);
-}
-
-static gboolean
-btn_calendar_clicked_cb (GtkButton *button, gboolean from, gpointer data)
-{
-	gboolean ret = TRUE;
-
-	SysinfoWindow *window = SYSINFO_WINDOW (data);
-	SysinfoWindowPrivate *priv = window->priv;
-
-	gint y = DEFAULT_YEAR, m = DEFAULT_MONTH, d = DEFAULT_DAY;
-	get_log_search_date (window, &y, &m, &d, from);
-
-	CalendarDialog *dlg = calendar_dialog_new (GTK_WIDGET (window));
-	calendar_dialog_set_date (dlg, y, m, d);
-	if (gtk_dialog_run (GTK_DIALOG (dlg)) == GTK_RESPONSE_OK) {
-		gint new_y = DEFAULT_YEAR, new_m = DEFAULT_MONTH, new_d = DEFAULT_DAY;
-		calendar_dialog_get_date (dlg, &new_y, &new_m, &new_d);
-
-		GDateTime *dt = g_date_time_new_local (new_y, new_m, new_d, 0, 0, 0);
-		gint64 new_utime = g_date_time_to_unix (dt);
-		g_date_time_unref (dt);
-
-		if (from) {
-			if (new_utime > priv->search_to_utime) {
-				ret = FALSE;
-				goto error;
-			}
-		} else {
-			if (priv->search_from_utime > new_utime) {
-				ret = FALSE;
-				goto error;
-			}
-		}
-
-		set_log_search_date (window, new_y, new_m, new_d, from);
-
-		g_timeout_add (100, (GSourceFunc) update_security_log, data);
-	}
-
-error:
-	gtk_widget_destroy (GTK_WIDGET (dlg));
-
-	return ret;
-}
-
-static void
 show_log_search_period_error_dialog (GtkWindow *parent)
 {
 	GtkWidget *dlg = gtk_message_dialog_new (parent,
@@ -2122,23 +2077,17 @@ show_log_search_period_error_dialog (GtkWindow *parent)
 }
 
 static void
-btn_calendar_from_clicked_cb (GtkButton *button, gpointer data)
+btn_search_clicked_cb (GtkButton *button, gpointer data)
 {
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
 
-	while (!btn_calendar_clicked_cb (button, TRUE, data)) {
+	if (priv->search_from_utime > priv->search_to_utime) {
 		show_log_search_period_error_dialog (GTK_WINDOW (window));
+		return;
 	}
-}
 
-static void
-btn_calendar_to_clicked_cb (GtkButton *button, gpointer data)
-{
-	SysinfoWindow *window = SYSINFO_WINDOW (data);
-
-	while (!btn_calendar_clicked_cb (button, FALSE, data)) {
-		show_log_search_period_error_dialog (GTK_WINDOW (window));
-	}
+	g_timeout_add (100, (GSourceFunc) update_security_log, data);
 }
 
 static void
@@ -2168,96 +2117,158 @@ on_safety_measure_button_clicked (GtkButton *button, gpointer data)
 }
 
 static void
-on_log_filter_popover_closed_cb (GtkPopover *popover, gpointer data)
+on_calendar_popover_closed_cb (GtkPopover *popover, gpointer data)
 {
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
 
-	g_signal_handlers_block_by_func (priv->btn_log_filter, on_log_filter_changed_cb, window);
+	g_signal_handlers_block_by_func (priv->btn_calendar_from, btn_calendar_from_clicked_cb, window);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->btn_calendar_from), FALSE);
+	g_signal_handlers_unblock_by_func (priv->btn_calendar_from, btn_calendar_from_clicked_cb, window);
+
+	g_signal_handlers_block_by_func (priv->btn_calendar_to, btn_calendar_to_clicked_cb, window);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->btn_calendar_to), FALSE);
+	g_signal_handlers_unblock_by_func (priv->btn_calendar_to, btn_calendar_to_clicked_cb, window);
+
+	if (!priv->calendar_popover)
+		return;
+
+	gint new_y = DEFAULT_YEAR, new_m = DEFAULT_MONTH, new_d = DEFAULT_DAY;
+	calendar_popover_get_date (priv->calendar_popover, &new_y, &new_m, &new_d);
+
+	gtk_widget_destroy (GTK_WIDGET (priv->calendar_popover));
+	priv->calendar_popover = NULL;
+
+	GDateTime *dt = g_date_time_new_local (new_y, new_m, new_d, 0, 0, 0);
+	gint64 new_utime = g_date_time_to_unix (dt);
+	g_date_time_unref (dt);
+
+	if (priv->log_date_from) {
+		set_log_search_date (window, new_y, new_m, new_d, priv->log_date_from);
+		if (new_utime > priv->search_to_utime)
+			return;
+	}
+
+	if (priv->search_from_utime > new_utime) {
+		show_log_search_period_error_dialog (GTK_WINDOW (window));
+		return;
+	}
+
+	set_log_search_date (window, new_y, new_m, new_d, priv->log_date_from);
+
+	g_timeout_add (100, (GSourceFunc) update_security_log, data);
+}
+
+static void
+popover_calendar (GtkToggleButton *button, gpointer data)
+{
+	GtkWidget *calendar;
+	gint y = DEFAULT_YEAR, m = DEFAULT_MONTH, d = DEFAULT_DAY;
+
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	if (!gtk_toggle_button_get_active (button))
+		return;
+
+	priv->calendar_popover = calendar_popover_new ();
+
+	gtk_popover_set_relative_to (GTK_POPOVER (priv->calendar_popover), GTK_WIDGET (button));
+	gtk_popover_set_modal (GTK_POPOVER (priv->calendar_popover), TRUE);
+	gtk_popover_set_position (GTK_POPOVER (priv->calendar_popover), GTK_POS_BOTTOM);
+
+	get_log_search_date (window, &y, &m, &d, priv->log_date_from);
+
+	calendar_popover_set_date (priv->calendar_popover, y, m, d);
+
+	g_signal_connect (G_OBJECT (priv->calendar_popover), "closed",
+                      G_CALLBACK (on_calendar_popover_closed_cb), window);
+
+	gtk_popover_popup (GTK_POPOVER (priv->calendar_popover));
+}
+
+static void
+logfilter_popover_closed_cb (GtkPopover *popover, gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	g_signal_handlers_block_by_func (priv->btn_log_filter, log_filter_clicked_cb, window);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->btn_log_filter), FALSE);
-	g_signal_handlers_unblock_by_func (priv->btn_log_filter, on_log_filter_changed_cb, window);
+	g_signal_handlers_unblock_by_func (priv->btn_log_filter, log_filter_clicked_cb, window);
 
-	guint cur_log_filter = 0;
+	if (!priv->logfilter_popover)
+		return;
+
+	guint new_log_filter = logfilter_popover_get_logfilter (priv->logfilter_popover);
+
+	gtk_widget_destroy (GTK_WIDGET (priv->logfilter_popover));
+	priv->logfilter_popover = NULL;
+
 	if (priv->settings)
-		cur_log_filter = g_settings_get_uint (priv->settings, "log-filter");
+		g_settings_set_uint (priv->settings, "log-filter", new_log_filter);
 
-	if (priv->prev_log_filter != cur_log_filter)
+	if (priv->prev_log_filter != new_log_filter)
 		g_timeout_add (100, (GSourceFunc) update_security_log, data);
 }
 
 static void
-on_log_level_changed (GtkToggleButton *button, gpointer data)
-{
-	guint log_filter = 0, log_level = 0;
-	SysinfoWindow *window = SYSINFO_WINDOW (data);
-	SysinfoWindowPrivate *priv = window->priv;
-
-	if (priv->settings)
-		log_filter = g_settings_get_uint (priv->settings, "log-filter");
-
-	log_level = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "log-filter"));
-
-	if (gtk_toggle_button_get_active (button)) {
-		log_filter |= log_level;
-	} else {
-		log_filter ^= log_level;
-	}
-
-	if (priv->settings)
-		g_settings_set_uint (priv->settings, "log-filter", log_filter);
-}
-
-static void
-on_log_filter_changed_cb (GtkToggleButton *button, gpointer data)
+log_filter_clicked_cb (GtkToggleButton *button, gpointer data)
 {
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
 
-	if (!gtk_toggle_button_get_active (button)) {
-		if (priv->popover) {
-			gtk_popover_popdown (GTK_POPOVER (priv->popover));
-			gtk_widget_destroy (priv->popover);
-			priv->popover = NULL;
-		}
+	if (!gtk_toggle_button_get_active (button))
 		return;
-	}
 
-	GtkBuilder *builder;
+	priv->logfilter_popover = logfilter_popover_new ();
 
-	builder = gtk_builder_new ();
-	gtk_builder_add_from_resource (builder, "/kr/gooroom/security/status/sysinfo/log-filter-popover.ui", NULL);
+	gtk_popover_set_relative_to (GTK_POPOVER (priv->logfilter_popover), GTK_WIDGET (button));
+	gtk_popover_set_modal (GTK_POPOVER (priv->logfilter_popover), TRUE);
+	gtk_popover_set_position (GTK_POPOVER (priv->logfilter_popover), GTK_POS_BOTTOM);
 
-	priv->popover = GTK_WIDGET (gtk_builder_get_object (builder, "log-filter-popover"));
-
-	gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), GTK_WIDGET (button));
-	gtk_popover_set_modal (GTK_POPOVER (priv->popover), TRUE);
-	gtk_popover_set_position (GTK_POPOVER (priv->popover), GTK_POS_BOTTOM);
-
-	guint i = 0;
 	guint cur_log_filter = 0;
 	if (priv->settings)
 		cur_log_filter = g_settings_get_uint (priv->settings, "log-filter");
 	priv->prev_log_filter = cur_log_filter;
 
-	for (i = 0; LOG_DATA[i].widget_name != NULL; i++) {
-		GtkWidget *w = GTK_WIDGET (gtk_builder_get_object (builder, LOG_DATA[i].widget_name));
-		gtk_button_set_label (GTK_BUTTON (w), _(LOG_DATA[i].tr_type));
-		g_object_set_data (G_OBJECT (w), "log-filter", GUINT_TO_POINTER (LOG_DATA[i].level));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), (cur_log_filter & LOG_DATA[i].level));
+	logfilter_popover_set_logfilter (priv->logfilter_popover, cur_log_filter);
 
-		g_signal_connect (G_OBJECT (w), "toggled", G_CALLBACK (on_log_level_changed), window);
-	}
+	g_signal_connect (G_OBJECT (priv->logfilter_popover), "closed",
+                      G_CALLBACK (logfilter_popover_closed_cb), window);
 
-	g_signal_connect (G_OBJECT (priv->popover), "closed",
-                      G_CALLBACK (on_log_filter_popover_closed_cb), window);
-
-	gtk_popover_popup (GTK_POPOVER (priv->popover));
+	gtk_popover_popup (GTK_POPOVER (priv->logfilter_popover));
 }
 
 static void
-on_notebook_changed (GtkNotebook *notebook, GtkWidget *widget, guint page_num, gpointer data)
+btn_calendar_from_clicked_cb (GtkToggleButton *button, gpointer data)
 {
-	if (page_num == 2)
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+
+	window->priv->log_date_from = TRUE;
+
+	popover_calendar (button, data);
+}
+
+static void
+btn_calendar_to_clicked_cb (GtkToggleButton *button, gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+
+	window->priv->log_date_from = FALSE;
+
+	popover_calendar (button, data);
+}
+
+
+static void
+on_stack_visible_child_notify_cb (GObject    *object,
+                                  GParamSpec *pspec,
+                                  gpointer    data)
+{
+	const gchar *name = gtk_stack_get_visible_child_name (GTK_STACK (object));
+
+	if (g_str_equal (name, "log-page"))
 		g_timeout_add (100, (GSourceFunc) update_security_log, data);
 }
 
@@ -2331,7 +2342,8 @@ sysinfo_window_init (SysinfoWindow *self)
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_security_log));
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_LIST_STORE (model)), 4, GTK_SORT_DESCENDING);
 
-	g_signal_connect (G_OBJECT (priv->ntb_main), "switch-page", G_CALLBACK (on_notebook_changed), self);
+	g_signal_connect (G_OBJECT (priv->stack), "notify::visible-child", G_CALLBACK (on_stack_visible_child_notify_cb), self);
+
 	g_signal_connect (G_OBJECT (priv->chk_os), "toggled", G_CALLBACK (on_togglebutton_state_changed), self);
 	g_signal_connect (G_OBJECT (priv->chk_exe), "toggled", G_CALLBACK (on_togglebutton_state_changed), self);
 	g_signal_connect (G_OBJECT (priv->chk_boot), "toggled", G_CALLBACK (on_togglebutton_state_changed), self);
@@ -2354,12 +2366,10 @@ sysinfo_window_init (SysinfoWindow *self)
 	g_signal_connect (G_OBJECT (priv->trv_res_ctrl), "row-activated", G_CALLBACK (treeview_row_activated_cb), self);
 	g_signal_connect (G_OBJECT (priv->trv_res_ctrl), "cursor-changed", G_CALLBACK (treeview_cursor_changed_cb), self);
 	g_signal_connect (G_OBJECT (priv->btn_more), "clicked", G_CALLBACK (btn_more_clicked_cb), self);
-	g_signal_connect (G_OBJECT (priv->btn_calendar_from), "clicked", G_CALLBACK (btn_calendar_from_clicked_cb), self);
-	g_signal_connect (G_OBJECT (priv->btn_calendar_to), "clicked", G_CALLBACK (btn_calendar_to_clicked_cb), self);
+	g_signal_connect (G_OBJECT (priv->btn_calendar_from), "toggled", G_CALLBACK (btn_calendar_from_clicked_cb), self);
+	g_signal_connect (G_OBJECT (priv->btn_calendar_to), "toggled", G_CALLBACK (btn_calendar_to_clicked_cb), self);
 	g_signal_connect (G_OBJECT (priv->btn_search), "clicked", G_CALLBACK (btn_search_clicked_cb), self);
-	g_signal_connect (G_OBJECT (priv->btn_log_filter), "toggled", G_CALLBACK (on_log_filter_changed_cb), self);
-
-	g_signal_connect_swapped (G_OBJECT (priv->btn_close), "clicked", G_CALLBACK (gtk_widget_destroy), self);
+	g_signal_connect (G_OBJECT (priv->btn_log_filter), "toggled", G_CALLBACK (log_filter_clicked_cb), self);
 
 	g_timeout_add (500, (GSourceFunc) update_ui, self);
 }
@@ -2395,7 +2405,7 @@ sysinfo_window_class_init (SysinfoWindowClass *class)
 	gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
 			"/kr/gooroom/security/status/sysinfo/sysinfo-window.ui");
 
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, ntb_main);
+	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, stack);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_res_ctrl);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_res_ctrl);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_more);
@@ -2457,7 +2467,6 @@ sysinfo_window_class_init (SysinfoWindowClass *class)
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_search_date_from);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_search_date_to);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_log_filter);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_close);
 }
 
 SysinfoWindow*
@@ -2467,8 +2476,5 @@ sysinfo_window_new (GtkApplication *application)
 
 	return g_object_new (SYSINFO_TYPE_WINDOW,
                          "application", application,
-                         "title", _("Details Security Status Of Gooroom System"),
-                         "icon-name", "preferences-system-firewall",
-                         "window-position", GTK_WIN_POS_CENTER,
                          NULL);
 }
