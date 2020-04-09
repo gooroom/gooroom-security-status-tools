@@ -214,9 +214,6 @@ run_security_log_parser_async (gchar *seektime, GIOFunc callback_func, gpointer 
 
     pkexec = g_find_program_in_path ("pkexec");
 
-	if (!seektime)
-	    g_file_get_contents (GOOROOM_SECURITY_LOGPARSER_SEEKTIME, &seektime, NULL, NULL);
-
     if (seektime)
         cmdline = g_strdup_printf ("%s %s %s", pkexec, GOOROOM_SECURITY_LOGPARSER_WRAPPER, seektime);
     else

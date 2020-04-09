@@ -14,6 +14,15 @@
     <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-logparser-seektime-helper</annotate>
   </action>
 
+  <action id="kr.gooroom.security.status.tools.record.vulnerable">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-security-status-vulnerable-helper</annotate>
+  </action>
+
   <action id="kr.gooroom.security.status.tools.logparser.run">
     <defaults>
       <allow_any>no</allow_any>

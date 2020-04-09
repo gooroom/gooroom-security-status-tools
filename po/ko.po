@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gooroom-security-status-tools 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-04 14:55+0900\n"
+"POT-Creation-Date: 2020-04-09 12:26+0900\n"
 "PO-Revision-Date: 2019-08-23 11:54+0900\n"
 "Language-Team: Gooroom <gooroom@gooroom.kr>\n"
 "Language: ko\n"
@@ -16,175 +16,175 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../src/sysinfo/sysinfo-window.c:361 ../src/sysinfo/sysinfo-window.c:1613
+#: ../src/sysinfo/sysinfo-window.c:365 ../src/sysinfo/sysinfo-window.c:1666
 msgid "unset"
 msgstr "설정되지 않음"
 
-#: ../src/sysinfo/sysinfo-window.c:364
+#: ../src/sysinfo/sysinfo-window.c:368
 msgid "immediately"
 msgstr "즉시"
 
-#: ../src/sysinfo/sysinfo-window.c:366
+#: ../src/sysinfo/sysinfo-window.c:370
 msgid "day"
 msgstr "일"
 
-#: ../src/sysinfo/sysinfo-window.c:368
+#: ../src/sysinfo/sysinfo-window.c:372
 msgid "days"
 msgstr "일"
 
-#: ../src/sysinfo/sysinfo-window.c:523
+#: ../src/sysinfo/sysinfo-window.c:527
 msgid "Connected"
 msgstr "연결됨"
 
-#: ../src/sysinfo/sysinfo-window.c:525
+#: ../src/sysinfo/sysinfo-window.c:529
 msgid "Disconnected"
 msgstr "연결끊김"
 
-#: ../src/sysinfo/sysinfo-window.c:537 ../src/sysinfo/sysinfo-window.c:560
-#: ../src/sysinfo/sysinfo-window.c:635 ../src/sysinfo/sysinfo-window.c:731
-#: ../src/sysinfo/sysinfo-window.c:1230 ../src/sysinfo/sysinfo-window.c:1352
-#: ../src/sysinfo/sysinfo-window.c:1425 ../src/sysinfo/sysinfo-window.c:1460
-#: ../src/sysinfo/sysinfo-window.c:1461 ../src/sysinfo/sysinfo-window.c:1462
-#: ../src/sysinfo/sysinfo-window.c:1631 ../src/sysinfo/sysinfo-window.c:1721
-#: ../src/sysinfo/sysinfo-window.c:1973 ../src/settings/settings-window.c:208
+#: ../src/sysinfo/sysinfo-window.c:541 ../src/sysinfo/sysinfo-window.c:564
+#: ../src/sysinfo/sysinfo-window.c:639 ../src/sysinfo/sysinfo-window.c:735
+#: ../src/sysinfo/sysinfo-window.c:1234 ../src/sysinfo/sysinfo-window.c:1365
+#: ../src/sysinfo/sysinfo-window.c:1405 ../src/sysinfo/sysinfo-window.c:1478
+#: ../src/sysinfo/sysinfo-window.c:1513 ../src/sysinfo/sysinfo-window.c:1514
+#: ../src/sysinfo/sysinfo-window.c:1515 ../src/sysinfo/sysinfo-window.c:1684
+#: ../src/sysinfo/sysinfo-window.c:1774 ../src/settings/settings-window.c:208
 #: ../src/settings/settings-window.c:211 ../src/settings/settings-window.c:214
 #: ../src/settings/settings-window.c:217 ../src/settings/settings-window.c:220
 #: ../src/sysinfo/sysinfo-window.ui.h:4 ../src/settings/settings-window.ui.h:5
 msgid "Unknown"
 msgstr "알수없음"
 
-#: ../src/sysinfo/sysinfo-window.c:733
+#: ../src/sysinfo/sysinfo-window.c:737
 msgid "Latest"
 msgstr "최신 상태"
 
-#: ../src/sysinfo/sysinfo-window.c:737
+#: ../src/sysinfo/sysinfo-window.c:741
 #, c-format
 msgid "There is %s package to update."
 msgstr "%s 개의 업데이트 패키지가 존재합니다."
 
-#: ../src/sysinfo/sysinfo-window.c:739
+#: ../src/sysinfo/sysinfo-window.c:743
 #, c-format
 msgid "There are %s packages to update."
 msgstr "%s 개의 업데이트 패키지가 존재합니다."
 
-#: ../src/sysinfo/sysinfo-window.c:836
+#: ../src/sysinfo/sysinfo-window.c:840
 msgid "ACCEPT"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:838
+#: ../src/sysinfo/sysinfo-window.c:842
 msgid "DROP"
 msgstr "차단"
 
-#: ../src/sysinfo/sysinfo-window.c:840
+#: ../src/sysinfo/sysinfo-window.c:844
 msgid "REJECT"
 msgstr "차단"
 
-#: ../src/sysinfo/sysinfo-window.c:902
+#: ../src/sysinfo/sysinfo-window.c:906
 msgid "Accept"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:904
+#: ../src/sysinfo/sysinfo-window.c:908
 msgid "Drop"
 msgstr "비허용"
 
-#: ../src/sysinfo/sysinfo-window.c:939
+#: ../src/sysinfo/sysinfo-window.c:943
 msgid "INPUT"
 msgstr "인바운드"
 
-#: ../src/sysinfo/sysinfo-window.c:940
+#: ../src/sysinfo/sysinfo-window.c:944
 msgid "OUTPUT"
 msgstr "아웃바운드"
 
-#: ../src/sysinfo/sysinfo-window.c:941
+#: ../src/sysinfo/sysinfo-window.c:945
 msgid "FORWARD"
 msgstr "포워드"
 
-#: ../src/sysinfo/sysinfo-window.c:967
+#: ../src/sysinfo/sysinfo-window.c:971
 msgid "Could not find firewall policy."
 msgstr "방화벽 정책을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1225
+#: ../src/sysinfo/sysinfo-window.c:1229
 msgid "Safety"
 msgstr "안전"
 
-#: ../src/sysinfo/sysinfo-window.c:1227
+#: ../src/sysinfo/sysinfo-window.c:1231
 msgid "Vulnerable"
 msgstr "취약"
 
-#: ../src/sysinfo/sysinfo-window.c:1436
+#: ../src/sysinfo/sysinfo-window.c:1489
 msgid "Standalone Mode"
 msgstr "독립 운영 모드"
 
-#: ../src/sysinfo/sysinfo-window.c:1438
+#: ../src/sysinfo/sysinfo-window.c:1491
 msgid "Server Managed Mode"
 msgstr "서버 관리 모드"
 
-#: ../src/sysinfo/sysinfo-window.c:1615
+#: ../src/sysinfo/sysinfo-window.c:1668
 msgid "minute"
 msgstr "분"
 
-#: ../src/sysinfo/sysinfo-window.c:1617
+#: ../src/sysinfo/sysinfo-window.c:1670
 msgid "minutes"
 msgstr "분"
 
-#: ../src/sysinfo/sysinfo-window.c:1627
+#: ../src/sysinfo/sysinfo-window.c:1680
 msgid "Enabled"
 msgstr "켜짐"
 
-#: ../src/sysinfo/sysinfo-window.c:1629
+#: ../src/sysinfo/sysinfo-window.c:1682
 msgid "Disabled"
 msgstr "꺼짐"
 
-#: ../src/sysinfo/sysinfo-window.c:1694
+#: ../src/sysinfo/sysinfo-window.c:1747
 msgid "Could not find trusted urls information."
 msgstr "신뢰할 수 있는 URL 목록을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1715
+#: ../src/sysinfo/sysinfo-window.c:1768
 msgid "ReadOnly"
 msgstr "읽기전용"
 
-#: ../src/sysinfo/sysinfo-window.c:1717 ../src/sysinfo/rpd-dialog.c:107
+#: ../src/sysinfo/sysinfo-window.c:1770 ../src/sysinfo/rpd-dialog.c:107
 #: ../src/sysinfo/rpd-dialog.c:296 ../src/sysinfo/rpd-dialog.c:316
 msgid "Allow"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:1719 ../src/sysinfo/rpd-dialog.c:298
+#: ../src/sysinfo/sysinfo-window.c:1772 ../src/sysinfo/rpd-dialog.c:298
 msgid "Disallow"
 msgstr "허용안함"
 
-#: ../src/sysinfo/sysinfo-window.c:1734
+#: ../src/sysinfo/sysinfo-window.c:1787
 msgid "More"
 msgstr "더 보기"
 
-#: ../src/sysinfo/sysinfo-window.c:1833 ../src/sysinfo/rpd-dialog.c:337
+#: ../src/sysinfo/sysinfo-window.c:1886 ../src/sysinfo/rpd-dialog.c:337
 msgid "Could not find information."
 msgstr "매체제어 정책을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1897
+#: ../src/sysinfo/sysinfo-window.c:1950
 msgid "Do you want to allow push update?"
 msgstr "푸쉬 업데이트를 허용 하겠습니까?"
 
-#: ../src/sysinfo/sysinfo-window.c:1897
+#: ../src/sysinfo/sysinfo-window.c:1950
 msgid "Do you want to deny push update?"
 msgstr "푸쉬 업데이트를 허용하지 않겠습니까?"
 
-#: ../src/sysinfo/sysinfo-window.c:1908
+#: ../src/sysinfo/sysinfo-window.c:1961
 msgid "_Yes"
 msgstr "예"
 
-#: ../src/sysinfo/sysinfo-window.c:1909
+#: ../src/sysinfo/sysinfo-window.c:1962
 msgid "_No"
 msgstr "아니오"
 
-#: ../src/sysinfo/sysinfo-window.c:1912
+#: ../src/sysinfo/sysinfo-window.c:1965
 msgid "Push Update Settings"
 msgstr "푸쉬 업데이트 설정"
 
-#: ../src/sysinfo/sysinfo-window.c:2071
+#: ../src/sysinfo/sysinfo-window.c:2117
 msgid "Please make sure to check log search period."
 msgstr "로그 검색 기간을 확인해 주시기 바랍니다."
 
-#: ../src/sysinfo/sysinfo-window.c:2074
+#: ../src/sysinfo/sysinfo-window.c:2120
 msgid "Log Search Period Settings"
 msgstr "로그 검색 기간 설정"
 
@@ -284,7 +284,7 @@ msgstr "로그 보기"
 
 #: ../src/sysinfo/sysinfo-window.ui.h:6
 msgid "Take Safety Measures"
-msgstr "안전 조치 완료"
+msgstr "안전 조치 실행"
 
 #: ../src/sysinfo/sysinfo-window.ui.h:7
 msgid "Trusted Booting"
@@ -602,53 +602,53 @@ msgstr "중복 알림 허용"
 msgid "Notifications Settings"
 msgstr "알림설정"
 
-msgid "keyboard"
-msgstr "USB 키보드"
+#~ msgid "keyboard"
+#~ msgstr "USB 키보드"
 
-msgid "printer"
-msgstr "프린터"
+#~ msgid "printer"
+#~ msgstr "프린터"
 
-msgid "sound"
-msgstr "사운드"
+#~ msgid "sound"
+#~ msgstr "사운드"
 
-msgid "usb_memory"
-msgstr "USB 메모리"
+#~ msgid "usb_memory"
+#~ msgstr "USB 메모리"
 
-msgid "cd_dvd"
-msgstr "CD/DVD"
+#~ msgid "cd_dvd"
+#~ msgstr "CD/DVD"
 
-msgid "clipboard"
-msgstr "클립보드"
+#~ msgid "clipboard"
+#~ msgstr "클립보드"
 
-msgid "network"
-msgstr "네트워크"
+#~ msgid "network"
+#~ msgstr "네트워크"
 
-msgid "mouse"
-msgstr "USB 마우스"
+#~ msgid "mouse"
+#~ msgstr "USB 마우스"
 
-msgid "bluetooth"
-msgstr "블루투스"
+#~ msgid "bluetooth"
+#~ msgstr "블루투스"
 
-msgid "screen_capture"
-msgstr "스크린캡쳐"
+#~ msgid "screen_capture"
+#~ msgstr "스크린캡쳐"
 
-msgid "wireless"
-msgstr "무선랜"
+#~ msgid "wireless"
+#~ msgstr "무선랜"
 
-msgid "camera"
-msgstr "카메라"
+#~ msgid "camera"
+#~ msgstr "카메라"
 
-msgid "microphone"
-msgstr "녹음"
+#~ msgid "microphone"
+#~ msgstr "녹음"
 
-msgid "All"
-msgstr "모두"
+#~ msgid "All"
+#~ msgstr "모두"
 
-msgid "Normal"
-msgstr "정상"
+#~ msgid "Normal"
+#~ msgstr "정상"
 
-msgid "Error"
-msgstr "오류"
+#~ msgid "Error"
+#~ msgstr "오류"
 
-msgid "ALL"
-msgstr "모두"
+#~ msgid "ALL"
+#~ msgstr "모두"

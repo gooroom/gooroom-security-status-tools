@@ -40,10 +40,14 @@
 
 #include <json-c/json.h>
 
-#define GRM_USER                                ".grm-user"
+#define GRM_USER                                 ".grm-user"
 
-#define	UPDATE_PACKAGES_CHECK_TIMEOUT			60000
-#define	AGENT_CONNECTION_STATUS_CHECK_TIMEOUT	10000
+#define	UPDATE_PACKAGES_CHECK_TIMEOUT			 60000
+#define	AGENT_CONNECTION_STATUS_CHECK_TIMEOUT	 10000
+
+#define GOOROOM_SECURITY_STATUS_VULNERABLE       "/var/tmp/GOOROOM-SECURITY-STATUS-VULNERABLE"
+#define GOOROOM_SECURITY_LOGPARSER_NEXT_SEEKTIME "/var/tmp/GOOROOM-SECURITY-LOGPARSER-NEXT-SEEKTIME"
+
 
 static struct {
 	const char *tr_type;
@@ -1237,13 +1241,36 @@ system_security_status_update (SysinfoWindow *window)
 	g_free (markup);
 }
 
+static guint
+last_vulnerable_get (void)
+{
+	guint vulnerable = 0;
+	gchar *str_vulnerable = NULL;
+
+	if (g_file_test (GOOROOM_SECURITY_STATUS_VULNERABLE, G_FILE_TEST_EXISTS)) {
+		g_file_get_contents (GOOROOM_SECURITY_STATUS_VULNERABLE, &str_vulnerable, NULL, NULL);
+
+		if (1 == sscanf (str_vulnerable, "%"G_GUINT32_FORMAT, &vulnerable)) {
+			if ((vulnerable < (1 << 0)) ||
+                (vulnerable >= (1 << 4))) { // 1 <= vulnerable < 16
+				vulnerable = 0;
+			}
+		}
+	}
+
+	g_free (str_vulnerable);
+
+	return vulnerable;
+}
+
 static gboolean
 security_logparser_async_done (GIOChannel   *source,
                                GIOCondition  condition,
                                gpointer      data)
 {
-	gchar  buff[1024] = {0, };
-	gsize  bytes_read;
+	gchar buff[1024] = {0, };
+	gsize bytes_read;
+	guint last_vulnerable = 0;
 
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
@@ -1286,9 +1313,9 @@ security_logparser_async_done (GIOChannel   *source,
 			if (summary_obj) {
 				const char *val = json_object_get_string (summary_obj);
 				if (val) {
-					if (g_strcmp0 (val, "safe") == 0) {
+					if (g_str_equal (val, "safe")) {
 						priv->security_status = SECURITY_STATUS_SAFETY;
-					} else if (g_strcmp0 (val, "vulnerable") == 0) {
+					} else if (g_str_equal (val, "vulnerable")) {
 						priv->security_status = SECURITY_STATUS_VULNERABLE;
 					} else {
 						priv->security_status = SECURITY_STATUS_UNKNOWN;
@@ -1309,10 +1336,36 @@ security_logparser_async_done (GIOChannel   *source,
 
 
 done:
+	last_vulnerable = last_vulnerable_get ();
+
+    if (last_vulnerable != 0)
+		priv->security_status = SECURITY_STATUS_VULNERABLE;
+
 	system_security_status_update (window);
 	system_security_function_update (window);
 
 	g_string_free (outputs, TRUE);
+
+	return FALSE;
+}
+
+static gboolean
+security_status_update_idle (gpointer data)
+{
+	gchar *seektime = NULL;
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	g_file_get_contents (GOOROOM_SECURITY_LOGPARSER_NEXT_SEEKTIME, &seektime, NULL, NULL);
+
+	if (!run_security_log_parser_async (seektime, security_logparser_async_done, window)) {
+		if (gtk_widget_get_visible (priv->btn_safety_measure))
+			gtk_widget_set_sensitive (priv->btn_safety_measure, FALSE);
+
+		gchar *markup = g_markup_printf_escaped ("<b><i>%s</i></b>", _("Unknown"));
+		gtk_label_set_markup (GTK_LABEL (priv->lbl_sec_status), markup);
+		g_free (markup);
+	}
 
 	return FALSE;
 }
@@ -1966,14 +2019,7 @@ update_ui (gpointer data)
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
 
-	if (!run_security_log_parser_async (NULL, security_logparser_async_done, window)) {
-		if (gtk_widget_get_visible (priv->btn_safety_measure))
-			gtk_widget_set_sensitive (priv->btn_safety_measure, FALSE);
-
-		gchar *markup = g_markup_printf_escaped ("<b><i>%s</i></b>", _("Unknown"));
-		gtk_label_set_markup (GTK_LABEL (priv->lbl_sec_status), markup);
-		g_free (markup);
-	}
+	security_status_update_idle (window);
 
 	system_basic_info_update (window);
 	system_device_security_update (window);
@@ -2077,6 +2123,17 @@ show_log_search_period_error_dialog (GtkWindow *parent)
 }
 
 static void
+last_vulnerable_update (guint vulnerable)
+{
+	gchar *pkexec = NULL, *cmd = NULL;
+
+	pkexec = g_find_program_in_path ("pkexec");
+	cmd = g_strdup_printf ("%s %s %u", pkexec, GOOROOM_SECURITY_STATUS_VULNERABLE_HELPER, vulnerable);
+
+	g_spawn_command_line_sync (cmd, NULL, NULL, NULL, NULL);
+}
+
+static void
 btn_search_clicked_cb (GtkButton *button, gpointer data)
 {
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
@@ -2114,6 +2171,8 @@ on_safety_measure_button_clicked (GtkButton *button, gpointer data)
 	} else {
 		send_taking_measure_signal_to_self ();
 	}
+
+	last_vulnerable_update (0);
 }
 
 static void
@@ -2273,11 +2332,39 @@ on_stack_visible_child_notify_cb (GObject    *object,
 }
 
 static void
+file_status_changed_cb (GFileMonitor      *monitor,
+                        GFile             *file,
+                        GFile             *other_file,
+                        GFileMonitorEvent  event_type,
+                        gpointer           data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	switch (event_type)
+	{
+		case G_FILE_MONITOR_EVENT_CHANGED:
+		case G_FILE_MONITOR_EVENT_DELETED:
+		case G_FILE_MONITOR_EVENT_CREATED:
+		{
+			g_timeout_add (100, (GSourceFunc) security_status_update_idle, window);
+			break;
+		}
+
+		default:
+			break;
+	}
+}
+
+static void
 sysinfo_window_init (SysinfoWindow *self)
 {
 	GError *error = NULL;
 	gchar  *markup = NULL;
-    GSettingsSchema *schema = NULL;
+	GSettingsSchema *schema = NULL;
+	GFile *file;
+	GFileMonitor *monitor;
+
 	SysinfoWindowPrivate *priv;
 
 	priv = self->priv = sysinfo_window_get_instance_private (self);
@@ -2297,17 +2384,26 @@ sysinfo_window_init (SysinfoWindow *self)
     priv->settings = NULL;
 
 	schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
-                                            "apps.gooroom-security-status-view", TRUE);
+                                              "apps.gooroom-security-status-view", TRUE);
 	if (schema) {
 		priv->settings = g_settings_new_full (schema, NULL, NULL);
 		g_settings_schema_unref (schema);
 	}
 
-	g_signal_connect (G_OBJECT (priv->btn_view_log), "clicked",
-						G_CALLBACK (on_view_log_button_clicked), self);
-	g_signal_connect (G_OBJECT (priv->swt_push_update), "state-set",
-						G_CALLBACK (on_push_update_changed), self);
+	file = g_file_new_for_path (GOOROOM_SECURITY_STATUS_VULNERABLE);
 
+	monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+	if (error) {
+		g_error_free (error);
+	} else {
+		g_signal_connect (monitor, "changed", G_CALLBACK (file_status_changed_cb), self);
+	}
+	g_object_unref (file);
+
+	g_signal_connect (G_OBJECT (priv->btn_view_log), "clicked",
+                      G_CALLBACK (on_view_log_button_clicked), self);
+	g_signal_connect (G_OBJECT (priv->swt_push_update), "state-set",
+                      G_CALLBACK (on_push_update_changed), self);
 
 	priv->standalone_mode = is_standalone_mode ();
 	if (priv->standalone_mode) {
