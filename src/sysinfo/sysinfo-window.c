@@ -1751,7 +1751,7 @@ error:
 }
 
 static void
-create_item (SysinfoWindow *window, char *key, const char *val, gchar *whitelist)
+create_item (SysinfoWindow *window, char *key, const char *val)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -1759,35 +1759,25 @@ create_item (SysinfoWindow *window, char *key, const char *val, gchar *whitelist
 	SysinfoWindowPrivate *priv = window->priv;
 
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_res_ctrl));
-
-	gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+	gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
 
 	if (val) {
-		const gchar *state;
+		const gchar *tr_state;
 		if (g_strcmp0 (val, "read_only") == 0) {
-			state = _("ReadOnly");
+			tr_state = _("ReadOnly");
 		} else if ((g_strcmp0 (val, "allow") == 0) || (g_strcmp0 (val, "accept") == 0)) {
-			state = _("Allow");
+			tr_state = _("Allow");
 		} else if (g_strcmp0 (val, "disallow") == 0) {
-			state = _("Disallow");
+			tr_state = _("Disallow");
 		} else {
-			state = _("Unknown");
+			tr_state = _("Unknown");
 		}
 
-		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+		gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
                             0, _(key),
-                            1, _(state),
-                            2, whitelist ? whitelist : "",
-                            3, key,
-                            4, FALSE,
-                            -1);
-	} else {
-		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-                            0, _(key),
-                            1, _("More"),
-                            2, "",
-                            3, key,
-                            4, TRUE,
+                            1, _(tr_state),
+                            2, key,
+                            3, FALSE,
                             -1);
 	}
 }
@@ -1795,31 +1785,70 @@ create_item (SysinfoWindow *window, char *key, const char *val, gchar *whitelist
 static void
 create_item_with_whitelist (SysinfoWindow *window, char *key, json_object *val, const char *wlname)
 {
-	const gchar *state;
-	gchar *whitelist = NULL;
-	json_object *obj1, *obj2;
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	gboolean allow = FALSE, more = TRUE;
+	const gchar *state_val;
+	json_object *obj1 = NULL, *obj2 = NULL;
+
+	SysinfoWindowPrivate *priv = window->priv;
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_res_ctrl));
+	gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
 
 	obj1 = JSON_OBJECT_GET (val, "state");
-	obj2 = JSON_OBJECT_GET (val, wlname);
+	if (wlname)
+		obj2 = JSON_OBJECT_GET (val, wlname);
 
-	state = (obj1) ? json_object_get_string (obj1) : NULL;
+	state_val = (obj1) ? json_object_get_string (obj1) : NULL;
 
-	if (obj2) {
-		guint i, len;
-		gchar **array;
-		len = json_object_array_length (obj2);
-		array = g_new0 (gchar *, len+1);
-		for (i = 0; i < len; i++) {
-			json_object *serial_obj = json_object_array_get_idx (obj2, i);
-			array[i] = g_strdup (json_object_get_string (serial_obj));
+	if (state_val) {
+		const gchar *tr_state;
+		if (g_strcmp0 (state_val, "read_only") == 0) {
+			tr_state = _("ReadOnly");
+		} else if ((g_strcmp0 (state_val, "allow") == 0) || (g_strcmp0 (state_val, "accept") == 0)) {
+			tr_state = _("Allow");
+			allow = TRUE;
+		} else if (g_strcmp0 (state_val, "disallow") == 0) {
+			tr_state = _("Disallow");
+		} else {
+			tr_state = _("Unknown");
 		}
-		array[i] = NULL;
-		whitelist = g_strjoinv ("\n", array);
-		g_strfreev (array);
+
+		if (g_str_equal (key, "network") && obj2) {
+			more = TRUE;
+		} else if (g_str_equal (key, "usb_network") && obj2 && !allow) {
+			more = TRUE;
+		} else {
+			more = FALSE;
+		}
+
+		gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
+                            0, _(key),
+                            1, _(tr_state),
+                            2, key,
+                            3, more,
+                            -1);
 	}
 
-	create_item (window, key, state, whitelist);
-	g_free (whitelist);
+	if (obj2 && !allow && !more) {
+		guint i, len;
+		const char *device;
+		GtkTreeIter child_iter;
+		len = json_object_array_length (obj2);
+		for (i = 0; i < len; i++) {
+			json_object *serial_obj = json_object_array_get_idx (obj2, i);
+			device = json_object_get_string (serial_obj);
+
+			gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
+			gtk_tree_store_set (GTK_TREE_STORE (model), &child_iter,
+                                0, device,
+                                1, _("Allow"),
+                                2, device,
+                                3, FALSE,
+                                -1);
+		}
+	}
 }
 
 static void
@@ -1853,23 +1882,19 @@ system_resource_control_update (SysinfoWindow *window)
 
 	json_object_object_foreach (root_obj, key, val) {
 		enum json_type type = json_object_get_type (val);
-		if (g_str_equal (key, "usb_memory") ) {
-			create_item_with_whitelist (window, key, val, "usb_serialno");
-		} else if (g_str_equal (key, "network") ) {
-			create_item (window, key, NULL, NULL);
-		} else if (g_str_equal (key, "bluetooth")) {
-			create_item_with_whitelist (window, key, val, "mac_address");
+		if (type == json_type_string) {
+			const char *value = json_object_get_string ((json_object *)val);
+			create_item (window, key, value);
 		} else {
-			switch (type) {
-				case json_type_string:
-					{
-						const char *value = json_object_get_string ((json_object *)val);
-						create_item (window, key, value, NULL);
-						break;
-					}
-
-				default:
-					break;
+			if (g_str_equal (key, "usb_memory") ) {
+				create_item_with_whitelist (window, key, val, "usb_serialno");
+			} else if (g_str_equal (key, "usb_network") ) {
+				create_item_with_whitelist (window, key, val, "whitelist");
+			} else if (g_str_equal (key, "network") ) {
+				create_item_with_whitelist (window, key, val, "rules");
+			} else if (g_str_equal (key, "bluetooth")) {
+				create_item_with_whitelist (window, key, val, "mac_address");
+			} else {
 			}
 		}
 	}
@@ -2056,9 +2081,9 @@ treeview_cursor_changed_cb (GtkTreeView       *tree_view,
 
 	selected = gtk_tree_selection_get_selected (gtk_tree_view_get_selection (tree_view), &model, &iter);
 	if (selected) {
-		gboolean depth = FALSE;
-		gtk_tree_model_get (model, &iter, 4, &depth, -1);
-		sensitive = depth;
+		gboolean more = FALSE;
+		gtk_tree_model_get (model, &iter, 3, &more, -1);
+		sensitive = more;
 	}
 
 	gtk_widget_set_sensitive (priv->btn_more, sensitive);
@@ -2074,7 +2099,7 @@ treeview_row_activated_cb (GtkTreeView       *tree_view,
 	GtkTreeModel *model;
 	gboolean selected;
 	gchar *key = NULL;
-	gboolean depth = FALSE;
+	gboolean more = FALSE;
 
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
@@ -2083,11 +2108,11 @@ treeview_row_activated_cb (GtkTreeView       *tree_view,
 
 	if (selected) {
 		gtk_tree_model_get (model, &iter,
-                            3, &key,
-                            4, &depth,
+                            2, &key,
+                            3, &more,
                             -1);
 
-		if (!depth) return;
+		if (!more) return;
 
 		RPDDialog *dlg = rpd_dialog_new (GTK_WIDGET (window), key);
 		gtk_dialog_run (GTK_DIALOG (dlg));

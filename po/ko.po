@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gooroom-security-status-tools 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-09 12:26+0900\n"
+"POT-Creation-Date: 2020-04-22 10:52+0900\n"
 "PO-Revision-Date: 2019-08-23 11:54+0900\n"
 "Language-Team: Gooroom <gooroom@gooroom.kr>\n"
 "Language: ko\n"
@@ -46,10 +46,11 @@ msgstr "연결끊김"
 #: ../src/sysinfo/sysinfo-window.c:1405 ../src/sysinfo/sysinfo-window.c:1478
 #: ../src/sysinfo/sysinfo-window.c:1513 ../src/sysinfo/sysinfo-window.c:1514
 #: ../src/sysinfo/sysinfo-window.c:1515 ../src/sysinfo/sysinfo-window.c:1684
-#: ../src/sysinfo/sysinfo-window.c:1774 ../src/settings/settings-window.c:208
-#: ../src/settings/settings-window.c:211 ../src/settings/settings-window.c:214
-#: ../src/settings/settings-window.c:217 ../src/settings/settings-window.c:220
-#: ../src/sysinfo/sysinfo-window.ui.h:4 ../src/settings/settings-window.ui.h:5
+#: ../src/sysinfo/sysinfo-window.c:1773 ../src/sysinfo/sysinfo-window.c:1815
+#: ../src/settings/settings-window.c:208 ../src/settings/settings-window.c:211
+#: ../src/settings/settings-window.c:214 ../src/settings/settings-window.c:217
+#: ../src/settings/settings-window.c:220 ../src/sysinfo/sysinfo-window.ui.h:4
+#: ../src/settings/settings-window.ui.h:5
 msgid "Unknown"
 msgstr "알수없음"
 
@@ -139,84 +140,85 @@ msgstr "꺼짐"
 msgid "Could not find trusted urls information."
 msgstr "신뢰할 수 있는 URL 목록을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1768
+#: ../src/sysinfo/sysinfo-window.c:1767 ../src/sysinfo/sysinfo-window.c:1808
 msgid "ReadOnly"
 msgstr "읽기전용"
 
-#: ../src/sysinfo/sysinfo-window.c:1770 ../src/sysinfo/rpd-dialog.c:107
-#: ../src/sysinfo/rpd-dialog.c:296 ../src/sysinfo/rpd-dialog.c:316
+#: ../src/sysinfo/sysinfo-window.c:1769 ../src/sysinfo/sysinfo-window.c:1810
+#: ../src/sysinfo/sysinfo-window.c:1846 ../src/sysinfo/rpd-dialog.c:212
 msgid "Allow"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:1772 ../src/sysinfo/rpd-dialog.c:298
+#: ../src/sysinfo/sysinfo-window.c:1771 ../src/sysinfo/sysinfo-window.c:1813
 msgid "Disallow"
 msgstr "허용안함"
 
-#: ../src/sysinfo/sysinfo-window.c:1787
-msgid "More"
-msgstr "더 보기"
-
-#: ../src/sysinfo/sysinfo-window.c:1886 ../src/sysinfo/rpd-dialog.c:337
+#: ../src/sysinfo/sysinfo-window.c:1911 ../src/sysinfo/rpd-dialog.c:240
 msgid "Could not find information."
 msgstr "매체제어 정책을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1950
+#: ../src/sysinfo/sysinfo-window.c:1975
 msgid "Do you want to allow push update?"
 msgstr "푸쉬 업데이트를 허용 하겠습니까?"
 
-#: ../src/sysinfo/sysinfo-window.c:1950
+#: ../src/sysinfo/sysinfo-window.c:1975
 msgid "Do you want to deny push update?"
 msgstr "푸쉬 업데이트를 허용하지 않겠습니까?"
 
-#: ../src/sysinfo/sysinfo-window.c:1961
+#: ../src/sysinfo/sysinfo-window.c:1986
 msgid "_Yes"
 msgstr "예"
 
-#: ../src/sysinfo/sysinfo-window.c:1962
+#: ../src/sysinfo/sysinfo-window.c:1987
 msgid "_No"
 msgstr "아니오"
 
-#: ../src/sysinfo/sysinfo-window.c:1965
+#: ../src/sysinfo/sysinfo-window.c:1990
 msgid "Push Update Settings"
 msgstr "푸쉬 업데이트 설정"
 
-#: ../src/sysinfo/sysinfo-window.c:2117
+#: ../src/sysinfo/sysinfo-window.c:2142
 msgid "Please make sure to check log search period."
 msgstr "로그 검색 기간을 확인해 주시기 바랍니다."
 
-#: ../src/sysinfo/sysinfo-window.c:2120
+#: ../src/sysinfo/sysinfo-window.c:2145
 msgid "Log Search Period Settings"
 msgstr "로그 검색 기간 설정"
 
-#: ../src/sysinfo/rpd-dialog.c:109
-msgid "Block"
-msgstr "차단"
+#: ../src/sysinfo/rpd-dialog.c:66 ../src/sysinfo/rpd-dialog.c:77
+#: ../src/sysinfo/sysinfo-window.ui.h:48
+msgid "Status"
+msgstr "상태"
 
-#: ../src/sysinfo/rpd-dialog.c:113
-msgid "default_network"
-msgstr "네트워크 기본"
+#: ../src/sysinfo/rpd-dialog.c:67 ../src/sysinfo/sysinfo-window.ui.h:52
+msgid "Protocol"
+msgstr "프로토콜"
 
-#: ../src/sysinfo/rpd-dialog.c:131
-msgid "rule"
-msgstr "Rule"
+#: ../src/sysinfo/rpd-dialog.c:68 ../src/sysinfo/sysinfo-window.ui.h:49
+msgid "Direction"
+msgstr "방향"
 
-#: ../src/sysinfo/rpd-dialog.c:185
-msgid "ports"
-msgstr "포트"
+#: ../src/sysinfo/rpd-dialog.c:69
+msgid "IP Address"
+msgstr "IP 주소"
 
-#: ../src/sysinfo/rpd-dialog.c:286
-msgid "Mac Address"
-msgstr "하드웨어 주소"
+#: ../src/sysinfo/rpd-dialog.c:70
+msgid "Source Port"
+msgstr "소스 포트"
 
-#: ../src/sysinfo/rpd-dialog.c:287 ../src/sysinfo/sysinfo-window.ui.h:43
-msgid "Access Authority"
-msgstr "접근 권한"
+#: ../src/sysinfo/rpd-dialog.c:71
+msgid "Destination Port"
+msgstr "목적지 포트"
 
-#: ../src/sysinfo/rpd-dialog.c:303
-msgid "default_bluetooth"
-msgstr "블루투스 기본"
+#: ../src/sysinfo/rpd-dialog.c:78
+msgid "Property"
+msgstr "속성"
 
-#: ../src/sysinfo/rpd-dialog.c:413
+#: ../src/sysinfo/rpd-dialog.c:79
+msgid "Value"
+msgstr "값"
+
+#: ../src/sysinfo/rpd-dialog.c:316
 msgid "View more detail"
 msgstr "세부 정보 보기"
 
@@ -430,105 +432,85 @@ msgstr "단말 보안 정책"
 msgid "Resources"
 msgstr "자원"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:44
-msgid "Whitelist"
-msgstr "화이트 리스트"
+#: ../src/sysinfo/sysinfo-window.ui.h:43
+msgid "Access Authority"
+msgstr "접근 권한"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:45
+#: ../src/sysinfo/sysinfo-window.ui.h:44
 msgid "Details"
 msgstr "자세히 보기"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:46
+#: ../src/sysinfo/sysinfo-window.ui.h:45
 msgid "Resources Control Policy"
 msgstr "매체 제어 정책"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:47
+#: ../src/sysinfo/sysinfo-window.ui.h:46
 msgid "Trusted URLs"
 msgstr "신뢰 사이트 목록"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:48
+#: ../src/sysinfo/sysinfo-window.ui.h:47
 msgid "Browser Policy"
 msgstr "브라우저 정책"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:49
-msgid "Status"
-msgstr "상태"
-
 #: ../src/sysinfo/sysinfo-window.ui.h:50
-msgid "Direction"
-msgstr "방향"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:51
 msgid "Source"
 msgstr "소스"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:52
+#: ../src/sysinfo/sysinfo-window.ui.h:51
 msgid "Destination"
 msgstr "목적지"
 
 #: ../src/sysinfo/sysinfo-window.ui.h:53
-msgid "Protocol"
-msgstr "프로토콜"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:54
 msgid "Firewall Policy - IPV4"
 msgstr "방화벽 정책 - IPV4"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:55
+#: ../src/sysinfo/sysinfo-window.ui.h:54
 msgid "Firewall Policy - IPV6"
 msgstr "방화벽 정책 - IPV6"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:56
+#: ../src/sysinfo/sysinfo-window.ui.h:55
 msgid "Authority Policy Info"
 msgstr "권한 정책 정보"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:57
+#: ../src/sysinfo/sysinfo-window.ui.h:56
 msgid "Period"
 msgstr "기간"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:58
+#: ../src/sysinfo/sysinfo-window.ui.h:57
 msgid "2015-01-01"
 msgstr "2015-01-01"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:59
+#: ../src/sysinfo/sysinfo-window.ui.h:58
 msgid "~"
 msgstr "~"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:60
+#: ../src/sysinfo/sysinfo-window.ui.h:59
 msgid "Log Filter Settings"
 msgstr "로그 필터 설정"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:61
+#: ../src/sysinfo/sysinfo-window.ui.h:60
 msgid "Date"
 msgstr "기간"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:62
+#: ../src/sysinfo/sysinfo-window.ui.h:61
 msgid "Time"
 msgstr "시간"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:63
+#: ../src/sysinfo/sysinfo-window.ui.h:62
 msgid "Type"
 msgstr "종류"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:64
+#: ../src/sysinfo/sysinfo-window.ui.h:63
 msgid "Description"
 msgstr "설명"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:65
+#: ../src/sysinfo/sysinfo-window.ui.h:64
 msgid "Log Info"
 msgstr "로그 정보"
 
 #: ../src/sysinfo/rpd-dialog.ui.h:1
 msgid "Unconfigured"
 msgstr "구성되지않음"
-
-#: ../src/sysinfo/rpd-dialog.ui.h:2
-msgid "Property"
-msgstr "속성"
-
-#: ../src/sysinfo/rpd-dialog.ui.h:3
-msgid "Value"
-msgstr "설정 값"
 
 #: ../src/sysinfo/logfilter-popover.ui.h:1
 msgid "DEBUG"
@@ -602,53 +584,62 @@ msgstr "중복 알림 허용"
 msgid "Notifications Settings"
 msgstr "알림설정"
 
-#~ msgid "keyboard"
-#~ msgstr "USB 키보드"
+msgid "Block"
+msgstr "차단"
 
-#~ msgid "printer"
-#~ msgstr "프린터"
+msgid "ports"
+msgstr "포트"
 
-#~ msgid "sound"
-#~ msgstr "사운드"
+msgid "keyboard"
+msgstr "USB 키보드"
 
-#~ msgid "usb_memory"
-#~ msgstr "USB 메모리"
+msgid "printer"
+msgstr "프린터"
 
-#~ msgid "cd_dvd"
-#~ msgstr "CD/DVD"
+msgid "sound"
+msgstr "사운드"
 
-#~ msgid "clipboard"
-#~ msgstr "클립보드"
+msgid "usb_memory"
+msgstr "USB 메모리"
 
-#~ msgid "network"
-#~ msgstr "네트워크"
+msgid "usb_network"
+msgstr "USB 네트워크"
 
-#~ msgid "mouse"
-#~ msgstr "USB 마우스"
+msgid "cd_dvd"
+msgstr "CD/DVD"
 
-#~ msgid "bluetooth"
-#~ msgstr "블루투스"
+msgid "clipboard"
+msgstr "클립보드"
 
-#~ msgid "screen_capture"
-#~ msgstr "스크린캡쳐"
+msgid "network"
+msgstr "네트워크"
 
-#~ msgid "wireless"
-#~ msgstr "무선랜"
+msgid "mouse"
+msgstr "USB 마우스"
 
-#~ msgid "camera"
-#~ msgstr "카메라"
+msgid "bluetooth"
+msgstr "블루투스"
 
-#~ msgid "microphone"
-#~ msgstr "녹음"
+msgid "screen_capture"
+msgstr "스크린캡쳐"
 
-#~ msgid "All"
-#~ msgstr "모두"
+msgid "wireless"
+msgstr "무선랜"
 
-#~ msgid "Normal"
-#~ msgstr "정상"
+msgid "camera"
+msgstr "카메라"
 
-#~ msgid "Error"
-#~ msgstr "오류"
+msgid "microphone"
+msgstr "녹음"
 
-#~ msgid "ALL"
-#~ msgstr "모두"
+msgid "All"
+msgstr "모두"
+
+msgid "Normal"
+msgstr "정상"
+
+msgid "Error"
+msgstr "오류"
+
+msgid "ALL"
+msgstr "모두"

@@ -40,8 +40,6 @@ struct _RPDDialogPrivate {
 	GtkWidget  *scl_resource;
 	GtkWidget  *trv_resource;
 	GtkWidget  *lbl_resource;
-	GtkWidget  *trv_col_1;
-	GtkWidget  *trv_col_2;
 
 	gchar      *resource;
 };
@@ -58,16 +56,67 @@ G_DEFINE_TYPE_WITH_PRIVATE (RPDDialog, rpd_dialog, GTK_TYPE_DIALOG)
 
 
 static void
+treeview_columns_add (GtkTreeView *treeview, const gchar *type)
+{
+	gint idx;
+	const gchar **p_str_columns;
+
+	static const gchar *NET_COLUMNS[] =
+	{
+		N_("Status"),
+		N_("Protocol"),
+		N_("Direction"),
+		N_("IP Address"),
+		N_("Source Port"),
+		N_("Destination Port"),
+		NULL
+	};
+
+	static const gchar *USB_NET_COLUMNS[] =
+	{
+		N_("Status"),
+		N_("Property"),
+		N_("Value"),
+		NULL
+	};
+
+	if (g_str_equal (type, "network")) {
+		p_str_columns = NET_COLUMNS;
+	} else if (g_str_equal (type, "usb_network")) {
+		p_str_columns = USB_NET_COLUMNS;
+	} else {
+		return;
+	}
+
+	for (idx = 0; p_str_columns[idx] != NULL; idx++) {
+		gint col_offset;
+		GtkCellRenderer *renderer;
+		GtkTreeViewColumn *column;
+
+		renderer = gtk_cell_renderer_text_new ();
+		g_object_set (renderer, "xalign", 0.5, NULL);
+
+		col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
+                                                                  -1, _(p_str_columns[idx]),
+                                                                  renderer, "text",
+                                                                  idx,
+                                                                  NULL);
+		column = gtk_tree_view_get_column (GTK_TREE_VIEW (treeview), col_offset - 1);
+		gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
+		gtk_tree_view_column_set_alignment (GTK_TREE_VIEW_COLUMN (column), 0.5);
+		gtk_tree_view_column_set_expand (GTK_TREE_VIEW_COLUMN (column), TRUE);
+	}
+}
+
+static void
 build_ui (RPDDialog *dialog)
 {
 	RPDDialogPrivate *priv;
 	priv = rpd_dialog_get_instance_private (dialog);
 
-	if (!g_str_equal (priv->resource, "network") && !g_str_equal (priv->resource, "bluetooth"))
-		goto error;
-
 	gboolean ret = FALSE;
 	gchar *grac_rules = NULL, *data = NULL, *output = NULL;
+	GtkTreeModel *model;
 
 	if (g_spawn_command_line_sync (GOOROOM_WHICH_GRAC_RULE, &output, NULL, NULL, NULL)) {
 		gchar **lines = g_strsplit (output, "\n", -1);
@@ -93,234 +142,88 @@ build_ui (RPDDialog *dialog)
 	if (g_str_equal (priv->resource, "network")) {
 		json_object *net_obj = JSON_OBJECT_GET (root_obj, "network");
 		if (net_obj) {
-			GtkTreeIter iter0;
-			GtkTreeModel *model;
-			model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_resource));
-
 			json_object *rules_obj = JSON_OBJECT_GET (net_obj, "rules");
-			json_object *state_obj = JSON_OBJECT_GET (net_obj, "state");
-
-			if (state_obj) {
-				gchar *default_state = NULL;
-				const char *str_state = json_object_get_string (state_obj);
-				if (g_str_equal (str_state, "allow") || g_str_equal (str_state, "accept"))
-					default_state = g_strdup (_("Allow"));
-				else
-					default_state = g_strdup (_("Block"));
-
-				gtk_tree_store_append (GTK_TREE_STORE (model), &iter0, NULL);
-				gtk_tree_store_set (GTK_TREE_STORE (model), &iter0,
-						0, _("default_network"),
-						1, default_state,
-						-1);
-
-				g_free (default_state);
-			}
-
 			if (rules_obj) {
-				gtk_tree_store_append (GTK_TREE_STORE (model), &iter0, NULL);
-				gtk_tree_store_set (GTK_TREE_STORE (model), &iter0,
-						0, "rules",
-						-1);
+				GtkTreeIter iter;
+				GtkListStore *model;
 
-				int i = 0, len = 0;
+				model = gtk_list_store_new (6, G_TYPE_STRING,
+                                               G_TYPE_STRING,
+                                               G_TYPE_STRING,
+                                               G_TYPE_STRING,
+                                               G_TYPE_STRING,
+                                               G_TYPE_STRING);
+
+				gint i = 0, len = 0;
 				len = json_object_array_length (rules_obj);
 				for (i = 0; i < len; i++) {
-					GtkTreeIter iter1, iter2;
-
-					gchar *str_rule = g_strdup_printf ("%s%d", _("rule"), i);
-
-					gtk_tree_store_append (GTK_TREE_STORE (model), &iter1, &iter0);
-					gtk_tree_store_set (GTK_TREE_STORE (model), &iter1,
-							0, str_rule,
-							-1);
-
-					g_free (str_rule);
+					GtkTreeIter iter;
 
 					json_object *rule = json_object_array_get_idx (rules_obj, i);
-					json_object *obj1 = JSON_OBJECT_GET (rule, "ipaddress");
-					json_object *obj2 = JSON_OBJECT_GET (rule, "state");
-					json_object *obj3 = JSON_OBJECT_GET (rule, "ports");
-					json_object *obj4 = JSON_OBJECT_GET (rule, "direction");
+					json_object *obj1 = JSON_OBJECT_GET (rule, "state");
+					json_object *obj2 = JSON_OBJECT_GET (rule, "protocol");
+					json_object *obj3 = JSON_OBJECT_GET (rule, "direction");
+					json_object *obj4 = JSON_OBJECT_GET (rule, "ipaddress");
+					json_object *obj5 = JSON_OBJECT_GET (rule, "src_ports");
+					json_object *obj6 = JSON_OBJECT_GET (rule, "dst_ports");
 
-					if (obj1) {
-						const char *str_ipaddress = json_object_get_string (obj1);
-						gchar *ipaddress = g_strdup (str_ipaddress);
+					const gchar *str_state     = json_object_get_string (obj1);
+					const gchar *str_protocol  = json_object_get_string (obj2);
+					const gchar *str_direction = json_object_get_string (obj3);
+					const gchar *str_ipaddress = json_object_get_string (obj4);
+					const gchar *str_src_ports = json_object_get_string (obj5);
+					const gchar *str_dst_ports = json_object_get_string (obj6);
 
-						gtk_tree_store_append (GTK_TREE_STORE (model), &iter2, &iter1);
-						gtk_tree_store_set (GTK_TREE_STORE (model), &iter2,
-								0, "ipaddress",
-								1, ipaddress,
-								-1);
+					gtk_list_store_append (model, &iter);
+					gtk_list_store_set (model, &iter,
+                                        0, str_state,
+                                        1, str_protocol,
+                                        2, str_direction,
+                                        3, str_ipaddress,
+                                        4, str_src_ports,
+                                        5, str_dst_ports,
+                                        -1);
 
-						g_free (ipaddress);
-					}
+					gtk_tree_view_set_model (GTK_TREE_VIEW (priv->trv_resource), GTK_TREE_MODEL (model));
 
+					treeview_columns_add (GTK_TREE_VIEW (priv->trv_resource), "network");
 
-					if (obj2) {
-						const char *state = json_object_get_string (obj2);
-						gchar *str_state = g_strdup (state);
-
-						gtk_tree_store_append (GTK_TREE_STORE (model), &iter2, &iter1);
-						gtk_tree_store_set (GTK_TREE_STORE (model), &iter2,
-								0, "state",
-								1, str_state,
-								-1);
-
-						g_free (str_state);
-
-					}
-
-					if (obj3) {
-						gtk_tree_store_append (GTK_TREE_STORE (model), &iter2, &iter1);
-						gtk_tree_store_set (GTK_TREE_STORE (model), &iter2,
-								0, "ports",
-								-1);
-
-						int i = 0, len = 0;
-						len = json_object_array_length (obj3);
-						for (i = 0; i < len; i++) {
-							GtkTreeIter iter3, iter4;
-
-							gchar *str_port = g_strdup_printf ("%s%d", _("ports"), i);
-
-							gtk_tree_store_append (GTK_TREE_STORE (model), &iter3, &iter2);
-							gtk_tree_store_set (GTK_TREE_STORE (model), &iter3,
-									0, str_port,
-									-1);
-
-							g_free (str_port);
-
-							json_object *ports_obj = json_object_array_get_idx (obj3, i);
-							json_object *src_ports_obj = JSON_OBJECT_GET (ports_obj, "src_port");
-							json_object *protocols_obj = JSON_OBJECT_GET (ports_obj, "protocol");
-							json_object *dst_ports_obj = JSON_OBJECT_GET (ports_obj, "dst_port");
-							if (src_ports_obj) {
-								int j = 0;
-								int j_len = json_object_array_length (src_ports_obj);
-								GPtrArray *arr = g_ptr_array_new ();
-								for (j = 0; j < j_len; j++) {
-									json_object *src_port_obj = json_object_array_get_idx (src_ports_obj, j);
-									const char *src_port = json_object_get_string (src_port_obj);
-									g_ptr_array_add (arr, g_strdup (src_port));
-								}
-								g_ptr_array_add (arr, NULL);
-								gchar **strings = (gchar **)g_ptr_array_free (arr, FALSE);
-
-								gchar *str_src_ports = g_strjoinv (",", strings);
-
-								g_free (strings);
-
-								gtk_tree_store_append (GTK_TREE_STORE (model), &iter4, &iter3);
-								gtk_tree_store_set (GTK_TREE_STORE (model), &iter4,
-										0, "src_port",
-										1, str_src_ports,
-										-1);
-
-								g_free (str_src_ports);
-							}
-
-							if (protocols_obj) {
-								const char *protocols = json_object_get_string (protocols_obj);
-								gchar *str_protocols = g_strdup (protocols);
-
-								gtk_tree_store_append (GTK_TREE_STORE (model), &iter4, &iter3);
-								gtk_tree_store_set (GTK_TREE_STORE (model), &iter4,
-										0, "protocol",
-										1, str_protocols,
-										-1);
-
-								g_free (str_protocols);
-							}
-
-							if (dst_ports_obj) {
-								int j = 0;
-								int j_len = json_object_array_length (dst_ports_obj);
-								GPtrArray *arr = g_ptr_array_new ();
-								for (j = 0; j < j_len; j++) {
-									json_object *dst_port_obj = json_object_array_get_idx (dst_ports_obj, j);
-									const char *dst_port = json_object_get_string (dst_port_obj);
-								}
-								g_ptr_array_add (arr, NULL);
-								gchar **strings = (gchar **)g_ptr_array_free (arr, FALSE);
-
-								gchar *str_dst_ports = g_strjoinv (",", strings);
-
-								g_free (strings);
-
-								gtk_tree_store_append (GTK_TREE_STORE (model), &iter4, &iter3);
-								gtk_tree_store_set (GTK_TREE_STORE (model), &iter4,
-										0, "dst_port",
-										1, str_dst_ports,
-										-1);
-
-								g_free (str_dst_ports);
-							}
-						}
-					}
-
-					if (obj4) {
-						const char *str_direction = json_object_get_string (obj4);
-						gchar *direction = g_strdup (str_direction);
-
-						gtk_tree_store_append (GTK_TREE_STORE (model), &iter2, &iter1);
-						gtk_tree_store_set (GTK_TREE_STORE (model), &iter2,
-								0, "direction",
-								1, direction,
-								-1);
-
-						g_free (direction);
-					}
-				} // end of for
-			}
-
-			ret = TRUE;
-		}
-	} else if (g_str_equal (priv->resource, "bluetooth")) {
-		json_object *bluetooth_obj = JSON_OBJECT_GET (root_obj, "bluetooth");
-		if (bluetooth_obj) {
-			GtkTreeIter iter;
-			GtkTreeModel *model;
-			model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_resource));
-
-			gtk_tree_view_column_set_title (GTK_TREE_VIEW_COLUMN (priv->trv_col_1), _("Mac Address"));
-			gtk_tree_view_column_set_title (GTK_TREE_VIEW_COLUMN (priv->trv_col_2), _("Access Authority"));
-
-			gchar *default_state = NULL;
-			json_object *state_obj = JSON_OBJECT_GET (bluetooth_obj, "state");
-			json_object *mac_addrs_obj = JSON_OBJECT_GET (bluetooth_obj, "mac_address");
-
-			if (state_obj) {
-				const char *str_state = json_object_get_string (state_obj);
-				if (g_str_equal (str_state, "allow"))
-					default_state = g_strdup (_("Allow"));
-				else
-					default_state = g_strdup (_("Disallow"));
-			}
-
-			gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
-			gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
-					0, _("default_bluetooth"),
-					1, default_state,
-					-1);
-
-			if (mac_addrs_obj) {
-				int i = 0, len = 0;
-				len = json_object_array_length (mac_addrs_obj);
-				for (i = 0; i < len; i++) {
-					json_object *mac_addr_obj = json_object_array_get_idx (mac_addrs_obj, i);
-					const char *mac_addr = json_object_get_string (mac_addr_obj);
-					gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
-					gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
-							0, mac_addr,
-							1, _("Allow"),
-							-1);
+					g_object_unref (model);
 				}
+				ret = TRUE;
 			}
 
-			g_free (default_state);
+		}
+	} else if (g_str_equal (priv->resource, "usb_network")) {
+		json_object *usb_net_obj = JSON_OBJECT_GET (root_obj, "usb_network");
+		if (usb_net_obj) {
+			json_object *wl_obj = JSON_OBJECT_GET (usb_net_obj, "whitelist");
+			if (wl_obj) {
+				GtkTreeIter iter;
+				GtkListStore *model;
 
-			ret = TRUE;
+				model = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+
+				json_object_object_foreach (wl_obj, key, val) {
+					const char *str_val = json_object_get_string (val);
+					if (key && str_val) {
+						gtk_list_store_append (model, &iter);
+						gtk_list_store_set (model, &iter,
+                                            0, _("Allow"),
+                                            1, key,
+                                            2, str_val,
+                                            -1);
+					}
+				}
+
+				gtk_tree_view_set_model (GTK_TREE_VIEW (priv->trv_resource), GTK_TREE_MODEL (model));
+
+				treeview_columns_add (GTK_TREE_VIEW (priv->trv_resource), "usb_network");
+
+				g_object_unref (model);
+
+				ret = TRUE;
+			}
 		}
 	}
 
@@ -411,9 +314,7 @@ rpd_dialog_constructor (GType                  type,
 	priv = rpd_dialog_get_instance_private (self);
 
 	gchar *title = g_strdup_printf ("%s (%s)", _("View more detail"), _(priv->resource));
-
 	gtk_window_set_title (GTK_WINDOW (self), title);
-
 	g_free (title);
 
 	build_ui (self);
@@ -449,8 +350,6 @@ rpd_dialog_class_init (RPDDialogClass *class)
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), RPDDialog, scl_resource);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), RPDDialog, trv_resource);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), RPDDialog, lbl_resource);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), RPDDialog, trv_col_1);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), RPDDialog, trv_col_2);
 
 	g_object_class_install_property (object_class,
 									PROP_RESOURCE,

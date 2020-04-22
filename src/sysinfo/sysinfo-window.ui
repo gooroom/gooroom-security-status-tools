@@ -23,20 +23,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststore">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gchararray2 -->
-      <column type="gchararray"/>
-      <!-- column-name gchararray3 -->
-      <column type="gchararray"/>
-      <!-- column-name gchararray4 -->
-      <column type="gchararray"/>
-      <!-- column-name gboolean1 -->
-      <column type="gboolean"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="liststore_browser">
     <columns>
       <!-- column-name gchararray1 -->
@@ -83,6 +69,24 @@
       <column type="gchararray"/>
       <!-- column-name gint1 -->
       <column type="gint64"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore_log_type">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="treestore_res">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
+      <!-- column-name gchararray3 -->
+      <column type="gchararray"/>
+      <!-- column-name gboolean1 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <template class="SysinfoWindow" parent="GtkApplicationWindow">
@@ -1337,11 +1341,6 @@
                                         </child>
                                       </object>
                                     </child>
-<!--
-                                    <child type="label_item">
-                                      <placeholder/>
-                                    </child>
--->
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1628,14 +1627,18 @@
                                               <object class="GtkTreeView" id="trv_res_ctrl">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
-                                                <property name="model">liststore</property>
+                                                <property name="model">treestore_res</property>
                                                 <child internal-child="selection">
                                                   <object class="GtkTreeSelection"/>
                                                 </child>
                                                 <child>
                                                   <object class="GtkTreeViewColumn">
-                                                    <property name="min_width">128</property>
+                                                    <property name="resizable">True</property>
+                                                    <property name="sizing">autosize</property>
                                                     <property name="title" translatable="yes">Resources</property>
+                                                    <property name="expand">True</property>
+                                                    <property name="clickable">True</property>
+                                                    <property name="alignment">0.5</property>
                                                     <child>
                                                       <object class="GtkCellRendererText">
                                                         <property name="xalign">0</property>
@@ -1648,7 +1651,11 @@
                                                 </child>
                                                 <child>
                                                   <object class="GtkTreeViewColumn">
+                                                    <property name="resizable">True</property>
+                                                    <property name="sizing">autosize</property>
                                                     <property name="title" translatable="yes">Access Authority</property>
+                                                    <property name="expand">True</property>
+                                                    <property name="clickable">True</property>
                                                     <property name="alignment">0.5</property>
                                                     <child>
                                                       <object class="GtkCellRendererText">
@@ -1656,20 +1663,6 @@
                                                       </object>
                                                       <attributes>
                                                         <attribute name="text">1</attribute>
-                                                      </attributes>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkTreeViewColumn">
-                                                    <property name="title" translatable="yes">Whitelist</property>
-                                                    <property name="alignment">0.5</property>
-                                                    <child>
-                                                      <object class="GtkCellRendererText">
-                                                        <property name="xalign">0.50999999046325684</property>
-                                                      </object>
-                                                      <attributes>
-                                                        <attribute name="text">2</attribute>
                                                       </attributes>
                                                     </child>
                                                   </object>
@@ -2376,11 +2369,5 @@
       <widget name="lbl_server_ip_const"/>
       <widget name="lbl_port_num_const"/>
     </widgets>
-  </object>
-  <object class="GtkListStore" id="liststore_log_type">
-    <columns>
-      <!-- column-name gchararray -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>

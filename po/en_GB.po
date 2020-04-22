@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gooroom-security-status-tools 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-04 14:55+0900\n"
+"POT-Creation-Date: 2020-04-22 10:52+0900\n"
 "PO-Revision-Date: 2019-08-23 11:54+0900\n"
 "Language-Team: Gooroom <gooroom@gooroom.kr>\n"
 "Language: en\n"
@@ -16,207 +16,209 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../src/sysinfo/sysinfo-window.c:361 ../src/sysinfo/sysinfo-window.c:1613
+#: ../src/sysinfo/sysinfo-window.c:365 ../src/sysinfo/sysinfo-window.c:1666
 msgid "unset"
 msgstr "unset"
 
-#: ../src/sysinfo/sysinfo-window.c:364
+#: ../src/sysinfo/sysinfo-window.c:368
 msgid "immediately"
 msgstr "immediately"
 
-#: ../src/sysinfo/sysinfo-window.c:366
+#: ../src/sysinfo/sysinfo-window.c:370
 msgid "day"
 msgstr "day"
 
-#: ../src/sysinfo/sysinfo-window.c:368
+#: ../src/sysinfo/sysinfo-window.c:372
 msgid "days"
 msgstr "days"
 
-#: ../src/sysinfo/sysinfo-window.c:523
+#: ../src/sysinfo/sysinfo-window.c:527
 msgid "Connected"
 msgstr "Connected"
 
-#: ../src/sysinfo/sysinfo-window.c:525
+#: ../src/sysinfo/sysinfo-window.c:529
 msgid "Disconnected"
 msgstr "Disconnected"
 
-#: ../src/sysinfo/sysinfo-window.c:537 ../src/sysinfo/sysinfo-window.c:560
-#: ../src/sysinfo/sysinfo-window.c:635 ../src/sysinfo/sysinfo-window.c:731
-#: ../src/sysinfo/sysinfo-window.c:1230 ../src/sysinfo/sysinfo-window.c:1352
-#: ../src/sysinfo/sysinfo-window.c:1425 ../src/sysinfo/sysinfo-window.c:1460
-#: ../src/sysinfo/sysinfo-window.c:1461 ../src/sysinfo/sysinfo-window.c:1462
-#: ../src/sysinfo/sysinfo-window.c:1631 ../src/sysinfo/sysinfo-window.c:1721
-#: ../src/sysinfo/sysinfo-window.c:1973 ../src/settings/settings-window.c:208
-#: ../src/settings/settings-window.c:211 ../src/settings/settings-window.c:214
-#: ../src/settings/settings-window.c:217 ../src/settings/settings-window.c:220
-#: ../src/sysinfo/sysinfo-window.ui.h:4 ../src/settings/settings-window.ui.h:5
+#: ../src/sysinfo/sysinfo-window.c:541 ../src/sysinfo/sysinfo-window.c:564
+#: ../src/sysinfo/sysinfo-window.c:639 ../src/sysinfo/sysinfo-window.c:735
+#: ../src/sysinfo/sysinfo-window.c:1234 ../src/sysinfo/sysinfo-window.c:1365
+#: ../src/sysinfo/sysinfo-window.c:1405 ../src/sysinfo/sysinfo-window.c:1478
+#: ../src/sysinfo/sysinfo-window.c:1513 ../src/sysinfo/sysinfo-window.c:1514
+#: ../src/sysinfo/sysinfo-window.c:1515 ../src/sysinfo/sysinfo-window.c:1684
+#: ../src/sysinfo/sysinfo-window.c:1773 ../src/sysinfo/sysinfo-window.c:1815
+#: ../src/settings/settings-window.c:208 ../src/settings/settings-window.c:211
+#: ../src/settings/settings-window.c:214 ../src/settings/settings-window.c:217
+#: ../src/settings/settings-window.c:220 ../src/sysinfo/sysinfo-window.ui.h:4
+#: ../src/settings/settings-window.ui.h:5
 msgid "Unknown"
 msgstr "Unknown"
 
-#: ../src/sysinfo/sysinfo-window.c:733
+#: ../src/sysinfo/sysinfo-window.c:737
 msgid "Latest"
 msgstr "Latest"
 
-#: ../src/sysinfo/sysinfo-window.c:737
+#: ../src/sysinfo/sysinfo-window.c:741
 #, c-format
 msgid "There is %s package to update."
 msgstr "There is %s package to update."
 
-#: ../src/sysinfo/sysinfo-window.c:739
+#: ../src/sysinfo/sysinfo-window.c:743
 #, c-format
 msgid "There are %s packages to update."
 msgstr "There are %s packages to update."
 
-#: ../src/sysinfo/sysinfo-window.c:836
+#: ../src/sysinfo/sysinfo-window.c:840
 msgid "ACCEPT"
 msgstr "ACCEPT"
 
-#: ../src/sysinfo/sysinfo-window.c:838
+#: ../src/sysinfo/sysinfo-window.c:842
 msgid "DROP"
 msgstr "DROP"
 
-#: ../src/sysinfo/sysinfo-window.c:840
+#: ../src/sysinfo/sysinfo-window.c:844
 msgid "REJECT"
 msgstr "REJECT"
 
-#: ../src/sysinfo/sysinfo-window.c:902
+#: ../src/sysinfo/sysinfo-window.c:906
 msgid "Accept"
 msgstr "Accept"
 
-#: ../src/sysinfo/sysinfo-window.c:904
+#: ../src/sysinfo/sysinfo-window.c:908
 msgid "Drop"
 msgstr "Drop"
 
-#: ../src/sysinfo/sysinfo-window.c:939
+#: ../src/sysinfo/sysinfo-window.c:943
 msgid "INPUT"
 msgstr "INPUT"
 
-#: ../src/sysinfo/sysinfo-window.c:940
+#: ../src/sysinfo/sysinfo-window.c:944
 msgid "OUTPUT"
 msgstr "OUTPUT"
 
-#: ../src/sysinfo/sysinfo-window.c:941
+#: ../src/sysinfo/sysinfo-window.c:945
 msgid "FORWARD"
 msgstr "FORWARD"
 
-#: ../src/sysinfo/sysinfo-window.c:967
+#: ../src/sysinfo/sysinfo-window.c:971
 msgid "Could not find firewall policy."
 msgstr "Could not find firewall policy."
 
-#: ../src/sysinfo/sysinfo-window.c:1225
+#: ../src/sysinfo/sysinfo-window.c:1229
 msgid "Safety"
 msgstr "Safety"
 
-#: ../src/sysinfo/sysinfo-window.c:1227
+#: ../src/sysinfo/sysinfo-window.c:1231
 msgid "Vulnerable"
 msgstr "Vulnerable"
 
-#: ../src/sysinfo/sysinfo-window.c:1436
+#: ../src/sysinfo/sysinfo-window.c:1489
 msgid "Standalone Mode"
 msgstr "Standalone Mode"
 
-#: ../src/sysinfo/sysinfo-window.c:1438
+#: ../src/sysinfo/sysinfo-window.c:1491
 msgid "Server Managed Mode"
 msgstr "Server Managed Mode"
 
-#: ../src/sysinfo/sysinfo-window.c:1615
+#: ../src/sysinfo/sysinfo-window.c:1668
 msgid "minute"
 msgstr "minute"
 
-#: ../src/sysinfo/sysinfo-window.c:1617
+#: ../src/sysinfo/sysinfo-window.c:1670
 msgid "minutes"
 msgstr "minutes"
 
-#: ../src/sysinfo/sysinfo-window.c:1627
+#: ../src/sysinfo/sysinfo-window.c:1680
 msgid "Enabled"
 msgstr "Enabled"
 
-#: ../src/sysinfo/sysinfo-window.c:1629
+#: ../src/sysinfo/sysinfo-window.c:1682
 msgid "Disabled"
 msgstr "Disabled"
 
-#: ../src/sysinfo/sysinfo-window.c:1694
+#: ../src/sysinfo/sysinfo-window.c:1747
 msgid "Could not find trusted urls information."
 msgstr "Could not find trusted urls information."
 
-#: ../src/sysinfo/sysinfo-window.c:1715
+#: ../src/sysinfo/sysinfo-window.c:1767 ../src/sysinfo/sysinfo-window.c:1808
 msgid "ReadOnly"
 msgstr "ReadOnly"
 
-#: ../src/sysinfo/sysinfo-window.c:1717 ../src/sysinfo/rpd-dialog.c:107
-#: ../src/sysinfo/rpd-dialog.c:296 ../src/sysinfo/rpd-dialog.c:316
+#: ../src/sysinfo/sysinfo-window.c:1769 ../src/sysinfo/sysinfo-window.c:1810
+#: ../src/sysinfo/sysinfo-window.c:1846 ../src/sysinfo/rpd-dialog.c:212
 msgid "Allow"
 msgstr "Allow"
 
-#: ../src/sysinfo/sysinfo-window.c:1719 ../src/sysinfo/rpd-dialog.c:298
+#: ../src/sysinfo/sysinfo-window.c:1771 ../src/sysinfo/sysinfo-window.c:1813
 msgid "Disallow"
 msgstr "Disallow"
 
-#: ../src/sysinfo/sysinfo-window.c:1734
-msgid "More"
-msgstr "More"
-
-#: ../src/sysinfo/sysinfo-window.c:1833 ../src/sysinfo/rpd-dialog.c:337
+#: ../src/sysinfo/sysinfo-window.c:1911 ../src/sysinfo/rpd-dialog.c:240
 msgid "Could not find information."
 msgstr "Could not find information."
 
-#: ../src/sysinfo/sysinfo-window.c:1897
+#: ../src/sysinfo/sysinfo-window.c:1975
 msgid "Do you want to allow push update?"
 msgstr "Do you want to allow push update?"
 
-#: ../src/sysinfo/sysinfo-window.c:1897
+#: ../src/sysinfo/sysinfo-window.c:1975
 msgid "Do you want to deny push update?"
 msgstr "Do you want to deny push update?"
 
-#: ../src/sysinfo/sysinfo-window.c:1908
+#: ../src/sysinfo/sysinfo-window.c:1986
 msgid "_Yes"
 msgstr "_Yes"
 
-#: ../src/sysinfo/sysinfo-window.c:1909
+#: ../src/sysinfo/sysinfo-window.c:1987
 msgid "_No"
 msgstr "_No"
 
-#: ../src/sysinfo/sysinfo-window.c:1912
+#: ../src/sysinfo/sysinfo-window.c:1990
 msgid "Push Update Settings"
 msgstr "Push Update Settings"
 
-#: ../src/sysinfo/sysinfo-window.c:2071
+#: ../src/sysinfo/sysinfo-window.c:2142
 msgid "Please make sure to check log search period."
 msgstr "Please make sure to check log search period."
 
-#: ../src/sysinfo/sysinfo-window.c:2074
+#: ../src/sysinfo/sysinfo-window.c:2145
 msgid "Log Search Period Settings"
 msgstr "Log Search Period Settings"
 
-#: ../src/sysinfo/rpd-dialog.c:109
-msgid "Block"
-msgstr "Block"
+#: ../src/sysinfo/rpd-dialog.c:66 ../src/sysinfo/rpd-dialog.c:77
+#: ../src/sysinfo/sysinfo-window.ui.h:48
+msgid "Status"
+msgstr "Status"
 
-#: ../src/sysinfo/rpd-dialog.c:113
-msgid "default_network"
-msgstr "default_network"
+#: ../src/sysinfo/rpd-dialog.c:67 ../src/sysinfo/sysinfo-window.ui.h:52
+msgid "Protocol"
+msgstr "Protocol"
 
-#: ../src/sysinfo/rpd-dialog.c:131
-msgid "rule"
-msgstr "Rule"
+#: ../src/sysinfo/rpd-dialog.c:68 ../src/sysinfo/sysinfo-window.ui.h:49
+msgid "Direction"
+msgstr "Direction"
 
-#: ../src/sysinfo/rpd-dialog.c:185
-msgid "ports"
-msgstr "ports"
+#: ../src/sysinfo/rpd-dialog.c:69
+msgid "IP Address"
+msgstr "IP Address"
 
-#: ../src/sysinfo/rpd-dialog.c:286
-msgid "Mac Address"
-msgstr "Mac Address"
+#: ../src/sysinfo/rpd-dialog.c:70
+msgid "Source Port"
+msgstr "Source Port"
 
-#: ../src/sysinfo/rpd-dialog.c:287 ../src/sysinfo/sysinfo-window.ui.h:43
-msgid "Access Authority"
-msgstr "Access Authority"
+#: ../src/sysinfo/rpd-dialog.c:71
+msgid "Destination Port"
+msgstr "Destination Port"
 
-#: ../src/sysinfo/rpd-dialog.c:303
-msgid "default_bluetooth"
-msgstr "default_bluetooth"
+#: ../src/sysinfo/rpd-dialog.c:78
+msgid "Property"
+msgstr "Property"
 
-#: ../src/sysinfo/rpd-dialog.c:413
+#: ../src/sysinfo/rpd-dialog.c:79
+msgid "Value"
+msgstr "Value"
+
+#: ../src/sysinfo/rpd-dialog.c:316
 msgid "View more detail"
 msgstr "View more detail"
 
@@ -430,105 +432,85 @@ msgstr "Device Security Policy"
 msgid "Resources"
 msgstr "Resources"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:44
-msgid "Whitelist"
-msgstr "Whitelist"
+#: ../src/sysinfo/sysinfo-window.ui.h:43
+msgid "Access Authority"
+msgstr "Access Authority"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:45
+#: ../src/sysinfo/sysinfo-window.ui.h:44
 msgid "Details"
 msgstr "Details"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:46
+#: ../src/sysinfo/sysinfo-window.ui.h:45
 msgid "Resources Control Policy"
 msgstr "Resources Control Policy"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:47
+#: ../src/sysinfo/sysinfo-window.ui.h:46
 msgid "Trusted URLs"
 msgstr "Trusted URLs"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:48
+#: ../src/sysinfo/sysinfo-window.ui.h:47
 msgid "Browser Policy"
 msgstr "Browser Policy"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:49
-msgid "Status"
-msgstr "Status"
-
 #: ../src/sysinfo/sysinfo-window.ui.h:50
-msgid "Direction"
-msgstr "Direction"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:51
 msgid "Source"
 msgstr "Source"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:52
+#: ../src/sysinfo/sysinfo-window.ui.h:51
 msgid "Destination"
 msgstr "Destination"
 
 #: ../src/sysinfo/sysinfo-window.ui.h:53
-msgid "Protocol"
-msgstr "Protocol"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:54
 msgid "Firewall Policy - IPV4"
 msgstr "Firewall Policy - IPV4"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:55
+#: ../src/sysinfo/sysinfo-window.ui.h:54
 msgid "Firewall Policy - IPV6"
 msgstr "Firewall Policy - IPV6"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:56
+#: ../src/sysinfo/sysinfo-window.ui.h:55
 msgid "Authority Policy Info"
 msgstr "Authority Policy Info"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:57
+#: ../src/sysinfo/sysinfo-window.ui.h:56
 msgid "Period"
 msgstr "Period"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:58
+#: ../src/sysinfo/sysinfo-window.ui.h:57
 msgid "2015-01-01"
 msgstr "2015-01-01"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:59
+#: ../src/sysinfo/sysinfo-window.ui.h:58
 msgid "~"
 msgstr "~"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:60
+#: ../src/sysinfo/sysinfo-window.ui.h:59
 msgid "Log Filter Settings"
 msgstr "Log Filter Settings"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:61
+#: ../src/sysinfo/sysinfo-window.ui.h:60
 msgid "Date"
 msgstr "Date"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:62
+#: ../src/sysinfo/sysinfo-window.ui.h:61
 msgid "Time"
 msgstr "Time"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:63
+#: ../src/sysinfo/sysinfo-window.ui.h:62
 msgid "Type"
 msgstr "Type"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:64
+#: ../src/sysinfo/sysinfo-window.ui.h:63
 msgid "Description"
 msgstr "Description"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:65
+#: ../src/sysinfo/sysinfo-window.ui.h:64
 msgid "Log Info"
 msgstr "Log Info"
 
 #: ../src/sysinfo/rpd-dialog.ui.h:1
 msgid "Unconfigured"
 msgstr "Unconfigured"
-
-#: ../src/sysinfo/rpd-dialog.ui.h:2
-msgid "Property"
-msgstr "Property"
-
-#: ../src/sysinfo/rpd-dialog.ui.h:3
-msgid "Value"
-msgstr "Value"
 
 #: ../src/sysinfo/logfilter-popover.ui.h:1
 msgid "DEBUG"
@@ -602,44 +584,53 @@ msgstr "Allow Duplicate Notifications"
 msgid "Notifications Settings"
 msgstr "Notifications Settings"
 
+msgid "Block"
+msgstr "Block"
+
+msgid "ports"
+msgstr "ports"
+
 msgid "keyboard"
-msgstr "usb keyboard"
+msgstr "USB Keyboard"
 
 msgid "printer"
-msgstr "printer"
+msgstr "Printer"
 
 msgid "sound"
-msgstr "sound"
+msgstr "Sound"
 
 msgid "usb_memory"
-msgstr "usb_memory"
+msgstr "USB Memory"
+
+msgid "usb_network"
+msgstr "USB Network"
 
 msgid "cd_dvd"
-msgstr "cd_dvd"
+msgstr "CD/DVD"
 
 msgid "clipboard"
-msgstr "clipboard"
+msgstr "Clipboard"
 
 msgid "network"
-msgstr "network"
+msgstr "Network"
 
 msgid "mouse"
-msgstr "usb mouse"
+msgstr "USB Mouse"
 
 msgid "bluetooth"
-msgstr "bluetooth"
+msgstr "Bluetooth"
 
 msgid "screen_capture"
-msgstr "screen capture"
+msgstr "Screen Capture"
 
 msgid "wireless"
-msgstr "wireless"
+msgstr "Wireless"
 
 msgid "camera"
-msgstr "camera"
+msgstr "Camera"
 
 msgid "microphone"
-msgstr "recording"
+msgstr "Recording"
 
 msgid "All"
 msgstr "All"
