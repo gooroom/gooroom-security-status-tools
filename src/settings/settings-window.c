@@ -166,8 +166,8 @@ gooroom_agent_service_status_update (gpointer data)
 }
 
 static void
-on_allow_duplicate_notification_toggled_cb (GtkToggleButton *button,
-                                            gpointer         data)
+on_allow_duplicate_notification_toggled (GtkToggleButton *button,
+                                         gpointer         data)
 {
 	SettingsWindow *window = SETTINGS_WINDOW (data);
 	SettingsWindowPrivate *priv = window->priv;
@@ -240,9 +240,9 @@ update_ui (SettingsWindow *window)
 	if (priv->settings)
 		adn = g_settings_get_boolean (priv->settings, "allow-duplicate-notifications");
 
-	g_signal_handlers_block_by_func (priv->chk_adn, on_allow_duplicate_notification_toggled_cb, window);
+	g_signal_handlers_block_by_func (priv->chk_adn, on_allow_duplicate_notification_toggled, window);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->chk_adn), adn);
-	g_signal_handlers_unblock_by_func (priv->chk_adn, on_allow_duplicate_notification_toggled_cb, window);
+	g_signal_handlers_unblock_by_func (priv->chk_adn, on_allow_duplicate_notification_toggled, window);
 }
 
 static void
@@ -347,7 +347,7 @@ settings_window_init (SettingsWindow *self)
 	gtk_widget_init_template (GTK_WIDGET (self));
 
 	schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
-                                              "apps.gooroom-security-notify", TRUE);
+                                              "apps.gooroom-security-status", TRUE);
 	if (schema) {
 		priv->settings = g_settings_new_full (schema, NULL, NULL);
 		g_settings_schema_unref (schema);
@@ -361,8 +361,12 @@ settings_window_init (SettingsWindow *self)
 	g_signal_connect (G_OBJECT (priv->btn_gms_settings), "clicked",
                       G_CALLBACK (on_gms_settings_button_clicked), self);
 
-	g_signal_connect (G_OBJECT (priv->chk_adn), "toggled",
-                      G_CALLBACK (on_allow_duplicate_notification_toggled_cb), self);
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->chk_adn), FALSE);
+	if (priv->settings) {
+		gtk_widget_set_sensitive (GTK_WIDGET (priv->chk_adn), TRUE);
+		g_signal_connect (G_OBJECT (priv->chk_adn), "toggled",
+                          G_CALLBACK (on_allow_duplicate_notification_toggled), self);
+	}
 }
 
 static void
