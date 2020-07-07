@@ -1,3 +1,12 @@
+gooroom-security-status-tools (0.1.5+grm2u1) unstable; urgency=medium
+
+  [ cjheo ]
+  * [b47ed539] [Bug: 2451] '중복알림허용' 동작오류 수정
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Tue, 07 Jul 2020 14:20:12 +0900
+
 gooroom-security-status-tools (0.1.4+grm2u1) unstable; urgency=medium
 
   [ cjheo ]
