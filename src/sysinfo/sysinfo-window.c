@@ -544,37 +544,77 @@ done_agent_proxy_cb (GObject *source_object, GAsyncResult *res, gpointer user_da
 }
 
 static void
-agent_connection_status_check (gpointer data)
+got_agent_proxy_cb (GObject      *source_object,
+                    GAsyncResult *res,
+                    gpointer      data)
 {
+	GError *error = NULL;
 	GDBusProxy *proxy;
-
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
 
-	proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
-			G_DBUS_CALL_FLAGS_NONE,
-			NULL,
-			"kr.gooroom.agent",
-			"/kr/gooroom/agent",
-			"kr.gooroom.agent",
-			NULL,
-			NULL);
+	proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
+	if (proxy == NULL) {
+		if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+			g_warning ("Error creating agent proxy: %s\n", error->message);
 
-	if (!proxy) {
 		gtk_label_set_text (GTK_LABEL (priv->lbl_conn_status), _("Unknown"));
+
+		g_error_free (error);
 		return;
 	}
 
 	const gchar *arg = "{\"module\":{\"module_name\":\"SERVER\",\"task\":{\"task_name\":\"grm_heartbit\",\"in\":{}}}}";
 
 	g_dbus_proxy_call (proxy,
-						"do_task",
-						g_variant_new ("(s)", arg),
-						G_DBUS_CALL_FLAGS_NONE,
-						-1,
-						NULL,
-						done_agent_proxy_cb,
-						data);
+                       "do_task",
+                       g_variant_new ("(s)", arg),
+                       G_DBUS_CALL_FLAGS_NONE,
+                       -1,
+                       NULL,
+                       done_agent_proxy_cb,
+                       window);
+}
+
+
+static void
+agent_connection_status_check (gpointer data)
+{
+	g_dbus_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
+                              G_DBUS_CALL_FLAGS_NONE,
+                              NULL,
+                              "kr.gooroom.agent",
+                              "/kr/gooroom/agent",
+                              "kr.gooroom.agent",
+                              NULL,
+                              got_agent_proxy_cb,
+                              data);
+
+//	GDBusProxy *proxy;
+//	proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+//			G_DBUS_CALL_FLAGS_NONE,
+//			NULL,
+//			"kr.gooroom.agent",
+//			"/kr/gooroom/agent",
+//			"kr.gooroom.agent",
+//			NULL,
+//			NULL);
+//
+//	if (!proxy) {
+//		gtk_label_set_text (GTK_LABEL (priv->lbl_conn_status), _("Unknown"));
+//		return;
+//	}
+//
+//	const gchar *arg = "{\"module\":{\"module_name\":\"SERVER\",\"task\":{\"task_name\":\"grm_heartbit\",\"in\":{}}}}";
+//
+//	g_dbus_proxy_call (proxy,
+//						"do_task",
+//						g_variant_new ("(s)", arg),
+//						G_DBUS_CALL_FLAGS_NONE,
+//						-1,
+//						NULL,
+//						done_agent_proxy_cb,
+//						data);
 }
 
 static gboolean
@@ -1526,9 +1566,10 @@ system_basic_info_update (SysinfoWindow *window)
 		}
 	}
 
+	gtk_label_set_text (GTK_LABEL (priv->lbl_conn_status), _("Unknown"));
+
 	/* Agent Connection Status */
 	agent_connection_status_check (window);
-	priv->agent_check_timeout_id = g_timeout_add (AGENT_CONNECTION_STATUS_CHECK_TIMEOUT, (GSourceFunc) agent_connection_status_check_continually, window);
 
 	/* check update pacakges */
 	package_updating_check (window);
@@ -1536,6 +1577,7 @@ system_basic_info_update (SysinfoWindow *window)
 	/* execute iptables or ip6tables command */
 	system_firewall_check (window);
 
+	priv->agent_check_timeout_id = g_timeout_add (AGENT_CONNECTION_STATUS_CHECK_TIMEOUT, (GSourceFunc) agent_connection_status_check_continually, window);
 	priv->update_check_timeout_id = g_timeout_add (UPDATE_PACKAGES_CHECK_TIMEOUT, (GSourceFunc) package_updating_check_continually, window);
 }
 

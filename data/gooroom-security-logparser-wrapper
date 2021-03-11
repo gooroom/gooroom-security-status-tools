@@ -1,2 +1,9 @@
 #!/bin/sh
+
+if [ -z $1 ]; then
+	export LANG=en_GB.UTF-8
+else
+	export LANG=$2
+fi
+
 /usr/bin/gooroom-security-logparser.py $1
