@@ -1,3 +1,12 @@
+gooroom-security-status-tools (0.1.6+grm2u1) unstable; urgency=medium
+
+  [ cjheo ]
+  * [1c5e53d5] [Bug:3072] gooroom-security-logparser-wrapper 스크립트에 언어환경설정값 전달
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 01 Apr 2021 09:54:05 +0900
+
 gooroom-security-status-tools (0.1.5+grm2u1) unstable; urgency=medium
 
   [ cjheo ]
