@@ -493,6 +493,30 @@ done:
 }
 
 static void
+open_help (GtkAccelGroup *accel, GObject *acceleratable,
+           guint keyval, GdkModifierType modifier,
+           gpointer user_data)
+{
+    gtk_show_uri_on_window (GTK_WINDOW(user_data), "help:gooroom-sysinfo",
+                            gtk_get_current_event_time(), NULL);
+}
+
+static void
+accel_init (SysinfoWindow *window)
+{
+    GtkAccelGroup *accel_group;
+    guint accel_key;
+    GdkModifierType accel_mod;
+    GClosure *clouser;
+
+    accel_group = gtk_accel_group_new();
+    gtk_accelerator_parse ("F1", &accel_key, &accel_mod);
+    clouser = g_cclosure_new_object ( G_CALLBACK(open_help), G_OBJECT(window));
+    gtk_accel_group_connect (accel_group, accel_key, accel_mod, GTK_ACCEL_VISIBLE, clouser);
+    gtk_window_add_accel_group (GTK_WINDOW(window), accel_group);
+}
+
+static void
 done_agent_proxy_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
 	gchar *status = NULL;
@@ -2501,6 +2525,8 @@ sysinfo_window_init (SysinfoWindow *self)
 
 	set_log_search_date (self, year, month, day, TRUE);
 	set_log_search_date (self, year, month, day, FALSE);
+
+    accel_init (self);
 
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_security_log));
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_LIST_STORE (model)), 4, GTK_SORT_DESCENDING);

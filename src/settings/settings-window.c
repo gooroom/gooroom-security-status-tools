@@ -246,6 +246,30 @@ update_ui (SettingsWindow *window)
 }
 
 static void
+open_help (GtkAccelGroup *accel, GObject *acceleratable,
+           guint keyval, GdkModifierType modifier,
+           gpointer user_data)
+{
+    gtk_show_uri_on_window (GTK_WINDOW(user_data), "help:gooroom-help-gcsr",
+                            gtk_get_current_event_time(), NULL);
+}
+
+static void
+accel_init (SettingsWindow *window)
+{
+    GtkAccelGroup *accel_group;
+    guint accel_key;
+    GdkModifierType accel_mod;
+    GClosure *clouser;
+
+    accel_group = gtk_accel_group_new();
+    gtk_accelerator_parse ("F1", &accel_key, &accel_mod);
+    clouser = g_cclosure_new_object ( G_CALLBACK(open_help), G_OBJECT(window));
+    gtk_accel_group_connect (accel_group, accel_key, accel_mod, GTK_ACCEL_VISIBLE, clouser);
+    gtk_window_add_accel_group (GTK_WINDOW(window), accel_group);
+}
+
+static void
 client_server_register_done (GPid pid, gint status, gpointer data)
 {
 	SettingsWindow *window;
@@ -354,6 +378,7 @@ settings_window_init (SettingsWindow *self)
 	}
 
 	update_ui (self);
+    accel_init (self);
 
 	g_signal_connect (G_OBJECT (priv->swt_service), "state-set",
                       G_CALLBACK (on_service_state_changed), self);
