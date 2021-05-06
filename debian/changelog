@@ -1,3 +1,10 @@
+gooroom-security-status-tools (0.1.7+grm2u1) unstable; urgency=medium
+
+  [ boyeon.choi ]
+  * [9dd6831e] Enable the help program
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 06 May 2021 20:47:59 +0900
+
 gooroom-security-status-tools (0.1.6+grm2u1) unstable; urgency=medium
 
   [ cjheo ]
