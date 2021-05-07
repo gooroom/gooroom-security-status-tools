@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+    <defs>
+        <linearGradient id="u197ovy41a" x1="0%" x2="100%" y1="0%" y2="100%">
+            <stop offset="0%" stop-color="#CFCFCF"/>
+            <stop offset="100%" stop-color="#8A8B8B"/>
+        </linearGradient>
+        <linearGradient id="bocbfch9db" x1="0%" x2="100%" y1="0%" y2="100%">
+            <stop offset="0%" stop-color="#F2F2F2"/>
+            <stop offset="100%" stop-color="#A7A7A7"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g transform="translate(-808 -1038) translate(808 1038)">
+                <path fill="url(#u197ovy41a)" d="M16 0h16c8.837 0 16 7.163 16 16v16c0 8.837-7.163 16-16 16H16C7.163 48 0 40.837 0 32V16C0 7.163 7.163 0 16 0z"/>
+                <circle cx="24" cy="24" r="17" fill="#202020"/>
+                <circle cx="24" cy="24" r="13" fill="url(#bocbfch9db)"/>
+                <path fill="#D0021B" d="M24 13c.552 0 1 .448 1 1v4c0 .552-.448 1-1 1s-1-.448-1-1v-4c0-.552.448-1 1-1z"/>
+                <g fill="#6A6A6A" transform="translate(8 8)">
+                    <rect width="2" height="2" x="15" rx="1"/>
+                    <rect width="2" height="2" x="15" y="30" rx="1"/>
+                    <rect width="2" height="2" y="15" rx="1"/>
+                    <rect width="2" height="2" x="30" y="15" rx="1"/>
+                </g>
+                <g fill="#6A6A6A" transform="rotate(30 5.072 34.928)">
+                    <rect width="2" height="2" x="15" rx="1"/>
+                    <rect width="2" height="2" x="15" y="30" rx="1"/>
+                    <rect width="2" height="2" y="15" rx="1"/>
+                    <rect width="2" height="2" x="30" y="15" rx="1"/>
+                </g>
+                <g fill="#6A6A6A" transform="rotate(60 13.072 26.928)">
+                    <rect width="2" height="2" x="15" rx="1"/>
+                    <rect width="2" height="2" x="15" y="30" rx="1"/>
+                    <rect width="2" height="2" y="15" rx="1"/>
+                    <rect width="2" height="2" x="30" y="15" rx="1"/>
+                </g>
+                <path fill="#D0021B" d="M24 3L26 6 22 6z" transform="matrix(1 0 0 -1 0 9)"/>
+            </g>
+        </g>
+    </g>
+</svg>

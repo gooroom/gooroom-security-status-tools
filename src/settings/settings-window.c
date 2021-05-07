@@ -250,7 +250,7 @@ open_help (GtkAccelGroup *accel, GObject *acceleratable,
            guint keyval, GdkModifierType modifier,
            gpointer user_data)
 {
-    gtk_show_uri_on_window (GTK_WINDOW(user_data), "help:gooroom-help-gcsr",
+    gtk_show_uri_on_window (GTK_WINDOW(user_data), "help:gooroom-settings",
                             gtk_get_current_event_time(), NULL);
 }
 

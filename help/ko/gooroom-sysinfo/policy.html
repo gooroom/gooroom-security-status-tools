@@ -1,0 +1,115 @@
+﻿<html>
+  <head>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
+  </head>
+  <body>
+    <!--nav bar-->
+    <nav class="navbar-fixed-top" style="top:20px;margin-left:30px;margin-right:30px;">
+      <ul>
+        <li><img class="img" src="help.svg">
+        <li><a href="index">구름 보안상태 보기</a>
+        <li><img class="img" src="grey.svg">
+        <li><a href="index#functions">기능</a>
+        <li><img class="img" src="grey.svg">
+        </li><li><a href="#top">권한 정책 정보</a>
+      </ul>
+    </nav>
+    <!--end of navbar-->
+    <!-- header -->
+    <header><a name="top"></a></header>
+    <!-- contents  -->
+    <!-- for align 30px -->
+    <div class="div_root">
+      <!--sub title-->
+      <font class="font sub_title">권한 정책 정보</font><br>
+
+      <!--Rectangle-->
+      <div class="Rectangle">
+        <font class="font text">
+          <pre>권한 정책 정보 탭으로 들어가면 다음과 같은 3가지 상태를 확인할 수 있습니다. 
+
+
+<B>알림창 표시 조건 (로그 레벨)</B>
+
+구름 플랫폼은 구름 보안프레임워크가 제공하는 4단계 보안 기술을 제공합니다.
+
+</pre>
+
+<div style="margin-left: 10; margin-right: 10;">
+  <table class="font text" style="border-spacing: 10px;">
+    <tr>
+      <td>신뢰부팅</td><td>부트로더 및 커널에 대한 무결성 검증 수행으로, 해커에 의해 시스템이 변조되었을 경우 구름 플랫폼의 부팅을 차단합니다.</td>
+    </tr>
+    <tr>
+      <td>운영체제 보호</td><td>동적 커널 보호 기술로서, 악성코드가 실행중인 커널을 변조할 때, 커널보다 높은 수준(하이퍼바이저)에서 악성행위를 탐지합니다.</td>
+    </tr>
+    <tr>
+      <td>실행파일 보호</td><td>실행파일에 대한 무결성 검증 수행으로, 악성 프로그램이 단말에 유입되었을 경우에도 근본적인 실행을 차단합니다.</td>
+    </tr>
+    <tr>
+      <td>브라우저 보호</td><td>접속처에 따라 신뢰브라우저와 비신뢰브라우저로 격리된 브라우징 환경을 제공하고 차등화된 보안정책을 적용할 수 있습니다.</td>
+    </tr>
+  </table>
+</div>
+
+<pre>알림창 표시 조건은 위의 기술 3가지(1. 신뢰부팅 / 2.실행파일 검증 / 3.운영체제 보호)과 <a href="../grac-editors/index">매체제어</a> 기술을 이용하여 로그를 기록합니다. 각 영역의 체크박스는 로그를 기록하는 범위를 나타내며, 구름 시스템 보안 상태 자세히 보기 프로그램을 이용해 수정할 수는 없습니다.
+
+
+
+<B>단말 보안 정책</B>
+
+GPMS에서 지정한  사용자의 단말의 보안 정책을 나타냅니다. 현재 상태들을 나타내며, [구름 보안 상태 보기]프로그램을 이용해 수정/편집 할 수는 없습니다. 화면보호기 시간을 변경하려면 <a href="../gnome-control-center/index">[설정]</a>의 <a href="../gnome-control-center/display-blank">빈 화면 설정</a>를 참고하세요.
+
+
+
+
+<B>매체 제어 정책</B>
+
+각각의 매체에 대한 접근 권한을 나타냅니다. 설정 변경을 위해서는 <a href="../grac-editors/index">매체제어 편집기</a>를 이용하세요.
+
+
+
+<B>브라우저 정책</B>
+
+구름 브라우저에서의 정책을 나타냅니다. 프로그램에서 수정/편집은 불가능 합니다.
+
+
+
+<B>방화벽 정책 - IPV4 / IPV6</B>
+
+방화벽 정책을 각각의 ip 버전에 맞춰 보여줍니다. 설정을 변경하기 위해서는 <a href="../grac-editors/index">매체제어 편집기</a>의 <a href="../grac-editors/network">네트워크</a> 탭을 이용하세요. 
+</pre>
+      </font>
+    </div>  <!-- end of Rectangle-->
+    
+  </div>  <!-- end of div_root-->
+  <footer>
+    <font class="font ref">참고 항목</font><br>
+    <a href="index#functions">기능</a><br>
+  </footer>
+  <footer class="info">
+    <a onclick="showMore('name')"
+    class="Options none" onMouseOver="this.className='OptionsOnMouse';"
+    onMouseOut="this.className='Options';"><B>정보</B></a><br>
+    <div id=name style="display:none; width:90%;">
+      <table class="font text" style="display:inline-block;" cellspacing="7px" cellpadding="3px">
+        <tr>
+          <td colspan="2" style="text-align:center">© 2014, 2016, 2017, 2018 조성호<br></td>
+        </tr>
+        <tr>
+          <td style="text-align:center;"><pre><B>번역자</B>
+조성호</pre></td><td style="text-align:center;"><pre><B>작성자</B>
+조성호</pre></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center"><B>Creative Commons</B></td>
+        </tr>
+        <tr>
+          <td colspan="2"><pre>이 문서는 <a href=https://creativecommons.org/licenses/?lang=ko>크리에이티브 커먼즈 저작자표시-동일조건변경허락 3.0 Unported 라이선스</a>에 따른 활용을 허가합니다.</pre></td>
+        </tr>
+      </table>
+    </div><!--end of name-->
+  </footer>
+</body>
+</html>

@@ -1,0 +1,67 @@
+﻿<html>
+  <head>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
+  </head>
+  <body>
+    <!--nav bar-->
+    <nav class="navbar-fixed-top" style="top:20px;margin-left:30px;margin-right:30px;">
+      <ul>
+        <li><img class="img" src="help.svg">
+        <li><a href="index">구름 보안상태 보기</a>
+        <li><img class="img" src="grey.svg">
+        <li><a href="index#functions">기능</a>
+        <li><img class="img" src="grey.svg">
+        </li><li><a href="#top">로그 정보</a>
+      </ul>
+    </nav>
+    <!--end of navbar-->
+    <!-- header -->
+    <header><a name="top"></a></header>
+    <!-- contents  -->
+    <!-- for align 30px -->
+    <div class="div_root">
+      <!--sub title-->
+      <font class="font sub_title">로그 정보</font><br>
+
+      <!--Rectangle-->
+      <div class="Rectangle">
+        <font class="font text">
+          <pre>로그는 <i>권한 정책 정보</i> 탭의 <a href="policy">알림창 표시 조건(로그 레벨)</a>에 체크된 정보가 기록되어 있습니다. 다음 순서에 맞춰 로그를 확인할 수 있습니다. </pre>
+          <div class="discription">1.<i>로그 정보</i> 탭으로 이동합니다. <br><br>
+          2. 기간의 버튼을 클릭하여 원하는 날짜를 지정합니다.<br><br>
+        
+        3. <i>찾기</i> 버튼을 클릭하여 로그 메시지를 확인합니다. </div>
+      </font>
+    </div>  <!-- end of Rectangle-->
+    
+  </div>  <!-- end of div_root-->
+  <footer>
+    <font class="font ref">참고 항목</font><br>
+    <a href="index#functions">기능</a><br>
+  </footer>
+  <footer class="info">
+    <a onclick="showMore('name')"
+    class="Options none" onMouseOver="this.className='OptionsOnMouse';"
+    onMouseOut="this.className='Options';"><B>정보</B></a><br>
+    <div id=name style="display:none; width:90%;">
+      <table class="font text" style="display:inline-block;" cellspacing="7px" cellpadding="3px">
+        <tr>
+          <td colspan="2" style="text-align:center">© 2014, 2016, 2017, 2018 조성호<br></td>
+        </tr>
+        <tr>
+          <td style="text-align:center;"><pre><B>번역자</B>
+조성호</pre></td><td style="text-align:center;"><pre><B>작성자</B>
+조성호</pre></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center"><B>Creative Commons</B></td>
+        </tr>
+        <tr>
+          <td colspan="2"><pre>이 문서는 <a href=https://creativecommons.org/licenses/?lang=ko>크리에이티브 커먼즈 저작자표시-동일조건변경허락 3.0 Unported 라이선스</a>에 따른 활용을 허가합니다.</pre></td>
+        </tr>
+      </table>
+    </div><!--end of name-->
+  </footer>
+</body>
+</html>

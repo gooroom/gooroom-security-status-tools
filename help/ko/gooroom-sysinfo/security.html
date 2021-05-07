@@ -1,0 +1,96 @@
+﻿<html>
+  <head>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
+  </head>
+  <body>
+    <!--nav bar-->
+    <nav class="navbar-fixed-top" style="top:20px;margin-left:30px;margin-right:30px;">
+      <ul>
+        <li><img class="img" src="help.svg">
+        <li><a href="index">구름 보안상태 보기</a>
+        <li><img class="img" src="grey.svg">
+        <li><a href="index#functions">기능</a>
+        <li><img class="img" src="grey.svg">
+        </li><li><a href="#top">보안 상태 정보</a>
+      </ul>
+    </nav>
+    <!--end of navbar-->
+    <!-- header -->
+    <header><a name="top"></a></header>
+    <!-- contents  -->
+    <!-- for align 30px -->
+    <div class="div_root">
+      <!--sub title-->
+      <font class="font sub_title">보안 상태 정보</font><br>
+
+      <!--Rectangle-->
+      <div class="Rectangle">
+        <font class="font text">
+          <pre>보안 상태 정보 탭으로 들어가면 다음과 같은 3가지 상태를 확인할 수 있습니다. 
+
+
+<B>보안 상태</B>
+
+신뢰부팅, 실행파일 검증, 운영체제 보호, 매체제어의 상태를 판단하여 안전/취약으로 현재 상태를 나타냅니다. <i>안전 조치 실행</i>버튼은 [취약] 상태에서 활성화 됩니다. <i>로그 보기</i> 버튼을 클릭하면, <a href="log">로그 정보</a> 탭으로 이동합니다. 
+
+
+<B>활성화된 보안 기능</B>
+
+신뢰부팅, 실행파일 검증, 운영체제 보호, 메체제어가 활성화 되어 있는지 나타냅니다. 정보를 표시하는 기능일 뿐 편집할 수 없습니다. <a href="../grac-editors/index">매체제어 편집기 </a>를 통해 <i>매체제어</i>를 활성화 할 수 있습니다.
+
+          </pre>
+
+<B>시스템 정보</B><br>
+<div style="margin-left: 30; margin-right: 30;">
+  <table class="font text" style="border-spacing: 10px;">
+    <tr>
+      <td>운영체제 정보</td><td>구름 플랫폼의 버전 정보를 나타냅니다.</td>
+    </tr>
+    <tr>
+      <td>커널 정보</td><td>이용 중인 구름 플랫폼  커널 릴리즈 정보와 커널 버전을 나타냅니다.</td>
+    </tr>
+    <tr>
+      <td>단말 제품번호</td><td>단말의 제품 번호를 출력합니다. </td>
+    </tr>
+    <tr>
+      <td>업데이트 상태</td><td>패키지 업데이트의 상태를 나타냅니다. 자세한 사항은 <a href="../gooroom-help-gooroom-update/index">업데이트 관리자</a>를 참고하세요.</td>
+    </tr>
+    <tr>
+      <td>운영 모드</td><td>단말이 독립적으로 운영되는지, 서버의 클라이언트로 운영 중인지를 나타냅니다.</td>
+    </tr>
+  </table>
+</div>
+        </font>
+      </div>  <!-- end of Rectangle-->
+      
+    </div>  <!-- end of div_root-->
+    <footer>
+      <font class="font ref">참고 항목</font><br>
+      <a href="index#functions">기능</a><br>
+    </footer>
+    <footer class="info">
+      <a onclick="showMore('name')"
+     class="Options none" onMouseOver="this.className='OptionsOnMouse';"
+     onMouseOut="this.className='Options';"><B>정보</B></a><br>
+      <div id=name style="display:none; width:90%;">
+        <table class="font text" style="display:inline-block;" cellspacing="7px" cellpadding="3px">
+          <tr>
+            <td colspan="2" style="text-align:center">© 2014, 2016, 2017, 2018 조성호<br></td>
+          </tr>
+          <tr>
+            <td style="text-align:center;"><pre><B>번역자</B>
+조성호</pre></td><td style="text-align:center;"><pre><B>작성자</B>
+조성호</pre></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:center"><B>Creative Commons</B></td>
+          </tr>
+          <tr>
+            <td colspan="2"><pre>이 문서는 <a href=https://creativecommons.org/licenses/?lang=ko>크리에이티브 커먼즈 저작자표시-동일조건변경허락 3.0 Unported 라이선스</a>에 따른 활용을 허가합니다.</pre></td>
+          </tr>
+        </table>
+      </div><!--end of name-->
+    </footer>
+  </body>
+</html>
