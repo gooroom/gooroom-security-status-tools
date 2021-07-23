@@ -1,7 +1,7 @@
 libcommon_la_CPPFLAGS = \
 	-I$(top_srcdir)/common \
-	-DGOOROOM_LOGPARSER_SEEKTIME_HELPER=\"$(pkglibexecdir)/gooroom-logparser-seektime-helper\" \
-	-DGOOROOM_SECURITY_LOGPARSER_WRAPPER=\"$(pkglibexecdir)/gooroom-security-logparser-wrapper\" \
+	-DGOOROOM_LOGPARSER_SEEKTIME_HELPER=\"/usr/lib/gooroom-security-utils/gooroom-logparser-seektime-helper\" \
+	-DGOOROOM_SECURITY_LOGPARSER_WRAPPER=\"/usr/lib/gooroom-security-utils/gooroom-security-logparser-wrapper\" \
 	$(AM_CPPFLAGS)
 
 noinst_LTLIBRARIES = libcommon.la
