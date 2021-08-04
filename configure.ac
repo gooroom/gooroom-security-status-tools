@@ -67,7 +67,5 @@ AC_OUTPUT([
   data/Makefile
   common/Makefile
   src/Makefile
-  src/sysinfo/Makefile
-  src/settings/Makefile
   po/Makefile.in
 ])

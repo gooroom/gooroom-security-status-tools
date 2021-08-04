@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2018-2020 Gooroom <gooroom@gooroom.kr>
+ * Copyright (C) 2018-2021 Gooroom <gooroom@gooroom.kr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -44,6 +44,9 @@ struct _LogfilterPopover {
 
 struct _LogfilterPopoverClass {
 	GtkPopoverClass __parent_class__;
+
+	/* signals */
+	void (*log_changed) (LogfilterPopover *popover, const gchar *status);
 };
 
 

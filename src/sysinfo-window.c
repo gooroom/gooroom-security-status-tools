@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Gooroom <gooroom@gooroom.kr>
+ * Copyright (C) 2018-2021 Gooroom <gooroom@gooroom.kr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +22,13 @@
 #include "calendar-popover.h"
 #include "logfilter-popover.h"
 #include "sysinfo-window.h"
+#include "stack-list.h"
 
 #include <stdlib.h>
-#include <sys/utsname.h> 
+#include <sys/utsname.h>
 #include <shadow.h>
 #include <sys/ioctl.h>
-#include <net/if.h> 
+#include <net/if.h>
 #include <unistd.h>
 #include <netinet/in.h>
 
@@ -67,17 +68,26 @@ static struct {
 
 
 
+static void     site_list_clicked_cb         (GtkToggleButton *button, gpointer data);
 static void     log_filter_clicked_cb        (GtkToggleButton *button, gpointer data);
 static void     btn_calendar_to_clicked_cb   (GtkToggleButton *button, gpointer data);
 static void     btn_calendar_from_clicked_cb (GtkToggleButton *button, gpointer data);
 static void     run_iptables_command         (const char *command, SysinfoWindow *window);
 static gboolean on_push_update_changed       (GtkSwitch *widget, gboolean state, gpointer data);
 
-
+enum {
+  ID_COLUMN,
+  NAME_COLUMN,
+  TITLE_COLUMN
+};
 
 struct _SysinfoWindowPrivate {
 	GSettings *settings;
+	GSettings *gkm_settings;
 
+    GtkWidget *lbl_title;
+    GtkWidget *sidebar_selection;
+    GtkWidget *trv_sidebar_contents;
 	GtkWidget *stack;
 
 	GtkWidget *frm_push_update;
@@ -86,12 +96,25 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *box_res_ctrl;
 	GtkWidget *btn_more;
 	GtkWidget *btn_search;
+	GtkWidget *combo_calendar;
 	GtkWidget *btn_calendar_from;
 	GtkWidget *btn_calendar_to;
 	GtkWidget *trv_res_ctrl;
-	GtkWidget *lbl_browser_urls;
+	GtkWidget *trv_res_ctrl1;
+	GtkWidget *btn_browser_urls;
+	GtkWidget *box_trust_list;
+	GtkWidget *rdo_trusted;
+	GtkWidget *rdo_untrusted;
+	GtkWidget *lbl_site_list;
+	GtkWidget *lbl_site_develop;
+	GtkWidget *lbl_site_download;
+	GtkWidget *lbl_site_printer;
+	GtkWidget *lbl_site_source;
+	GtkWidget *lbl_site_socket;
+	GtkWidget *lbl_site_worker;
 	GtkWidget *scl_browser_urls;
 	GtkWidget *trv_browser_urls;
+	GtkWidget *lbl_net_allow;
 	GtkWidget *lbl_firewall4;
 	GtkWidget *lbl_firewall4_policy;
 	GtkWidget *scl_firewall4;
@@ -102,6 +125,7 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *trv_firewall6;
 	GtkWidget *trv_security_log;
 	GtkWidget *lbl_sec_status;
+	GtkWidget *img_security_status;
 
 	GtkWidget *lbl_search_date_from;
 	GtkWidget *lbl_search_date_to;
@@ -130,6 +154,10 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *chk_exe;
 	GtkWidget *chk_boot;
 	GtkWidget *chk_media;
+	GtkWidget *lbl_security_booting;
+	GtkWidget *lbl_security_files;
+	GtkWidget *lbl_security_os;
+	GtkWidget *lbl_security_rsc;
 	GtkWidget *rdo_os;
 	GtkWidget *rdo_exe;
 	GtkWidget *rdo_boot;
@@ -142,6 +170,14 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *chk_log_crit;
 	GtkWidget *chk_log_alert;
 	GtkWidget *chk_log_emerg;
+	GtkWidget *lbl_status_debug;
+	GtkWidget *lbl_status_info;
+	GtkWidget *lbl_status_notice;
+	GtkWidget *lbl_status_warning;
+	GtkWidget *lbl_status_err;
+	GtkWidget *lbl_status_crit;
+	GtkWidget *lbl_status_alert;
+	GtkWidget *lbl_status_emerg;
 	GtkWidget *btn_view_log;
 	GtkWidget *btn_safety_measure;
 	GtkWidget *lbl_update;
@@ -172,11 +208,38 @@ struct _SysinfoWindowPrivate {
 	gboolean setting_ipv4;
 
 	gboolean log_date_from;
+
+    /* for settings */
+	GtkWidget *swt_service;
+	GtkWidget *lbl_agent_status;
+	GtkWidget *lbl_mgt_svr_url;
+	GtkWidget *lbl_domain_url;
+	GtkWidget *lbl_svr_crt;
+	GtkWidget *lbl_client_id;
+	GtkWidget *lbl_group;
+	GtkWidget *lbl_client_crt;
+	GtkWidget *btn_gms_settings;
+	GtkWidget *chk_adn;
+	GtkWidget *lbl_chk_adn;
+
+    /* for new functions */
+    GtkWidget *btn_site_list;
+    GtkWidget *dlg_trusted_site;
+
+	GtkWidget *lbl_debug;
+	GtkWidget *lbl_info;
+	GtkWidget *lbl_notice;
+	GtkWidget *lbl_warning;
+	GtkWidget *lbl_err;
+	GtkWidget *lbl_crit;
+	GtkWidget *lbl_alert;
+	GtkWidget *lbl_emerg;
 };
 
 
 G_DEFINE_TYPE_WITH_PRIVATE (SysinfoWindow, sysinfo_window, GTK_TYPE_APPLICATION_WINDOW)
 
+static gboolean on_service_state_changed (GtkSwitch *widget, gboolean state, gpointer data);
 
 static gint
 str_compare_func (gconstpointer a, gconstpointer b)
@@ -225,6 +288,47 @@ stripped_double_quoations (const char *str)
 	}
 
 	return ret;
+}
+
+static void
+populate_model (GtkTreeModel *model)
+{
+    StackList *s = titles;
+
+    while (s->title)
+    {
+        StackList *children = s->children;
+        GtkTreeIter iter;
+
+        gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
+
+        gtk_tree_store_set (GTK_TREE_STORE (model),
+                            &iter,
+                            ID_COLUMN, s->id,
+                            NAME_COLUMN, s->name,
+                            TITLE_COLUMN, _(s->title),
+                            -1);
+        s++;
+
+        if (!children)
+            continue;
+
+        while (children->title)
+        {
+            GtkTreeIter child_iter;
+
+            gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
+
+            gtk_tree_store_set (GTK_TREE_STORE (model),
+                                &child_iter,
+                                ID_COLUMN, children->id,
+                                NAME_COLUMN, children->name,
+                                TITLE_COLUMN, _(children->title),
+                                -1);
+            children++;
+        }
+
+    }
 }
 
 static void
@@ -329,30 +433,48 @@ on_security_item_changed (GtkWidget *button, gpointer data)
 	GHashTable *table;
 	GHashTableIter iter;
 	gpointer key, value;
+    gchar *markup = NULL;
 
 	table = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-	g_hash_table_insert (table, priv->chk_log_debug, GUINT_TO_POINTER (LOG_LEVEL_DEBUG));
-	g_hash_table_insert (table, priv->chk_log_info, GUINT_TO_POINTER (LOG_LEVEL_INFO));
-	g_hash_table_insert (table, priv->chk_log_notice, GUINT_TO_POINTER (LOG_LEVEL_NOTICE));
-	g_hash_table_insert (table, priv->chk_log_warning, GUINT_TO_POINTER (LOG_LEVEL_WARNING));
-	g_hash_table_insert (table, priv->chk_log_err, GUINT_TO_POINTER (LOG_LEVEL_ERR));
-	g_hash_table_insert (table, priv->chk_log_crit, GUINT_TO_POINTER (LOG_LEVEL_ALERT));
-	g_hash_table_insert (table, priv->chk_log_alert, GUINT_TO_POINTER (LOG_LEVEL_CRIT));
-	g_hash_table_insert (table, priv->chk_log_emerg, GUINT_TO_POINTER (LOG_LEVEL_EMERG));
+	//g_hash_table_insert (table, priv->chk_log_debug, GUINT_TO_POINTER (LOG_LEVEL_DEBUG));
+	//g_hash_table_insert (table, priv->chk_log_info, GUINT_TO_POINTER (LOG_LEVEL_INFO));
+	//g_hash_table_insert (table, priv->chk_log_notice, GUINT_TO_POINTER (LOG_LEVEL_NOTICE));
+	//g_hash_table_insert (table, priv->chk_log_warning, GUINT_TO_POINTER (LOG_LEVEL_WARNING));
+	//g_hash_table_insert (table, priv->chk_log_err, GUINT_TO_POINTER (LOG_LEVEL_ERR));
+	//g_hash_table_insert (table, priv->chk_log_crit, GUINT_TO_POINTER (LOG_LEVEL_ALERT));
+	//g_hash_table_insert (table, priv->chk_log_alert, GUINT_TO_POINTER (LOG_LEVEL_CRIT));
+	//g_hash_table_insert (table, priv->chk_log_emerg, GUINT_TO_POINTER (LOG_LEVEL_EMERG));
+
+	g_hash_table_insert (table, priv->lbl_status_debug, GUINT_TO_POINTER (LOG_LEVEL_DEBUG));
+	g_hash_table_insert (table, priv->lbl_status_info, GUINT_TO_POINTER (LOG_LEVEL_INFO));
+	g_hash_table_insert (table, priv->lbl_status_notice, GUINT_TO_POINTER (LOG_LEVEL_NOTICE));
+	g_hash_table_insert (table, priv->lbl_status_warning, GUINT_TO_POINTER (LOG_LEVEL_WARNING));
+	g_hash_table_insert (table, priv->lbl_status_err, GUINT_TO_POINTER (LOG_LEVEL_ERR));
+	g_hash_table_insert (table, priv->lbl_status_crit, GUINT_TO_POINTER (LOG_LEVEL_ALERT));
+	g_hash_table_insert (table, priv->lbl_status_alert, GUINT_TO_POINTER (LOG_LEVEL_CRIT));
+	g_hash_table_insert (table, priv->lbl_status_emerg, GUINT_TO_POINTER (LOG_LEVEL_EMERG));
 
 	g_hash_table_iter_init (&iter, table);
+    markup = g_strdup_printf("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
 	while (g_hash_table_iter_next (&iter, &key, &value)) {
-		GtkToggleButton *w = GTK_TOGGLE_BUTTON (key);
+		//GtkToggleButton *w = GTK_TOGGLE_BUTTON (key);
+		GtkLabel *w = GTK_LABEL (key);
 		guint log_level = GPOINTER_TO_UINT (value);
 
-		if (w) {
-			g_signal_handlers_block_by_func (w, on_togglebutton_state_changed, data);
-			gtk_toggle_button_set_active (w, level & log_level);
-			g_signal_handlers_unblock_by_func (w, on_togglebutton_state_changed, data);
-		}
+	//	if (w) {
+	//		g_signal_handlers_block_by_func (w, on_togglebutton_state_changed, data);
+	//		gtk_toggle_button_set_active (w, level & log_level);
+	//		g_signal_handlers_unblock_by_func (w, on_togglebutton_state_changed, data);
+	//	}
+
+		if ( level & log_level )
+            gtk_label_set_markup (w, markup);
+		else
+			gtk_label_set_text (w, _("Disallow"));
 	}
 
 	g_hash_table_destroy (table);
+    g_free (markup);
 }
 
 static void
@@ -493,6 +615,336 @@ done:
 }
 
 static void
+child_watch_func (GPid     pid,
+                  gint     status,
+                  gpointer data)
+{
+	GtkWidget *dlg;
+	gboolean service_active = FALSE, switch_active = FALSE;
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	g_spawn_close_pid (pid);
+
+	if (!is_systemd_service_available (GOOROOM_AGENT_SERVICE_NAME)) {
+		gtk_widget_set_sensitive (priv->swt_service, FALSE);
+		gtk_switch_set_active (GTK_SWITCH (priv->swt_service), FALSE);
+		return;
+	}
+
+	gtk_widget_set_sensitive (priv->swt_service, TRUE);
+
+	service_active = is_systemd_service_active (GOOROOM_AGENT_SERVICE_NAME);
+	switch_active = gtk_switch_get_active (GTK_SWITCH (priv->swt_service));
+
+	g_signal_handlers_block_by_func (priv->swt_service, on_service_state_changed, window);
+	gtk_switch_set_active (GTK_SWITCH (priv->swt_service), service_active);
+	g_signal_handlers_unblock_by_func (priv->swt_service, on_service_state_changed, window);
+
+	if (switch_active == service_active) {
+		const gchar *message = (service_active) ? _("Service was started successfully") : _("Service was stopped successfully");
+		gchar *markup = g_markup_printf_escaped ("<span fgcolor='#494949'>%s</span>", _("Unknown"));
+
+
+		if (service_active)
+			markup = g_markup_printf_escaped ("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+		else
+			markup = g_markup_printf_escaped ("<span fgcolor='#494949'>%s</span>", _("Disallow"));
+
+		dlg = gtk_message_dialog_new (GTK_WINDOW (window),
+				GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO,
+				GTK_BUTTONS_OK,
+				NULL);
+
+		gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dlg), "%s", message);
+
+		gtk_label_set_markup (GTK_LABEL (priv->lbl_agent_status), markup);
+		g_free (markup);
+		gtk_window_set_title (GTK_WINDOW (dlg), _("Notifications"));
+		gtk_dialog_run (GTK_DIALOG (dlg));
+		gtk_widget_destroy (dlg);
+	}
+}
+
+static gboolean
+gooroom_agent_service_control (gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	GPid pid;
+	gchar *cmd;
+	gchar **argv;
+	GError *error = NULL;
+
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->swt_service), FALSE);
+
+	if (gtk_switch_get_active (GTK_SWITCH (priv->swt_service)))
+		cmd = g_strdup_printf ("pkexec %s -s %s -a", GOOROOM_SYSTEMD_CONTROL_HELPER, GOOROOM_AGENT_SERVICE_NAME);
+	else
+		cmd = g_strdup_printf ("pkexec %s -s %s -d", GOOROOM_SYSTEMD_CONTROL_HELPER, GOOROOM_AGENT_SERVICE_NAME);
+
+	g_shell_parse_argv (cmd, NULL, &argv, NULL);
+
+	g_spawn_async_with_pipes (NULL, argv, NULL,
+                              G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD, NULL,
+                              NULL, &pid, NULL, NULL, NULL, &error);
+
+	if (error)
+		g_warning ("%s\n", error->message);
+
+	g_free (cmd);
+	g_strfreev (argv);
+
+	g_child_watch_add (pid, child_watch_func, window);
+
+	return FALSE;
+}
+
+static gboolean
+on_service_state_changed (GtkSwitch *widget, gboolean state, gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+
+	g_idle_add ((GSourceFunc) gooroom_agent_service_control, window);
+
+	return FALSE;
+}
+
+static gboolean
+gooroom_agent_service_status_update (gpointer data)
+{
+	SysinfoWindow *window;
+	SysinfoWindowPrivate *priv;
+
+	window = SYSINFO_WINDOW (data);
+	priv = window->priv;
+
+	if (!is_systemd_service_available (GOOROOM_AGENT_SERVICE_NAME)) {
+		gtk_widget_set_sensitive (priv->swt_service, FALSE);
+		return FALSE;
+	}
+
+	gtk_widget_set_sensitive (priv->swt_service, TRUE);
+
+	g_signal_handlers_block_by_func (priv->swt_service, on_service_state_changed, window);
+
+	gtk_switch_set_active (GTK_SWITCH (priv->swt_service), is_systemd_service_active (GOOROOM_AGENT_SERVICE_NAME));
+
+	g_signal_handlers_unblock_by_func (priv->swt_service, on_service_state_changed, window);
+
+	return FALSE;
+}
+
+static void
+on_allow_duplicate_notification_toggled (GtkSwitch *button,
+                                         gboolean   state,
+                                         gpointer   data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	if (priv->gkm_settings) {
+    	gboolean val = gtk_switch_get_active (GTK_SWITCH (button)) ? 1 : 0;
+
+        if ( val == 1)
+        {
+            gchar *markup = NULL;
+		    markup = g_markup_printf_escaped ("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+            gtk_label_set_markup ( GTK_LABEL (priv->lbl_chk_adn), markup );
+            g_free(markup);
+        }
+        else
+            gtk_label_set_text ( GTK_LABEL (priv->lbl_chk_adn), _("Disallow") );
+
+		g_settings_set_boolean (priv->gkm_settings, "allow-duplicate-notifications", val);
+	}
+}
+
+static void
+settings_update_ui (SysinfoWindow *window)
+{
+	SysinfoWindowPrivate *priv = window->priv;
+
+	gchar *svr_crt = NULL, *client_name = NULL, *group = NULL, *client_crt = NULL, *svr_mgt_url = NULL;
+	GError *error = NULL;
+	GKeyFile *keyfile = NULL;
+	gchar *domain_url = NULL, *markup = NULL;
+
+	keyfile = g_key_file_new ();
+
+	g_key_file_load_from_file (keyfile, GOOROOM_MANAGEMENT_SERVER_CONF, G_KEY_FILE_KEEP_COMMENTS, &error);
+
+	if (error == NULL) {
+		if (g_key_file_has_group (keyfile, "domain")) {
+			svr_mgt_url = g_key_file_get_string (keyfile, "domain", "gkm", NULL);
+			domain_url = g_key_file_get_string (keyfile, "domain", "gpms", NULL);
+		}
+
+		if (g_key_file_has_group (keyfile, "certificate")) {
+			svr_crt = g_key_file_get_string (keyfile, "certificate", "server_crt", NULL);
+			client_name = g_key_file_get_string (keyfile, "certificate", "client_name", NULL);
+			group = g_key_file_get_string (keyfile, "certificate", "organizational_unit", NULL);
+			client_crt = g_key_file_get_string (keyfile, "certificate", "client_crt", NULL);
+		}
+	}
+
+	if (!domain_url)
+		domain_url = g_strdup (_("Unknown"));
+
+	if (!svr_mgt_url)
+		svr_mgt_url = g_strdup (_("Unknown"));
+
+	if (!svr_crt)
+		svr_crt = g_strdup (_("Unknown"));
+
+	if (!client_name)
+		client_name = g_strdup (_("Unknown"));
+
+	if (!group)
+		group = g_strdup (_("Unknown"));
+
+	if (!client_crt)
+		client_crt = g_strdup (_("Unknown"));
+
+	gtk_label_set_text (GTK_LABEL (priv->lbl_domain_url), domain_url);
+	gtk_label_set_text (GTK_LABEL (priv->lbl_mgt_svr_url), svr_mgt_url);
+	gtk_label_set_text (GTK_LABEL (priv->lbl_svr_crt), svr_crt);
+	gtk_label_set_text (GTK_LABEL (priv->lbl_client_id), client_name);
+	gtk_label_set_text (GTK_LABEL (priv->lbl_group), group);
+	gtk_label_set_text (GTK_LABEL (priv->lbl_client_crt), client_crt);
+
+	g_free (domain_url);
+	g_free (svr_mgt_url);
+	g_free (svr_crt);
+	g_free (client_name);
+	g_free (group);
+	g_free (client_crt);
+
+	g_key_file_free (keyfile);
+	g_clear_error (&error);
+
+	markup = g_markup_printf_escaped ("<span fgcolor='#494949'>%s</span>", _("Unknown"));
+	gooroom_agent_service_status_update (window);
+	if (gtk_switch_get_active (GTK_SWITCH(priv->swt_service)))
+		markup = g_markup_printf_escaped ("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+	else
+		markup = g_markup_printf_escaped ("<span fgcolor='#494949'>%s</span>", _("Disallow"));
+	gtk_label_set_markup ( GTK_LABEL (priv->lbl_agent_status), markup);
+	g_free (markup);
+
+	gboolean adn = FALSE;
+	if (priv->gkm_settings)
+		adn = g_settings_get_boolean (priv->gkm_settings, "allow-duplicate-notifications");
+
+	g_signal_handlers_block_by_func (priv->chk_adn, on_allow_duplicate_notification_toggled, window);
+	gtk_switch_set_active (GTK_SWITCH (priv->chk_adn), adn);
+    on_allow_duplicate_notification_toggled (GTK_SWITCH (priv->chk_adn),adn, window);
+	g_signal_handlers_unblock_by_func (priv->chk_adn, on_allow_duplicate_notification_toggled, window);
+}
+
+static void
+client_server_register_done (GPid pid, gint status, gpointer data)
+{
+	SysinfoWindow *window;
+	SysinfoWindowPrivate *priv;
+
+	window = SYSINFO_WINDOW (data);
+	priv = window->priv;
+
+	g_spawn_close_pid (pid);
+
+	settings_update_ui (window);
+
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->btn_gms_settings), TRUE);
+}
+
+static gboolean
+launch_client_server_register_async (SysinfoWindow *window)
+{
+	GPid pid;
+	gboolean ret = FALSE;
+	gchar **argv = NULL;
+	gchar *pkexec = NULL, *cmd = NULL, *cmdline = NULL;
+
+	SysinfoWindowPrivate *priv = window->priv;
+
+	pkexec = g_find_program_in_path ("pkexec");
+	cmd = g_find_program_in_path ("gooroom-client-server-register");
+
+	if (!cmd) {
+		GtkWidget *message;
+
+		message = gtk_message_dialog_new (GTK_WINDOW (window),
+				GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO,
+				GTK_BUTTONS_CLOSE,
+				_("Program is not installed"));
+
+		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (message),
+				_("Please install the gooroom-client-server-register."));
+
+		gtk_dialog_run (GTK_DIALOG (message));
+		gtk_widget_destroy (message);
+
+		goto error;
+	}
+
+	cmdline = g_strdup_printf ("%s %s", pkexec, GCSR_WRAPPER);
+	g_shell_parse_argv (cmdline, NULL, &argv, NULL);
+
+	if (g_spawn_async (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, NULL)) {
+		g_child_watch_add (pid, (GChildWatchFunc) client_server_register_done, window);
+		ret = TRUE;
+	}
+
+	g_free (cmdline);
+	g_strfreev (argv);
+
+error:
+	g_free (cmd);
+	g_free (pkexec);
+
+	return ret;
+}
+
+static void
+on_gms_settings_button_clicked (GtkButton *button, gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+
+	gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
+
+	if (!launch_client_server_register_async (window))
+		gtk_widget_set_sensitive (GTK_WIDGET (button), TRUE);
+}
+
+static void
+open_help (GtkAccelGroup *accel, GObject *acceleratable,
+           guint keyval, GdkModifierType modifier,
+           gpointer user_data)
+{
+    gtk_show_uri_on_window (GTK_WINDOW(user_data), "help:gooroom-sysinfo",
+                            gtk_get_current_event_time(), NULL);
+}
+
+static void
+accel_init (SysinfoWindow *window)
+{
+    GtkAccelGroup *accel_group;
+    guint accel_key;
+    GdkModifierType accel_mod;
+    GClosure *clouser;
+
+    accel_group = gtk_accel_group_new();
+    gtk_accelerator_parse ("F1", &accel_key, &accel_mod);
+    clouser = g_cclosure_new_object ( G_CALLBACK(open_help), G_OBJECT(window));
+    gtk_accel_group_connect (accel_group, accel_key, accel_mod, GTK_ACCEL_VISIBLE, clouser);
+    gtk_window_add_accel_group (GTK_WINDOW(window), accel_group);
+}
+
+static void
 done_agent_proxy_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
 	gchar *status = NULL;
@@ -544,37 +996,77 @@ done_agent_proxy_cb (GObject *source_object, GAsyncResult *res, gpointer user_da
 }
 
 static void
-agent_connection_status_check (gpointer data)
+got_agent_proxy_cb (GObject      *source_object,
+                    GAsyncResult *res,
+                    gpointer	  data)
 {
+	GError *error = NULL;
 	GDBusProxy *proxy;
-
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
 	SysinfoWindowPrivate *priv = window->priv;
 
-	proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
-			G_DBUS_CALL_FLAGS_NONE,
-			NULL,
-			"kr.gooroom.agent",
-			"/kr/gooroom/agent",
-			"kr.gooroom.agent",
-			NULL,
-			NULL);
+	proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
+	if (proxy == NULL) {
+		if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+			g_warning ("Error creating agent proxy: %s\n", error->message);
 
-	if (!proxy) {
 		gtk_label_set_text (GTK_LABEL (priv->lbl_conn_status), _("Unknown"));
+
+		g_error_free (error);
 		return;
 	}
 
 	const gchar *arg = "{\"module\":{\"module_name\":\"SERVER\",\"task\":{\"task_name\":\"grm_heartbit\",\"in\":{}}}}";
 
 	g_dbus_proxy_call (proxy,
-						"do_task",
-						g_variant_new ("(s)", arg),
-						G_DBUS_CALL_FLAGS_NONE,
-						-1,
-						NULL,
-						done_agent_proxy_cb,
-						data);
+                       "do_task",
+                       g_variant_new ("(s)", arg),
+                       G_DBUS_CALL_FLAGS_NONE,
+                       -1,
+                       NULL,
+                       done_agent_proxy_cb,
+                       window);
+}
+
+
+static void
+agent_connection_status_check (gpointer data)
+{
+	g_dbus_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
+                              G_DBUS_CALL_FLAGS_NONE,
+                              NULL,
+                              "kr.gooroom.agent",
+                              "/kr/gooroom/agent",
+                              "kr.gooroom.agent",
+                              NULL,
+                              got_agent_proxy_cb,
+                              data);
+
+//	GDBusProxy *proxy;
+//	proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+//			G_DBUS_CALL_FLAGS_NONE,
+//			NULL,
+//			"kr.gooroom.agent",
+//			"/kr/gooroom/agent",
+//			"kr.gooroom.agent",
+//			NULL,
+//			NULL);
+//
+//	if (!proxy) {
+//		gtk_label_set_text (GTK_LABEL (priv->lbl_conn_status), _("Unknown"));
+//		return;
+//	}
+//
+//	const gchar *arg = "{\"module\":{\"module_name\":\"SERVER\",\"task\":{\"task_name\":\"grm_heartbit\",\"in\":{}}}}";
+//
+//	g_dbus_proxy_call (proxy,
+//						"do_task",
+//						g_variant_new ("(s)", arg),
+//						G_DBUS_CALL_FLAGS_NONE,
+//						-1,
+//						NULL,
+//						done_agent_proxy_cb,
+//						data);
 }
 
 static gboolean
@@ -686,6 +1178,22 @@ show_log (GtkWidget *treeview, json_object *root_obj, gint64 search_to_utime, GL
 					3, desc,
 					4, utime,
 					-1);
+
+            //GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,4);
+            //GtkWidget *lbl_date = gtk_label_new(date);
+            //GtkWidget *lbl_time = gtk_label_new(time);
+            //GtkWidget *lbl_display_type = gtk_label_new(display_type);
+            //GtkWidget *lbl_desc = gtk_label_new(desc);
+
+            //gtk_box_pack_end (GTK_BOX(box), lbl_date, FALSE, FALSE, 0);
+            //gtk_box_pack_end (GTK_BOX(box), lbl_time, FALSE, FALSE, 0);
+            //gtk_box_pack_end (GTK_BOX(box), lbl_display_type, FALSE, FALSE, 0);
+            //gtk_box_pack_end (GTK_BOX(box), lbl_desc, FALSE, FALSE, 0);
+
+            //g_free (lbl_date);
+            //g_free (lbl_time);
+            //g_free (lbl_display_type);
+            //g_free (lbl_desc);
 		}
 
 		g_free (date);
@@ -968,7 +1476,7 @@ iptables_output_parse (GIOChannel   *source,
 			gtk_widget_hide (priv->lbl_firewall6);
 		}
 	} else {
-		gchar *markup = g_markup_printf_escaped ("<i>%s</i>", _("Could not find firewall policy."));
+		gchar *markup = g_markup_printf_escaped ("%s", _("Could not find firewall policy."));
 
 		if (priv->setting_ipv4) {
 			gtk_widget_show (priv->lbl_firewall4);
@@ -1199,6 +1707,7 @@ static void
 system_security_function_update (SysinfoWindow *window)
 {
 	SysinfoWindowPrivate *priv = window->priv;
+    gchar *markup = NULL;
 
 	g_signal_handlers_block_by_func (priv->chk_os, on_togglebutton_state_changed, window);
 	g_signal_handlers_block_by_func (priv->chk_exe, on_togglebutton_state_changed, window);
@@ -1210,6 +1719,43 @@ system_security_function_update (SysinfoWindow *window)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->chk_boot), priv->security_item_run & SECURITY_ITEM_BOOT_RUN);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->chk_media), priv->security_item_run & SECURITY_ITEM_MEDIA_RUN);
 
+	if (priv->security_item_run & SECURITY_ITEM_OS_RUN)
+    {
+		//gtk_label_set_text (GTK_LABEL(priv->lbl_security_os), _("Allow"));
+		markup = g_markup_printf_escaped ("<span foreground=\"#5ea80d\">%s</span>", _("Allow"));
+	    gtk_label_set_markup (GTK_LABEL (priv->lbl_security_os), markup);
+    }
+	else
+		gtk_label_set_text (GTK_LABEL(priv->lbl_security_os), _("Disallow"));
+
+	if (priv->security_item_run & SECURITY_ITEM_EXE_RUN)
+    {
+		//gtk_label_set_text (GTK_LABEL(priv->lbl_security_files), _("Allow"));
+		markup = g_markup_printf_escaped ("<span foreground=\"#5ea80d\">%s</span>", _("Allow"));
+	    gtk_label_set_markup (GTK_LABEL (priv->lbl_security_files), markup);
+    }
+	else
+		gtk_label_set_text (GTK_LABEL(priv->lbl_security_files), _("Disallow"));
+
+	if (priv->security_item_run & SECURITY_ITEM_BOOT_RUN)
+    {
+		//gtk_label_set_text (GTK_LABEL(priv->lbl_security_booting), _("Allow"));
+		markup = g_markup_printf_escaped ("<span foreground=\"#5ea80d\">%s</span>", _("Allow"));
+	    gtk_label_set_markup (GTK_LABEL (priv->lbl_security_booting), markup);
+    }
+	else
+		gtk_label_set_text (GTK_LABEL(priv->lbl_security_booting), _("Disallow"));
+
+	if (priv->security_item_run & SECURITY_ITEM_MEDIA_RUN)
+    {
+		//gtk_label_set_text (GTK_LABEL(priv->lbl_security_rsc), _("Allow"));
+		markup = g_markup_printf_escaped ("<span foreground=\"#5ea80d\">%s</span>", _("Allow"));
+	    gtk_label_set_markup (GTK_LABEL (priv->lbl_security_rsc), markup);
+    }
+	else
+		gtk_label_set_text (GTK_LABEL(priv->lbl_security_rsc), _("Disallow"));
+
+    g_free (markup);
 	g_signal_handlers_unblock_by_func (priv->chk_os, on_togglebutton_state_changed, window);
 	g_signal_handlers_unblock_by_func (priv->chk_exe, on_togglebutton_state_changed, window);
 	g_signal_handlers_unblock_by_func (priv->chk_boot, on_togglebutton_state_changed, window);
@@ -1226,12 +1772,15 @@ system_security_status_update (SysinfoWindow *window)
 	SysinfoWindowPrivate *priv = window->priv;
 
 	if (priv->security_status == SECURITY_STATUS_SAFETY) {
-		markup = g_markup_printf_escaped ("<b><i><span foreground=\"#0000ff\">%s</span></i></b>", _("Safety"));
+		markup = g_markup_printf_escaped ("<b><i><span foreground=\"#5ea80d\">%s</span></i></b>", _("Safety"));
+		gtk_image_set_from_resource (GTK_IMAGE(priv->img_security_status), "/kr/gooroom/security/status/settings/ic-security-safe");
 	} else if (priv->security_status == SECURITY_STATUS_VULNERABLE) {
 		markup = g_markup_printf_escaped ("<b><i><span foreground=\"#dc322f\">%s</span></i></b>", _("Vulnerable"));
+		gtk_image_set_from_resource (GTK_IMAGE(priv->img_security_status), "/kr/gooroom/security/status/settings/ic-security-danger");
 		sensitive = TRUE;
 	} else {
 		markup = g_markup_printf_escaped ("<b><i>%s</i></b>", _("Unknown"));
+		gtk_image_set_from_icon_name (GTK_IMAGE(priv->img_security_status), "gtk-missing-image", GTK_ICON_SIZE_BUTTON);
 	}
 
 	if (gtk_widget_get_visible (priv->btn_safety_measure))
@@ -1526,9 +2075,10 @@ system_basic_info_update (SysinfoWindow *window)
 		}
 	}
 
+	gtk_label_set_text (GTK_LABEL (priv->lbl_conn_status), _("Unknown"));
+
 	/* Agent Connection Status */
 	agent_connection_status_check (window);
-	priv->agent_check_timeout_id = g_timeout_add (AGENT_CONNECTION_STATUS_CHECK_TIMEOUT, (GSourceFunc) agent_connection_status_check_continually, window);
 
 	/* check update pacakges */
 	package_updating_check (window);
@@ -1536,6 +2086,7 @@ system_basic_info_update (SysinfoWindow *window)
 	/* execute iptables or ip6tables command */
 	system_firewall_check (window);
 
+	priv->agent_check_timeout_id = g_timeout_add (AGENT_CONNECTION_STATUS_CHECK_TIMEOUT, (GSourceFunc) agent_connection_status_check_continually, window);
 	priv->update_check_timeout_id = g_timeout_add (UPDATE_PACKAGES_CHECK_TIMEOUT, (GSourceFunc) package_updating_check_continually, window);
 }
 
@@ -1619,7 +2170,7 @@ system_security_log_update (SysinfoWindow *window)
 
 	gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET (window)), cursor);
 
-	gtk_widget_set_sensitive (GTK_WIDGET (priv->btn_search), FALSE);
+	//gtk_widget_set_sensitive (GTK_WIDGET (priv->btn_search), FALSE);
 
 	gchar *seektime = seek_time_get (window);
 	if (!run_security_log_parser_async (seektime, security_log_get, window)) {
@@ -1686,13 +2237,130 @@ system_device_security_update (SysinfoWindow *window)
 }
 
 static void
+log_filter_button_changed (GtkWidget *widget, guint status, gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	status & LOG_LEVEL_DEBUG? gtk_widget_show (priv->lbl_debug) : gtk_widget_hide (priv->lbl_debug);
+	status & LOG_LEVEL_INFO? gtk_widget_show (priv->lbl_info) : gtk_widget_hide (priv->lbl_info);
+	status & LOG_LEVEL_NOTICE? gtk_widget_show (priv->lbl_notice) : gtk_widget_hide (priv->lbl_notice);
+	status & LOG_LEVEL_WARNING? gtk_widget_show (priv->lbl_warning) : gtk_widget_hide (priv->lbl_warning);
+	status & LOG_LEVEL_ERR? gtk_widget_show (priv->lbl_err) : gtk_widget_hide (priv->lbl_err);
+	status & LOG_LEVEL_CRIT? gtk_widget_show (priv->lbl_crit) : gtk_widget_hide (priv->lbl_crit);
+	status & LOG_LEVEL_ALERT? gtk_widget_show (priv->lbl_alert) : gtk_widget_hide (priv->lbl_alert);
+	status & LOG_LEVEL_EMERG? gtk_widget_show (priv->lbl_emerg) : gtk_widget_hide (priv->lbl_emerg);
+}
+
+static void
+gooroom_browser_status_update (GtkWidget *button, gpointer user_data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (user_data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	gchar *file = NULL, *data = NULL, *markup = NULL;
+	gboolean ret = FALSE;
+
+	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+		return;
+
+	if (button == priv->rdo_trusted) {
+		file = g_strdup_printf (GOOROOM_BROWSER_TRUST);
+		gtk_widget_show (priv->box_trust_list);
+	} else if (button == priv->rdo_untrusted) {
+		file = g_strdup_printf (GOOROOM_BROWSER_UNTRUST);
+		gtk_widget_hide (priv->box_trust_list);
+	} else {
+		return;
+	}
+
+	if (!g_file_test (file, G_FILE_TEST_EXISTS)) {
+		goto error;
+	}
+
+	g_file_get_contents (file, &data, NULL, NULL);
+
+	if (!data) {
+		goto error;
+	}
+
+	enum json_tokener_error jerr = json_tokener_success;
+	json_object *root_obj = json_tokener_parse_verbose (data, &jerr);
+	if (jerr != json_tokener_success) {
+		goto error;
+	}
+
+	ret =TRUE;
+
+	json_object *obj1 = JSON_OBJECT_GET (root_obj, "PageSourceViewEnabled");
+	json_object *obj2 = JSON_OBJECT_GET (root_obj, "DownloadRestrictions");
+	json_object *obj3 = JSON_OBJECT_GET (root_obj, "PrintingEnabled");
+	json_object *obj4 = JSON_OBJECT_GET (root_obj, "DeveloperToolsAvailability");
+
+	markup = g_strdup_printf("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+	if (obj1){
+		const gchar *val;
+		val = json_object_get_string (obj1);
+
+		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
+	        gtk_label_set_text ( GTK_LABEL (priv->lbl_site_source), _("Disallow"));
+		else
+	        gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_source), markup);
+	}
+
+	if (obj2){
+		const gchar *val;
+		val = json_object_get_string (obj2);
+
+		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
+	        gtk_label_set_text ( GTK_LABEL (priv->lbl_site_download),_("Disallow"));
+		else
+	        gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_download), markup);
+	}
+
+	if (obj3){
+		const gchar *val;
+		val = json_object_get_string (obj3);
+
+		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
+	        gtk_label_set_text ( GTK_LABEL (priv->lbl_site_printer), _("Disallow"));
+		else
+	        gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_printer), markup);
+	}
+
+	if (obj4){
+		const gchar *val;
+		val = json_object_get_string (obj4);
+
+		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
+	        gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_develop), _("Disallow"));
+		else
+	        gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_develop), markup);
+	}
+
+	json_object_put (root_obj);
+
+error:
+	g_free (data);
+	g_free (file);
+	g_free (markup);
+
+}
+
+static void
 system_browser_policy_update (SysinfoWindow *window)
 {
 	gchar *file = NULL;
 	gchar *data = NULL;
 	gboolean ret = FALSE;
+    gchar *markup = NULL;
 
 	SysinfoWindowPrivate *priv = window->priv;
+
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->rdo_trusted)))
+		gooroom_browser_status_update (GTK_WIDGET(priv->rdo_trusted), window);
+	else
+		gooroom_browser_status_update (GTK_WIDGET(priv->rdo_untrusted), window);
 
 	file = g_strdup_printf ("/usr/share/gooroom/browser/policies/mainpref.json");
 
@@ -1715,6 +2383,9 @@ system_browser_policy_update (SysinfoWindow *window)
 	json_object *obj1 = JSON_OBJECT_GET (root_obj, "gooroom");
 	json_object *obj2 = JSON_OBJECT_GET (obj1, "policy");
 	json_object *obj2_1 = JSON_OBJECT_GET (obj2, "whitelist");
+	json_object *obj2_2 = JSON_OBJECT_GET (obj2, "websocket");
+	json_object *obj2_3 = JSON_OBJECT_GET (obj2, "webworker");
+
 	if (obj2_1) {
 		GtkTreeIter iter;
 		GtkTreeModel *model;
@@ -1734,6 +2405,32 @@ system_browser_policy_update (SysinfoWindow *window)
 
 		ret = TRUE;
 	}
+
+    markup = g_strdup_printf("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+	if (obj2_2){
+		const gchar *val;
+		val = json_object_get_string (obj2_2);
+
+		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
+			gtk_label_set_text ( GTK_LABEL (priv->lbl_site_socket), _("Disallow"));
+		else if (g_strcmp0 (val, "true") == 0 || g_strcmp0 (val, "1") == 0)
+            gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
+		else
+			gtk_label_set_text ( GTK_LABEL (priv->lbl_site_socket), _("Unknown"));
+	}
+
+	if (obj2_3){
+		const gchar *val;
+		val = json_object_get_string (obj2_3);
+
+		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
+			gtk_label_set_text ( GTK_LABEL (priv->lbl_site_worker), _("Disallow"));
+		else if (g_strcmp0 (val, "true") == 0 || g_strcmp0 (val, "1") == 0)
+            gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
+		else
+			gtk_label_set_text ( GTK_LABEL (priv->lbl_site_worker), _("Unknown"));
+	}
+
 	json_object_put (root_obj);
 
 error:
@@ -1741,13 +2438,11 @@ error:
 	g_free (file);
 
 	if (!ret) {
-		gtk_widget_show (priv->lbl_browser_urls);
-		gtk_widget_hide (priv->scl_browser_urls);
-
-		gchar *markup = g_markup_printf_escaped ("<i>%s</i>", _("Could not find trusted urls information."));
-		gtk_label_set_markup (GTK_LABEL (priv->lbl_browser_urls), markup);
-		g_free (markup);
+		markup = g_markup_printf_escaped ("%s", _("Could not find trusted urls information."));
+		gtk_label_set_markup (GTK_LABEL (priv->lbl_site_list), markup);
+		gtk_widget_set_sensitive (priv->btn_site_list, FALSE);
 	}
+	g_free (markup);
 }
 
 static void
@@ -1758,7 +2453,11 @@ create_item (SysinfoWindow *window, char *key, const char *val)
 
 	SysinfoWindowPrivate *priv = window->priv;
 
-	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_res_ctrl));
+	if (g_str_equal (key, "wireless") || g_str_equal (key, "clipboard") || g_str_equal (key, "screen_capture"))
+		model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_res_ctrl1));
+	else
+		model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_res_ctrl));
+
 	gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
 
 	if (val) {
@@ -1766,7 +2465,7 @@ create_item (SysinfoWindow *window, char *key, const char *val)
 		if (g_strcmp0 (val, "read_only") == 0) {
 			tr_state = _("ReadOnly");
 		} else if ((g_strcmp0 (val, "allow") == 0) || (g_strcmp0 (val, "accept") == 0)) {
-			tr_state = _("Allow");
+			tr_state = "Allow";
 		} else if (g_strcmp0 (val, "disallow") == 0) {
 			tr_state = _("Disallow");
 		} else {
@@ -1908,7 +2607,7 @@ error:
 		gtk_widget_show (priv->lbl_res_ctrl);
 		gtk_widget_hide (priv->box_res_ctrl);
 
-		gchar *markup = g_markup_printf_escaped ("<i>%s</i>", _("Could not find information."));
+		gchar *markup = g_markup_printf_escaped ("%s", _("Could not find information."));
 		gtk_label_set_markup (GTK_LABEL (priv->lbl_res_ctrl), markup);
 		g_free (markup);
 	}
@@ -2297,6 +2996,25 @@ logfilter_popover_closed_cb (GtkPopover *popover, gpointer data)
 }
 
 static void
+dlg_trusted_site_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+	gtk_widget_hide_on_delete (widget);
+}
+
+static void
+site_list_clicked_cb (GtkToggleButton *button, gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	gtk_dialog_run (GTK_DIALOG (priv->dlg_trusted_site));
+	g_signal_connect (G_OBJECT (priv->dlg_trusted_site),
+					  "delete-event",
+					  G_CALLBACK (dlg_trusted_site_delete_cb), 
+					  window);
+}
+
+static void
 log_filter_clicked_cb (GtkToggleButton *button, gpointer data)
 {
 	SysinfoWindow *window = SYSINFO_WINDOW (data);
@@ -2312,16 +3030,74 @@ log_filter_clicked_cb (GtkToggleButton *button, gpointer data)
 	gtk_popover_set_position (GTK_POPOVER (priv->logfilter_popover), GTK_POS_BOTTOM);
 
 	guint cur_log_filter = 0;
+
 	if (priv->settings)
 		cur_log_filter = g_settings_get_uint (priv->settings, "log-filter");
 	priv->prev_log_filter = cur_log_filter;
 
 	logfilter_popover_set_logfilter (priv->logfilter_popover, cur_log_filter);
+	log_filter_button_changed (GTK_WIDGET(button), cur_log_filter, window);
 
+	g_signal_connect (G_OBJECT (priv->logfilter_popover), "log-changed",
+					  G_CALLBACK (log_filter_button_changed), window);
 	g_signal_connect (G_OBJECT (priv->logfilter_popover), "closed",
                       G_CALLBACK (logfilter_popover_closed_cb), window);
 
 	gtk_popover_popup (GTK_POPOVER (priv->logfilter_popover));
+}
+
+static void
+combo_calendar_clicked_cb (GtkComboBox *widget, gpointer data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+	gint id;
+    gint year, month, day, s_year, s_month, s_day;
+    GDateTime *dt = g_date_time_new_now_local ();
+
+	id = gtk_combo_box_get_active ( GTK_COMBO_BOX (widget) );
+
+	g_date_time_get_ymd (dt, &year, &month, &day);
+
+	gtk_widget_set_sensitive (priv->btn_calendar_from, FALSE);
+	gtk_widget_set_sensitive (priv->btn_calendar_to, FALSE);
+	set_log_search_date (window, year, month, day, FALSE);
+
+	switch (id) {
+		case 0:
+			set_log_search_date (window, year, month, day, TRUE);
+			break;
+
+		case 1:
+			dt = g_date_time_add_weeks (dt, -1);
+			g_date_time_get_ymd (dt, &s_year, &s_month, &s_day);
+			set_log_search_date (window, s_year, s_month, s_day, TRUE);
+			break;
+
+		case 2:
+			dt = g_date_time_add_months (dt, -1);
+			g_date_time_get_ymd (dt, &s_year, &s_month, &s_day);
+			set_log_search_date (window, s_year, s_month, s_day, TRUE);
+			break;
+
+		case 3:
+			dt = g_date_time_add_months (dt, -3);
+			g_date_time_get_ymd (dt, &s_year, &s_month, &s_day);
+			set_log_search_date (window, s_year, s_month, s_day, TRUE);
+			break;
+
+		case 4:
+			dt = g_date_time_add_months (dt, -6);
+			g_date_time_get_ymd (dt, &s_year, &s_month, &s_day);
+			set_log_search_date (window, s_year, s_month, s_day, TRUE);
+			break;
+
+		case 5:
+			gtk_widget_set_sensitive (priv->btn_calendar_from, TRUE);
+			gtk_widget_set_sensitive (priv->btn_calendar_to, TRUE);
+			break;
+	}
+   	g_date_time_unref (dt);
 }
 
 static void
@@ -2382,6 +3158,74 @@ file_status_changed_cb (GFileMonitor      *monitor,
 }
 
 static void
+sidebar_row_activated_cb (GtkWidget *treeview,
+						  GtkTreePath *path,
+						  GtkTreeViewColumn *column,
+						  gpointer user_data)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	SysinfoWindow *window = SYSINFO_WINDOW (user_data);
+	SysinfoWindowPrivate *priv = window->priv;
+	gchar *name, *title = NULL;
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
+	gtk_tree_model_get_iter (model, &iter, path);
+
+	gtk_tree_model_get (GTK_TREE_MODEL (model),
+						&iter,
+						NAME_COLUMN, &name,
+						TITLE_COLUMN, &title,
+						-1);
+
+	if (name != NULL)
+		return;
+
+	if (!gtk_tree_view_expand_row ( GTK_TREE_VIEW (treeview), path, TRUE))
+		gtk_tree_view_collapse_row ( GTK_TREE_VIEW (treeview), path);
+
+	g_free (name);
+	g_free (title);
+	
+}
+
+static void
+selection_cb (GtkTreeSelection *selection,
+              gpointer user_data)
+{
+	GtkTreeIter iter;
+	GtkTreeView *treeview;
+	GtkTreeModel *model;
+	GtkTreePath *path;
+	char *name;
+	char *title;
+
+	SysinfoWindow *window = SYSINFO_WINDOW (user_data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	if (! gtk_tree_selection_get_selected (selection, NULL, &iter))
+		return;
+
+	treeview = gtk_tree_selection_get_tree_view (selection);
+	model = gtk_tree_view_get_model (treeview);
+	path = gtk_tree_model_get_path (model, &iter);
+
+	gtk_tree_model_get (model, &iter,
+	                    NAME_COLUMN, &name,
+	                    TITLE_COLUMN, &title,
+	                    -1);
+
+	if (name != NULL)
+	{
+		gtk_stack_set_visible_child_name (GTK_STACK(priv->stack), name);
+		gtk_label_set_text (GTK_LABEL (priv->lbl_title), _(title));
+	}
+
+	g_free (name);
+	g_free (title);
+}
+
+static void
 sysinfo_window_init (SysinfoWindow *self)
 {
 	GError *error = NULL;
@@ -2389,6 +3233,7 @@ sysinfo_window_init (SysinfoWindow *self)
 	GSettingsSchema *schema = NULL;
 	GFile *file;
 	GFileMonitor *monitor;
+	GtkCssProvider *provider;
 
 	SysinfoWindowPrivate *priv;
 
@@ -2406,10 +3251,41 @@ sysinfo_window_init (SysinfoWindow *self)
 	priv->agent_check_timeout_id = 0;
 	priv->update_check_timeout_id = 0;
 	priv->prev_log_filter = 0;
-    priv->settings = NULL;
+	priv->settings = NULL;
+
+    /* for settings */
+	schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
+                                              "apps.gooroom-security-status", TRUE);
+	if (schema) {
+		priv->gkm_settings = g_settings_new_full (schema, NULL, NULL);
+		g_settings_schema_unref (schema);
+	}
+
+	settings_update_ui (self);
+	g_signal_connect (G_OBJECT (priv->swt_service), "state-set",
+                      G_CALLBACK (on_service_state_changed), self);
+
+	g_signal_connect (G_OBJECT (priv->btn_gms_settings), "clicked",
+                      G_CALLBACK (on_gms_settings_button_clicked), self);
+
+	gtk_widget_set_sensitive (GTK_WIDGET (priv->chk_adn), FALSE);
+	if (priv->gkm_settings) {
+		gtk_widget_set_sensitive (GTK_WIDGET (priv->chk_adn), TRUE);
+		g_signal_connect (G_OBJECT (priv->chk_adn), "state-set",
+                          G_CALLBACK (on_allow_duplicate_notification_toggled), self);
+	}
+
+    /* for sidebar treeview */
+    GtkTreeModel *model;
+
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_sidebar_contents));
+    populate_model (model);
+
+	g_signal_connect (priv->trv_sidebar_contents, "row-activated", G_CALLBACK (sidebar_row_activated_cb), self);
+	g_signal_connect (priv->sidebar_selection, "changed", G_CALLBACK (selection_cb), self);
 
 	schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
-                                              "apps.gooroom-security-status-view", TRUE);
+                                              "apps.gooroom-security-status-tool", TRUE);
 	if (schema) {
 		priv->settings = g_settings_new_full (schema, NULL, NULL);
 		g_settings_schema_unref (schema);
@@ -2460,7 +3336,13 @@ sysinfo_window_init (SysinfoWindow *self)
 	set_log_search_date (self, year, month, day, TRUE);
 	set_log_search_date (self, year, month, day, FALSE);
 
-	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_security_log));
+	gtk_widget_set_sensitive (priv->btn_calendar_from, FALSE);
+	gtk_widget_set_sensitive (priv->btn_calendar_to, FALSE);
+
+    accel_init (self);
+	gtk_label_set_text (GTK_LABEL (priv->lbl_title), _("Gooroom Platform Management Server"));
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_security_log));
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_LIST_STORE (model)), 4, GTK_SORT_DESCENDING);
 
 	g_signal_connect (G_OBJECT (priv->stack), "notify::visible-child", G_CALLBACK (on_stack_visible_child_notify_cb), self);
@@ -2486,13 +3368,26 @@ sysinfo_window_init (SysinfoWindow *self)
 
 	g_signal_connect (G_OBJECT (priv->trv_res_ctrl), "row-activated", G_CALLBACK (treeview_row_activated_cb), self);
 	g_signal_connect (G_OBJECT (priv->trv_res_ctrl), "cursor-changed", G_CALLBACK (treeview_cursor_changed_cb), self);
+	g_signal_connect (G_OBJECT (priv->trv_res_ctrl1), "row-activated", G_CALLBACK (treeview_row_activated_cb), self);
+	g_signal_connect (G_OBJECT (priv->trv_res_ctrl1), "cursor-changed", G_CALLBACK (treeview_cursor_changed_cb), self);
 	g_signal_connect (G_OBJECT (priv->btn_more), "clicked", G_CALLBACK (btn_more_clicked_cb), self);
+	g_signal_connect (G_OBJECT (priv->combo_calendar), "changed", G_CALLBACK (combo_calendar_clicked_cb), self);
 	g_signal_connect (G_OBJECT (priv->btn_calendar_from), "toggled", G_CALLBACK (btn_calendar_from_clicked_cb), self);
 	g_signal_connect (G_OBJECT (priv->btn_calendar_to), "toggled", G_CALLBACK (btn_calendar_to_clicked_cb), self);
 	g_signal_connect (G_OBJECT (priv->btn_search), "clicked", G_CALLBACK (btn_search_clicked_cb), self);
 	g_signal_connect (G_OBJECT (priv->btn_log_filter), "toggled", G_CALLBACK (log_filter_clicked_cb), self);
+	g_signal_connect (G_OBJECT (priv->btn_site_list), "clicked", G_CALLBACK (site_list_clicked_cb), self);
+	g_signal_connect (G_OBJECT (priv->rdo_trusted), "toggled", G_CALLBACK (gooroom_browser_status_update), self);
+	g_signal_connect (G_OBJECT (priv->rdo_untrusted), "toggled", G_CALLBACK (gooroom_browser_status_update), self);
 
 	g_timeout_add (500, (GSourceFunc) update_ui, self);
+
+	provider = gtk_css_provider_new ();
+	gtk_css_provider_load_from_resource (provider, "/kr/gooroom/security/status/settings/style.css");
+	gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+											   GTK_STYLE_PROVIDER (provider),
+											   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_object_unref (provider);
 }
 
 static void
@@ -2512,6 +3407,7 @@ sysinfo_window_finalize (GObject *object)
 	}
 
 	g_object_unref (priv->settings);
+	g_object_unref (priv->gkm_settings);
 
 	G_OBJECT_CLASS (sysinfo_window_parent_class)->finalize (object);
 }
@@ -2520,74 +3416,130 @@ static void
 sysinfo_window_class_init (SysinfoWindowClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
 	object_class->finalize = sysinfo_window_finalize;
 
-	gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
+	gtk_widget_class_set_template_from_resource (widget_class,
 			"/kr/gooroom/security/status/sysinfo/sysinfo-window.ui");
 
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, stack);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_res_ctrl);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_res_ctrl);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_more);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_search);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_calendar_from);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_calendar_to);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, trv_res_ctrl);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_browser_urls);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, scl_browser_urls);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, trv_browser_urls);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_firewall4);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_firewall4_policy);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, scl_firewall4);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, trv_firewall4);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_firewall6);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_firewall6_policy);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, scl_firewall6);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, trv_firewall6);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, trv_security_log);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_sec_status);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_device_id);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_os);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_server_ip);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_machine_id);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_conn_status);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_op_mode);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_port_num);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_kernel_ver);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_change_pw_cycle);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_change_pw_cycle);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_screen_saver_time);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_pkgs_change_blocking);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, frm_push_update);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, rdo_os);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, rdo_exe);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, rdo_boot);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, rdo_media);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_os);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_exe);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_boot);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_media);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_log_debug);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_log_info);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_log_notice);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_log_warning);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_log_err);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_log_crit);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_log_alert);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, chk_log_emerg);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_view_log);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_safety_measure);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_update);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, swt_push_update);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_device_id);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_server_ip);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_conn_status);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_port_num);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, box_pkgs_change_blocking);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_search_date_from);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, lbl_search_date_to);
-	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), SysinfoWindow, btn_log_filter);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_title);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, sidebar_selection);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, trv_sidebar_contents);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, stack);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_res_ctrl);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, box_res_ctrl);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_more);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_search);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, combo_calendar);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_calendar_from);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_calendar_to);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, trv_res_ctrl);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, trv_res_ctrl1);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_browser_urls);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, box_trust_list);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, rdo_trusted);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, rdo_untrusted);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_site_list);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_site_develop);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_site_download);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_site_printer);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_site_source);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_site_socket);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_site_worker);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, scl_browser_urls);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, trv_browser_urls);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_net_allow);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_firewall4);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_firewall4_policy);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, scl_firewall4);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, trv_firewall4);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_firewall6);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_firewall6_policy);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, scl_firewall6);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, trv_firewall6);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, trv_security_log);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_sec_status);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, img_security_status);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_device_id);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_os);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_server_ip);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_machine_id);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_conn_status);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_op_mode);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_port_num);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_kernel_ver);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, box_change_pw_cycle);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_change_pw_cycle);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_screen_saver_time);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_pkgs_change_blocking);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, frm_push_update);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, rdo_os);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, rdo_exe);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, rdo_boot);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, rdo_media);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_os);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_exe);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_boot);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_media);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_security_booting);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_security_files);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_security_os);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_security_rsc);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_log_debug);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_log_info);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_log_notice);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_log_warning);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_log_err);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_log_crit);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_log_alert);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_log_emerg);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_debug);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_info);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_notice);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_warning);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_err);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_crit);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_alert);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_emerg);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_view_log);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_safety_measure);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_update);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, swt_push_update);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, box_device_id);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, box_server_ip);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, box_conn_status);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, box_port_num);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, box_pkgs_change_blocking);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_search_date_from);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_search_date_to);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_log_filter);
+
+    /* for settings */
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, swt_service);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_agent_status);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_mgt_svr_url);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_domain_url);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_svr_crt);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_client_id);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_group);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_client_crt);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_gms_settings);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_adn);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_chk_adn);
+
+    /* for new functions */
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_site_list);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, dlg_trusted_site);
+
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_debug);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_info);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_notice);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_warning);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_err);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_crit);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_alert);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_emerg);
 }
 
 SysinfoWindow*

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Gooroom <gooroom@gooroom.kr>
+ * Copyright (C) 2018-2021 Gooroom <gooroom@gooroom.kr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ G_BEGIN_DECLS
 #define GOOROOM_SECURITY_LOGPARSER_SEEKTIME    "/var/tmp/GOOROOM-SECURITY-LOGPARSER-SEEKTIME"
 #define GOOROOM_MANAGEMENT_SERVER_CONF         "/etc/gooroom/gooroom-client-server-register/gcsr.conf"
 #define GOOROOM_AGENT_SERVICE_NAME             "gooroom-agent.service"
+#define GOOROOM_BROWSER_TRUST				   "/usr/share/gooroom/browser/policies/trust/managed/ui-policy.json"
+#define GOOROOM_BROWSER_UNTRUST				   "/usr/share/gooroom/browser/policies/untrust/managed/ui-policy.json"
 
 #define	DEFAULT_YEAR                            1970 
 #define	DEFAULT_MONTH                           1

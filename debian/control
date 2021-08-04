@@ -10,7 +10,8 @@ Build-Depends: automake (>= 1.13),
                libglib2.0-dev,
                libgtk-3-dev,
                libpolkit-gobject-1-dev,
-               libjson-c-dev
+               libjson-c-dev,
+               gooroom-security-utils
 Standards-Version: 3.9.8
 
 Package: gooroom-security-status-tools
