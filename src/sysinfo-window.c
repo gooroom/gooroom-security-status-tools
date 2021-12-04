@@ -578,8 +578,12 @@ get_password_max_days_for_online_user (void)
 	gint maxdays = -1;
 	gchar *file = NULL;
 	gchar *data = NULL;
+	const char *homedir = g_getenv ("HOME");
 
-	file = g_strdup_printf ("%s/.gooroom/%s", g_get_home_dir (), GRM_USER);
+	if (!homedir)
+		homedir = g_get_home_dir ();
+
+	file = g_strdup_printf ("%s/.gooroom/%s", homedir, GRM_USER);
 
 	if (!g_file_test (file, G_FILE_TEST_EXISTS)) {
 		g_error ("No such file or directory : %s", file);
@@ -1164,20 +1168,19 @@ show_log (GtkWidget *treeview, json_object *root_obj, gint64 search_to_utime, GL
 				g_string_free (cnt, TRUE);
 			}
 
-			g_strfreev (lines);
+			if (utime <= search_to_utime) {
+				gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+						0, date,
+						1, time,
+						2, display_type,
+						3, desc,
+						4, utime,
+						-1);
 
+			g_strfreev (lines);
 			g_date_time_unref (dt);
 		}
-
-		if (utime <= search_to_utime) {
-			gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-					0, date,
-					1, time,
-					2, display_type,
-					3, desc,
-					4, utime,
-					-1);
 
             //GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL,4);
             //GtkWidget *lbl_date = gtk_label_new(date);
@@ -1798,8 +1801,10 @@ last_vulnerable_get (void)
 
 	if (g_file_test (GOOROOM_SECURITY_STATUS_VULNERABLE, G_FILE_TEST_EXISTS)) {
 		g_file_get_contents (GOOROOM_SECURITY_STATUS_VULNERABLE, &str_vulnerable, NULL, NULL);
+		vulnerable = atoi (str_vulnerable);
 
-		if (1 == sscanf (str_vulnerable, "%"G_GUINT32_FORMAT, &vulnerable)) {
+		//if (1 == sscanf (str_vulnerable, "%"G_GUINT32_FORMAT, &vulnerable)) {
+		if (vulnerable) {
 			if ((vulnerable < (1 << 0)) ||
                 (vulnerable >= (1 << 4))) { // 1 <= vulnerable < 16
 				vulnerable = 0;
@@ -1839,11 +1844,16 @@ security_logparser_async_done (GIOChannel   *source,
 		goto done;
 	}
 
-	gchar *json_output = strstr (outputs->str, "JSON-ANCHOR=");
+	gchar *json_output = g_strrstr (outputs->str, "JSON-ANCHOR=");
+
 	if (json_output) {
-		gchar *json_string = json_output + strlen ("JSON-ANCHOR=");
+		gchar **json_string = NULL;
 		enum json_tokener_error jerr = json_tokener_success;
-		json_object *root_obj = json_tokener_parse_verbose (json_string, &jerr);
+		json_object *root_obj = NULL;
+
+		json_string = g_strsplit (json_output, "JSON-ANCHOR=", -1);
+		root_obj = json_tokener_parse_verbose (json_string[1], &jerr);
+
 		if (jerr == json_tokener_success) {
 			json_object *summary_obj;
 			json_object *os_run_obj, *exe_run_obj, *boot_run_obj, *media_run_obj;
@@ -2111,11 +2121,16 @@ security_log_get (GIOChannel   *source,
 		goto done;
 	}
 
-	gchar *json_output = strstr (outputs->str, "JSON-ANCHOR=");
+	gchar *json_output = g_strrstr (outputs->str, "JSON-ANCHOR=");
 	if (json_output) {
-		gchar *json_string = json_output + strlen ("JSON-ANCHOR=");
+		gchar **json_string = NULL;
 		enum json_tokener_error jerr = json_tokener_success;
-		json_object *root_obj = json_tokener_parse_verbose (json_string, &jerr);
+		//json_object *root_obj = json_tokener_parse_verbose (json_string, &jerr);
+		json_object *root_obj = NULL;
+
+		json_string = g_strsplit(json_output, "JSON-ANCHOR=", -1);
+		root_obj = json_tokener_parse_verbose (json_string[1], &jerr);
+
 		if (jerr == json_tokener_success) {
 			json_object *os_obj = NULL, *exe_obj = NULL, *boot_obj = NULL, *media_obj = NULL, *agent_obj = NULL;
 			json_object_object_get_ex (root_obj, "os_log", &os_obj);
@@ -2149,6 +2164,8 @@ security_log_get (GIOChannel   *source,
 
 			json_object_put (root_obj);
 		}
+
+		g_strfreev (json_string);
 	}
 
 done:
