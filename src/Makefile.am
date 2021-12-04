@@ -9,7 +9,7 @@ gooroom_security_status_tool_CPPFLAGS = \
 	-DGOOROOM_IP6TABLES_WRAPPER=\"$(pkglibexecdir)/gooroom-ip6tables-wrapper\" \
 	-DGOOROOM_PRODUCT_UUID_HELPER=\"$(pkglibexecdir)/gooroom-product-uuid-helper\" \
 	-DGOOROOM_WHICH_GRAC_RULE=\"/usr/lib/gooroom-resource-access-control/which-grac-rule.py\" \
-	-DGOOROOM_SECURITY_STATUS_VULNERABLE_HELPER=\"$(pkglibexecdir)/gooroom-security-status-vulnerable-helper\" \
+	-DGOOROOM_SECURITY_STATUS_VULNERABLE_HELPER=\"/usr/lib/gooroom-security-utils/gooroom-security-status-vulnerable-helper\" \
 	-DGCSR_WRAPPER=\"$(pkglibexecdir)/gooroom-client-server-register-wrapper\" \
 	-DGOOROOM_SYSTEMD_CONTROL_HELPER=\"$(pkglibexecdir)/gooroom-systemd-control-helper\" \
 	$(AM_CPPFLAGS)
