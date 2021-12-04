@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Gooroom <gooroom@gooroom.kr>
+ * Copyright (C) 2018-2021 Gooroom <gooroom@gooroom.kr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -211,13 +211,17 @@ run_security_log_parser_async (gchar *seektime, GIOFunc callback_func, gpointer 
 	gboolean ret = FALSE;
 	gint stdout_fd;
 	gchar *pkexec, *cmdline = NULL;
+	const gchar *lang;
 
     pkexec = g_find_program_in_path ("pkexec");
+	lang = g_getenv ("LANG");
 
     if (seektime)
-        cmdline = g_strdup_printf ("%s %s %s", pkexec, GOOROOM_SECURITY_LOGPARSER_WRAPPER, seektime);
+        cmdline = g_strdup_printf ("%s %s %s %s", pkexec,
+                                   GOOROOM_SECURITY_LOGPARSER_WRAPPER, seektime, lang);
     else
-        cmdline = g_strdup_printf ("%s %s", pkexec, GOOROOM_SECURITY_LOGPARSER_WRAPPER);
+        cmdline = g_strdup_printf ("%s %s %s", pkexec,
+                                   GOOROOM_SECURITY_LOGPARSER_WRAPPER, lang);
 
 	gchar **arr_cmd = g_strsplit (cmdline, " ", -1);
 

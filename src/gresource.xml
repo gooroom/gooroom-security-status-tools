@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/kr/gooroom/security/status/sysinfo">
+    <file preprocess="xml-stripblanks">sysinfo-window.ui</file>
+    <file preprocess="xml-stripblanks">rpd-dialog.ui</file>
+    <file preprocess="xml-stripblanks">logfilter-popover.ui</file>
+  </gresource>
+
+  <gresource prefix="/kr/gooroom/security/status/settings">
+    <file alias="ic-fix">../data/icons/ic-fix.svg</file>
+    <file alias="ic-security-safe">../data/icons/ic-security-safe.svg</file>
+    <file alias="ic-security-danger">../data/icons/ic-security-danger.svg</file>
+    <file alias="style.css">../data/style.css</file>
+  </gresource>
+</gresources>

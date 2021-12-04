@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="gooroom-security-status-view">
+<schemalist gettext-domain="gooroom-security-status-tool">
 
-  <schema id="apps.gooroom-security-status-view" path="/apps/gooroom-security-status-view/">
+  <schema id="apps.gooroom-security-status-tool" path="/apps/gooroom-security-status-tool/">
 
     <key name="log-filter" type="u">
       <default>255</default>

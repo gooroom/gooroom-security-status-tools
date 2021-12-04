@@ -1,13 +1,10 @@
 gooroom_security_status_toolsdir = $(pkglibexecdir)
 gooroom_security_status_tools_SCRIPTS = \
 	gooroom-client-server-register-wrapper \
-	gooroom-logparser-seektime-helper	\
-	gooroom-security-logparser-wrapper	\
 	gooroom-update-checker	\
 	gooroom-iptables-wrapper \
 	gooroom-ip6tables-wrapper \
-	gooroom-product-uuid-helper \
-	gooroom-security-status-vulnerable-helper
+    gooroom-product-uuid-helper
 
 kr.gooroom.security.status.tools.policy.in: kr.gooroom.security.status.tools.policy.in.in Makefile
 	$(AM_V_GEN) sed -e "s|\@pkglibexecdir\@|$(pkglibexecdir)|" $< >$@
