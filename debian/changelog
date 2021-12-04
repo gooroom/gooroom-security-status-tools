@@ -1,3 +1,15 @@
+gooroom-security-status-tools (0.3.0+grm3u1) unstable; urgency=medium
+
+  [ jongkyung.woo ]
+  * [8e47dc50] Rebuild on gooroom-3.0
+
+  [ boyeon.choi ]
+  * [7adf8bba] Gooroom-3.0 UI Initialization
+  * [64902082] Corrected the path of gooroom-security-status-vulnerable-helper
+  * [178f53ff] Fixed static code analysis issue
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Sat, 04 Dec 2021 16:34:41 +0900
+
 gooroom-security-status-tools (0.1.5+grm2u1) unstable; urgency=medium
 
   [ cjheo ]
