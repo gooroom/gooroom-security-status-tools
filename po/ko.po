@@ -1,5 +1,5 @@
 # Korean translations for gooroom-security-status-tools package.
-# Copyright (C) 2018-2019 THE gooroom-security-status-tools'S COPYRIGHT HOLDER
+# Copyright (C) 2018-2021 THE gooroom-security-status-tools'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gooroom-security-status-tools package.
 #
 #, fuzzy
@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gooroom-security-status-tools 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 16:58+0900\n"
+"POT-Creation-Date: 2021-08-24 17:54+0900\n"
 "PO-Revision-Date: 2019-08-23 11:54+0900\n"
 "Language-Team: Gooroom <gooroom@gooroom.kr>\n"
 "Language: ko\n"
@@ -16,239 +16,258 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../src/sysinfo/sysinfo-window.c:365 ../src/sysinfo/sysinfo-window.c:1708
+#. gtk_label_set_text (GTK_LABEL(priv->lbl_security_os), _("Allow"));
+#. gtk_label_set_text (GTK_LABEL(priv->lbl_security_files), _("Allow"));
+#. gtk_label_set_text (GTK_LABEL(priv->lbl_security_booting), _("Allow"));
+#. gtk_label_set_text (GTK_LABEL(priv->lbl_security_rsc), _("Allow"));
+#: ../src/sysinfo-window.c:458 ../src/sysinfo-window.c:650
+#: ../src/sysinfo-window.c:754 ../src/sysinfo-window.c:831
+#: ../src/sysinfo-window.c:1725 ../src/sysinfo-window.c:1734
+#: ../src/sysinfo-window.c:1743 ../src/sysinfo-window.c:1752
+#: ../src/sysinfo-window.c:2300 ../src/sysinfo-window.c:2409
+#: ../src/sysinfo-window.c:2509 ../src/sysinfo-window.c:2545
+#: ../src/rpd-dialog.c:212
+msgid "Allow"
+msgstr "허용"
+
+#: ../src/sysinfo-window.c:473 ../src/sysinfo-window.c:652
+#: ../src/sysinfo-window.c:759 ../src/sysinfo-window.c:833
+#: ../src/sysinfo-window.c:1729 ../src/sysinfo-window.c:1738
+#: ../src/sysinfo-window.c:1747 ../src/sysinfo-window.c:1756
+#: ../src/sysinfo-window.c:2306 ../src/sysinfo-window.c:2316
+#: ../src/sysinfo-window.c:2326 ../src/sysinfo-window.c:2336
+#: ../src/sysinfo-window.c:2415 ../src/sysinfo-window.c:2427
+#: ../src/sysinfo-window.c:2470 ../src/sysinfo-window.c:2512
+msgid "Disallow"
+msgstr "허용안함"
+
+#: ../src/sysinfo-window.c:487 ../src/sysinfo-window.c:2217
 msgid "unset"
 msgstr "설정되지 않음"
 
-#: ../src/sysinfo/sysinfo-window.c:368
+#: ../src/sysinfo-window.c:490
 msgid "immediately"
 msgstr "즉시"
 
-#: ../src/sysinfo/sysinfo-window.c:370
+#: ../src/sysinfo-window.c:492
 msgid "day"
 msgstr "일"
 
-#: ../src/sysinfo/sysinfo-window.c:372
+#: ../src/sysinfo-window.c:494
 msgid "days"
 msgstr "일"
 
-#: ../src/sysinfo/sysinfo-window.c:527
-msgid "Connected"
-msgstr "연결됨"
+#: ../src/sysinfo-window.c:645
+msgid "Service was started successfully"
+msgstr "서비스를 시작하였습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:529
-msgid "Disconnected"
-msgstr "연결끊김"
+#: ../src/sysinfo-window.c:645
+msgid "Service was stopped successfully"
+msgstr "서비스를 중지하였습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:541 ../src/sysinfo/sysinfo-window.c:561
-#: ../src/sysinfo/sysinfo-window.c:679 ../src/sysinfo/sysinfo-window.c:775
-#: ../src/sysinfo/sysinfo-window.c:1274 ../src/sysinfo/sysinfo-window.c:1405
-#: ../src/sysinfo/sysinfo-window.c:1445 ../src/sysinfo/sysinfo-window.c:1518
-#: ../src/sysinfo/sysinfo-window.c:1553 ../src/sysinfo/sysinfo-window.c:1554
-#: ../src/sysinfo/sysinfo-window.c:1555 ../src/sysinfo/sysinfo-window.c:1569
-#: ../src/sysinfo/sysinfo-window.c:1726 ../src/sysinfo/sysinfo-window.c:1815
-#: ../src/sysinfo/sysinfo-window.c:1857 ../src/settings/settings-window.c:208
-#: ../src/settings/settings-window.c:211 ../src/settings/settings-window.c:214
-#: ../src/settings/settings-window.c:217 ../src/settings/settings-window.c:220
-#: ../src/sysinfo/sysinfo-window.ui.h:4 ../src/settings/settings-window.ui.h:5
+#: ../src/sysinfo-window.c:646 ../src/sysinfo-window.c:794
+#: ../src/sysinfo-window.c:797 ../src/sysinfo-window.c:800
+#: ../src/sysinfo-window.c:803 ../src/sysinfo-window.c:806
+#: ../src/sysinfo-window.c:809 ../src/sysinfo-window.c:828
+#: ../src/sysinfo-window.c:993 ../src/sysinfo-window.c:1013
+#: ../src/sysinfo-window.c:1131 ../src/sysinfo-window.c:1243
+#: ../src/sysinfo-window.c:1782 ../src/sysinfo-window.c:1914
+#: ../src/sysinfo-window.c:1954 ../src/sysinfo-window.c:2027
+#: ../src/sysinfo-window.c:2062 ../src/sysinfo-window.c:2063
+#: ../src/sysinfo-window.c:2064 ../src/sysinfo-window.c:2078
+#: ../src/sysinfo-window.c:2235 ../src/sysinfo-window.c:2419
+#: ../src/sysinfo-window.c:2431 ../src/sysinfo-window.c:2472
+#: ../src/sysinfo-window.c:2514 ../src/sysinfo-window.ui.h:7
 msgid "Unknown"
 msgstr "알수없음"
 
-#: ../src/sysinfo/sysinfo-window.c:777
+#: ../src/sysinfo-window.c:664
+msgid "Notifications"
+msgstr "알림"
+
+#: ../src/sysinfo-window.c:883
+msgid "Program is not installed"
+msgstr "프로그램이 설치 되지 않았습니다."
+
+#: ../src/sysinfo-window.c:886
+msgid "Please install the gooroom-client-server-register."
+msgstr "gooroom-client-server-register 프로그램을 설치하십시오."
+
+#: ../src/sysinfo-window.c:979
+msgid "Connected"
+msgstr "연결됨"
+
+#: ../src/sysinfo-window.c:981
+msgid "Disconnected"
+msgstr "연결끊김"
+
+#: ../src/sysinfo-window.c:1245
 msgid "Latest"
 msgstr "최신 상태"
 
-#: ../src/sysinfo/sysinfo-window.c:781
+#: ../src/sysinfo-window.c:1249
 #, c-format
 msgid "There is %s package to update."
 msgstr "%s 개의 업데이트 패키지가 존재합니다."
 
-#: ../src/sysinfo/sysinfo-window.c:783
+#: ../src/sysinfo-window.c:1251
 #, c-format
 msgid "There are %s packages to update."
 msgstr "%s 개의 업데이트 패키지가 존재합니다."
 
-#: ../src/sysinfo/sysinfo-window.c:880
+#: ../src/sysinfo-window.c:1348
 msgid "ACCEPT"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:882
+#: ../src/sysinfo-window.c:1350
 msgid "DROP"
 msgstr "차단"
 
-#: ../src/sysinfo/sysinfo-window.c:884
+#: ../src/sysinfo-window.c:1352
 msgid "REJECT"
 msgstr "차단"
 
-#: ../src/sysinfo/sysinfo-window.c:946
+#: ../src/sysinfo-window.c:1414
 msgid "Accept"
 msgstr "허용"
 
-#: ../src/sysinfo/sysinfo-window.c:948
+#: ../src/sysinfo-window.c:1416
 msgid "Drop"
 msgstr "비허용"
 
-#: ../src/sysinfo/sysinfo-window.c:983
+#: ../src/sysinfo-window.c:1451
 msgid "INPUT"
 msgstr "인바운드"
 
-#: ../src/sysinfo/sysinfo-window.c:984
+#: ../src/sysinfo-window.c:1452
 msgid "OUTPUT"
 msgstr "아웃바운드"
 
-#: ../src/sysinfo/sysinfo-window.c:985
+#: ../src/sysinfo-window.c:1453
 msgid "FORWARD"
 msgstr "포워드"
 
-#: ../src/sysinfo/sysinfo-window.c:1011
+#: ../src/sysinfo-window.c:1479
 msgid "Could not find firewall policy."
 msgstr "방화벽 정책을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1269
+#: ../src/sysinfo-window.c:1775
 msgid "Safety"
 msgstr "안전"
 
-#: ../src/sysinfo/sysinfo-window.c:1271
+#: ../src/sysinfo-window.c:1778
 msgid "Vulnerable"
 msgstr "취약"
 
-#: ../src/sysinfo/sysinfo-window.c:1529
+#: ../src/sysinfo-window.c:2038
 msgid "Standalone Mode"
 msgstr "독립 운영 모드"
 
-#: ../src/sysinfo/sysinfo-window.c:1531
+#: ../src/sysinfo-window.c:2040
 msgid "Server Managed Mode"
 msgstr "서버 관리 모드"
 
-#: ../src/sysinfo/sysinfo-window.c:1710
+#: ../src/sysinfo-window.c:2219
 msgid "minute"
 msgstr "분"
 
-#: ../src/sysinfo/sysinfo-window.c:1712
+#: ../src/sysinfo-window.c:2221
 msgid "minutes"
 msgstr "분"
 
-#: ../src/sysinfo/sysinfo-window.c:1722
+#: ../src/sysinfo-window.c:2231
 msgid "Enabled"
 msgstr "켜짐"
 
-#: ../src/sysinfo/sysinfo-window.c:1724
+#: ../src/sysinfo-window.c:2233
 msgid "Disabled"
 msgstr "꺼짐"
 
-#: ../src/sysinfo/sysinfo-window.c:1789
+#: ../src/sysinfo-window.c:2441
 msgid "Could not find trusted urls information."
 msgstr "신뢰할 수 있는 URL 목록을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:1809 ../src/sysinfo/sysinfo-window.c:1850
+#: ../src/sysinfo-window.c:2466 ../src/sysinfo-window.c:2507
 msgid "ReadOnly"
 msgstr "읽기전용"
 
-#: ../src/sysinfo/sysinfo-window.c:1811 ../src/sysinfo/sysinfo-window.c:1852
-#: ../src/sysinfo/sysinfo-window.c:1888 ../src/sysinfo/rpd-dialog.c:212
-msgid "Allow"
-msgstr "허용"
-
-#: ../src/sysinfo/sysinfo-window.c:1813 ../src/sysinfo/sysinfo-window.c:1855
-msgid "Disallow"
-msgstr "허용안함"
-
-#: ../src/sysinfo/sysinfo-window.c:1953 ../src/sysinfo/rpd-dialog.c:240
+#: ../src/sysinfo-window.c:2610 ../src/rpd-dialog.c:240
 msgid "Could not find information."
 msgstr "매체제어 정책을 찾을 수 없습니다."
 
-#: ../src/sysinfo/sysinfo-window.c:2017
+#: ../src/sysinfo-window.c:2674
 msgid "Do you want to allow push update?"
 msgstr "푸쉬 업데이트를 허용 하겠습니까?"
 
-#: ../src/sysinfo/sysinfo-window.c:2017
+#: ../src/sysinfo-window.c:2674
 msgid "Do you want to deny push update?"
 msgstr "푸쉬 업데이트를 허용하지 않겠습니까?"
 
-#: ../src/sysinfo/sysinfo-window.c:2028
+#: ../src/sysinfo-window.c:2685
 msgid "_Yes"
 msgstr "예"
 
-#: ../src/sysinfo/sysinfo-window.c:2029
+#: ../src/sysinfo-window.c:2686
 msgid "_No"
 msgstr "아니오"
 
-#: ../src/sysinfo/sysinfo-window.c:2032
+#: ../src/sysinfo-window.c:2689
 msgid "Push Update Settings"
 msgstr "푸쉬 업데이트 설정"
 
-#: ../src/sysinfo/sysinfo-window.c:2184
+#: ../src/sysinfo-window.c:2841
 msgid "Please make sure to check log search period."
 msgstr "로그 검색 기간을 확인해 주시기 바랍니다."
 
-#: ../src/sysinfo/sysinfo-window.c:2187
+#: ../src/sysinfo-window.c:2844
 msgid "Log Search Period Settings"
 msgstr "로그 검색 기간 설정"
 
-#: ../src/sysinfo/rpd-dialog.c:66 ../src/sysinfo/rpd-dialog.c:77
-#: ../src/sysinfo/sysinfo-window.ui.h:48
+#: ../src/sysinfo-window.c:3343
+msgid "Gooroom Platform Management Server"
+msgstr "구름 관리 서버"
+
+#: ../src/rpd-dialog.c:66 ../src/rpd-dialog.c:77 ../src/sysinfo-window.ui.h:54
 msgid "Status"
 msgstr "상태"
 
-#: ../src/sysinfo/rpd-dialog.c:67 ../src/sysinfo/sysinfo-window.ui.h:52
+#: ../src/rpd-dialog.c:67 ../src/sysinfo-window.ui.h:58
 msgid "Protocol"
 msgstr "프로토콜"
 
-#: ../src/sysinfo/rpd-dialog.c:68 ../src/sysinfo/sysinfo-window.ui.h:49
+#: ../src/rpd-dialog.c:68 ../src/sysinfo-window.ui.h:55
 msgid "Direction"
 msgstr "방향"
 
-#: ../src/sysinfo/rpd-dialog.c:69
+#: ../src/rpd-dialog.c:69
 msgid "IP Address"
 msgstr "IP 주소"
 
-#: ../src/sysinfo/rpd-dialog.c:70
+#: ../src/rpd-dialog.c:70
 msgid "Source Port"
 msgstr "소스 포트"
 
-#: ../src/sysinfo/rpd-dialog.c:71
+#: ../src/rpd-dialog.c:71
 msgid "Destination Port"
 msgstr "목적지 포트"
 
-#: ../src/sysinfo/rpd-dialog.c:78
+#: ../src/rpd-dialog.c:78
 msgid "Property"
 msgstr "속성"
 
-#: ../src/sysinfo/rpd-dialog.c:79
+#: ../src/rpd-dialog.c:79
 msgid "Value"
 msgstr "값"
 
-#: ../src/sysinfo/rpd-dialog.c:316
+#: ../src/rpd-dialog.c:316
 msgid "View more detail"
 msgstr "세부 정보 보기"
 
-#: ../src/sysinfo/gooroom-security-status-view.desktop.in.h:1
-msgid "Gooroom Security Status View"
-msgstr "구름 보안 상태 보기"
+#: ../src/gooroom-security-status-tool.desktop.in.h:1
+msgid "Gooroom Security Status Tool"
+msgstr "구름 보안 상태 도구"
 
-#: ../src/settings/settings-window.c:82
-msgid "Service was started successfully"
-msgstr "서비스를 시작하였습니다."
-
-#: ../src/settings/settings-window.c:82
-msgid "Service was stopped successfully"
-msgstr "서비스를 중지하였습니다."
-
-#: ../src/settings/settings-window.c:92
-msgid "Notifications"
-msgstr "알림"
-
-#: ../src/settings/settings-window.c:284
-msgid "Program is not installed"
-msgstr "프로그램이 설치 되지 않았습니다."
-
-#: ../src/settings/settings-window.c:287
-msgid "Please install the gooroom-client-server-register."
-msgstr "gooroom-client-server-register 프로그램을 설치하십시오."
-
-#: ../src/settings/gooroom-security-status-settings.desktop.in.h:1
 #: ../data/kr.gooroom.security.status.tools.policy.in.in.h:1
-#: ../src/settings/settings-window.ui.h:1
 msgid "Gooroom Management Settings"
 msgstr "구름 관리 설정"
 
@@ -268,319 +287,467 @@ msgstr "구름 시스템 구성"
 msgid "Authentication is required to change push update settings."
 msgstr "푸쉬 업데이트 설정을 변경하기 위해서 인증이 필요합니다."
 
-#: ../src/sysinfo/sysinfo-window.ui.h:1
-msgid "Details Security Status Of Gooroom System"
-msgstr "구름 시스템 보안 상태 자세히 보기"
+#: ../src/sysinfo-window.ui.h:1
+msgid "Trusted Site List"
+msgstr "신뢰 사이트 목록"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:2
-msgid "Security Status"
-msgstr "보안 상태"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:3 ../src/settings/settings-window.ui.h:4
-msgid ":"
-msgstr ":"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:5
-msgid "View Log"
-msgstr "로그 보기"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:6
-msgid "Take Safety Measures"
-msgstr "안전 조치 실행"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:7
-msgid "Trusted Booting"
-msgstr "신뢰부팅"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:8
-msgid "Protect executable files"
-msgstr "실행파일 검증"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:9
-msgid "Protecting OS"
-msgstr "운영체제 보호"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:10
-msgid "Resources Control"
-msgstr "매체제어"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:11
-msgid "Activated Security Functions"
-msgstr "활성화된 보안 기능"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:12
-msgid "Target packages num"
-msgstr "전체 패키지 개수"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:13
-msgid "Qunatification score"
-msgstr "정량화 점수"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:14
-msgid "Updating..."
-msgstr "업데이트중..."
-
-#: ../src/sysinfo/sysinfo-window.ui.h:15
-msgid "Safety Quantification Score"
-msgstr "안전성 정량화 점수"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:16 ../src/settings/settings-window.ui.h:3
-msgid "Device ID"
-msgstr "단말 ID"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:17
-msgid "OS"
-msgstr "운영체제 정보"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:18
-msgid "Kernel Version"
-msgstr "커널 정보"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:19
-msgid "Serial Number"
-msgstr "단말 제품번호"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:20
-msgid "Update Status"
-msgstr "업데이트 상태"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:21
-msgid "Operation Mode"
-msgstr "운영 모드"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:22
-msgid "Server Connecting Status"
-msgstr "서버 연결 상태"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:23
-msgid "Management Server IP"
-msgstr "구름 관리 서버"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:24
-msgid "Port"
-msgstr "포트"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:25
-msgid "System Info"
-msgstr "시스템 정보"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:26
-msgid "Security Status Info"
-msgstr "보안 상태 정보"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:27
-msgid "Allow Push Update"
-msgstr "푸쉬 업데이트 허용"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:28
-msgid "Update Policy"
-msgstr "업데이트 정책"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:29
-msgid "Notification Display Condition (Log Level)"
-msgstr "알림창 표시 조건 (로그 레벨)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:30
-msgid "Debug"
-msgstr "디버깅 (Debug)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:31
-msgid "Info"
-msgstr "정보 (Info)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:32
-msgid "Notice"
-msgstr "알림 (Notice)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:33
-msgid "Warning"
-msgstr "경고 (Warning)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:34
-msgid "Err"
-msgstr "오류 (Err)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:35
-msgid "Crit"
-msgstr "위험 (Crit)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:36
-msgid "Alert"
-msgstr "경보 (Alert)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:37
-msgid "Emerg"
-msgstr "긴급 (Emerg)"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:38
-msgid "Login PW Change Cycle"
-msgstr "패스워드 변경 주기"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:39
-msgid "Screen Saver Time Setting"
-msgstr "화면보호기 설정 시간"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:40
-msgid "Packages Change Blocking"
-msgstr "패키지 추가/삭제 차단 기능"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:41
-msgid "Device Security Policy"
-msgstr "단말 보안 정책"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:42
-msgid "Resources"
-msgstr "자원"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:43
-msgid "Access Authority"
-msgstr "접근 권한"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:44
-msgid "Details"
-msgstr "자세히 보기"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:45
-msgid "Resources Control Policy"
-msgstr "매체 제어 정책"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:46
+#: ../src/sysinfo-window.ui.h:2
 msgid "Trusted URLs"
 msgstr "신뢰 사이트 목록"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:47
-msgid "Browser Policy"
-msgstr "브라우저 정책"
+#: ../src/sysinfo-window.ui.h:3
+msgid "Trusted Sites"
+msgstr "신뢰 사이트 목록"
 
-#: ../src/sysinfo/sysinfo-window.ui.h:50
-msgid "Source"
-msgstr "소스"
+#: ../src/sysinfo-window.ui.h:4
+msgid "label"
+msgstr ""
 
-#: ../src/sysinfo/sysinfo-window.ui.h:51
-msgid "Destination"
-msgstr "목적지"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:53
-msgid "Firewall Policy - IPV4"
-msgstr "방화벽 정책 - IPV4"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:54
-msgid "Firewall Policy - IPV6"
-msgstr "방화벽 정책 - IPV6"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:55
-msgid "Authority Policy Info"
-msgstr "권한 정책 정보"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:56
-msgid "Period"
-msgstr "기간"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:57
-msgid "2015-01-01"
-msgstr "2015-01-01"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:58
-msgid "~"
-msgstr "~"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:59
-msgid "Log Filter Settings"
-msgstr "로그 필터 설정"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:60
-msgid "Date"
-msgstr "기간"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:61
-msgid "Time"
-msgstr "시간"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:62
-msgid "Type"
-msgstr "종류"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:63
-msgid "Description"
-msgstr "설명"
-
-#: ../src/sysinfo/sysinfo-window.ui.h:64
-msgid "Log Info"
-msgstr "로그 정보"
-
-#: ../src/sysinfo/rpd-dialog.ui.h:1
-msgid "Unconfigured"
-msgstr "구성되지않음"
-
-#: ../src/sysinfo/logfilter-popover.ui.h:1
-msgid "DEBUG"
-msgstr "디버깅"
-
-#: ../src/sysinfo/logfilter-popover.ui.h:2
-msgid "INFO"
-msgstr "정보"
-
-#: ../src/sysinfo/logfilter-popover.ui.h:3
-msgid "NOTICE"
-msgstr "알림"
-
-#: ../src/sysinfo/logfilter-popover.ui.h:4
-msgid "WARNING"
-msgstr "경고"
-
-#: ../src/sysinfo/logfilter-popover.ui.h:5
-msgid "ERR"
-msgstr "오류"
-
-#: ../src/sysinfo/logfilter-popover.ui.h:6
-msgid "CRIT"
-msgstr "위험"
-
-#: ../src/sysinfo/logfilter-popover.ui.h:7
-msgid "ALERT"
-msgstr "경보"
-
-#: ../src/sysinfo/logfilter-popover.ui.h:8
-msgid "EMERG"
-msgstr "긴급"
-
-#: ../src/settings/settings-window.ui.h:2
-msgid "Gooroom Agent Service"
-msgstr "구름 에이전트 서비스"
-
-#: ../src/settings/settings-window.ui.h:6
-msgid "Device Type"
-msgstr "단말 종류"
-
-#: ../src/settings/settings-window.ui.h:7
-msgid "Device Certificate Location"
-msgstr "단말 인증서 위치"
-
-#: ../src/settings/settings-window.ui.h:8
-msgid "General"
-msgstr "일반"
-
-#: ../src/settings/settings-window.ui.h:9
-msgid "Domain"
-msgstr "도메인"
-
-#: ../src/settings/settings-window.ui.h:10
-msgid "Server Certificates Location"
-msgstr "서버 인증서 위치"
-
-#: ../src/settings/settings-window.ui.h:11
+#: ../src/sysinfo-window.ui.h:5
 msgid "Device (re)registration"
 msgstr "단말 등록/재등록"
 
-#: ../src/settings/settings-window.ui.h:12
+#: ../src/sysinfo-window.ui.h:6
+msgid "Device ID"
+msgstr "단말 ID"
+
+#: ../src/sysinfo-window.ui.h:8
+msgid "Device Type"
+msgstr "단말 종류"
+
+#: ../src/sysinfo-window.ui.h:9
+msgid "Device Certificate Location"
+msgstr "단말 인증서 위치"
+
+#: ../src/sysinfo-window.ui.h:10
+msgid "General"
+msgstr "일반"
+
+#: ../src/sysinfo-window.ui.h:11
+msgid "Registry Key"
+msgstr "등록키"
+
+#: ../src/sysinfo-window.ui.h:12
+msgid "GKM"
+msgstr ""
+
+#: ../src/sysinfo-window.ui.h:13
+msgid "Domain"
+msgstr "도메인"
+
+#: ../src/sysinfo-window.ui.h:14
+msgid "Server Certificates Location"
+msgstr "서버 인증서 위치"
+
+#: ../src/sysinfo-window.ui.h:15
 msgid "Gooroom Management Server"
 msgstr "구름 관리 서버"
 
-#: ../src/settings/settings-window.ui.h:13
+#: ../src/sysinfo-window.ui.h:16
+msgid "Gooroom Agent Service"
+msgstr "구름 에이전트 서비스"
+
+#: ../src/sysinfo-window.ui.h:17
+msgid "Management Server"
+msgstr "구름 관리 서버"
+
+#: ../src/sysinfo-window.ui.h:18
+msgid "Policy Name"
+msgstr "정책명"
+
+#: ../src/sysinfo-window.ui.h:19
+msgid "Policy Description"
+msgstr "정책 설명"
+
+#: ../src/sysinfo-window.ui.h:20
+msgid "Basic Infomation"
+msgstr "기본 정보"
+
+#: ../src/sysinfo-window.ui.h:21
+msgid "Trusted Site"
+msgstr "신뢰 사이트"
+
+#: ../src/sysinfo-window.ui.h:22
+msgid "Untrusted Site"
+msgstr "비신뢰 사이트"
+
+#: ../src/sysinfo-window.ui.h:23
+msgid "View List"
+msgstr "목록 보기"
+
+#: ../src/sysinfo-window.ui.h:24
+msgid "Using Developer Tools"
+msgstr "개발자도구 사용"
+
+#: ../src/sysinfo-window.ui.h:25
+msgid "Download"
+msgstr "다운로드"
+
+#: ../src/sysinfo-window.ui.h:26
+msgid "Printer"
+msgstr "프린터"
+
+#: ../src/sysinfo-window.ui.h:27
+msgid "View Page Source"
+msgstr "페이지 소스보기"
+
+#: ../src/sysinfo-window.ui.h:28
+msgid "Web Socket"
+msgstr "웹 소켓"
+
+#: ../src/sysinfo-window.ui.h:29
+msgid "Web Worker"
+msgstr "웹 워커"
+
+#: ../src/sysinfo-window.ui.h:30
+msgid "Browser Policy"
+msgstr "브라우저 정책"
+
+#: ../src/sysinfo-window.ui.h:31
+msgid ""
+"A policy that separates a connection site into a trusted/non-trusted site "
+"and \n"
+"controls the features available in the browser. Contact your administrator "
+"to specify a trust site."
+msgstr ""
+"접속 사이트를 신뢰/비 신뢰 사이트로 구분하고, 브라우저에서 사용할 수 있는 기"
+"능들을\n"
+"제어하는 정책입니다. 신뢰 사이트 지정은 관리자에게 문의하세요."
+
+#: ../src/sysinfo-window.ui.h:33
+msgid "Policy Info"
+msgstr "권한 정책 정보"
+
+#: ../src/sysinfo-window.ui.h:34
+msgid "Resources"
+msgstr "자원"
+
+#: ../src/sysinfo-window.ui.h:35
+msgid "Access Authority"
+msgstr "접근 권한"
+
+#: ../src/sysinfo-window.ui.h:36
+msgid "Details"
+msgstr "자세히 보기"
+
+#: ../src/sysinfo-window.ui.h:37
+msgid "Device"
+msgstr "단말 ID"
+
+#: ../src/sysinfo-window.ui.h:38
+msgid "System & Network"
+msgstr "시스템 & 네트워크"
+
+#: ../src/sysinfo-window.ui.h:39
+msgid "Resources Control Policy"
+msgstr "매체 제어 정책"
+
+#: ../src/sysinfo-window.ui.h:40
+msgid "Security Status"
+msgstr "보안 상태"
+
+#: ../src/sysinfo-window.ui.h:41
+msgid "Take Safety Measures"
+msgstr "안전 조치 실행"
+
+#: ../src/sysinfo-window.ui.h:42
+msgid "Trusted Booting"
+msgstr "신뢰부팅"
+
+#: ../src/sysinfo-window.ui.h:43
+msgid "Unkown"
+msgstr ""
+
+#: ../src/sysinfo-window.ui.h:44
+msgid "Protect executable files"
+msgstr "실행파일 검증"
+
+#: ../src/sysinfo-window.ui.h:45
+msgid "Protecting OS"
+msgstr "운영체제 보호"
+
+#: ../src/sysinfo-window.ui.h:46
+msgid "Resources Control"
+msgstr "매체제어"
+
+#: ../src/sysinfo-window.ui.h:47
+msgid "Activated Security Functions"
+msgstr "활성화된 보안 기능"
+
+#: ../src/sysinfo-window.ui.h:48
+msgid "Login PW Change Cycle"
+msgstr "패스워드 변경 주기"
+
+#: ../src/sysinfo-window.ui.h:49
+msgid "Screen Saver Time Setting"
+msgstr "화면보호기 설정 시간"
+
+#: ../src/sysinfo-window.ui.h:50
+msgid "Packages Change Blocking"
+msgstr "패키지 추가/삭제 차단 기능"
+
+#: ../src/sysinfo-window.ui.h:51
+msgid "Device Security Policy"
+msgstr "단말 보안 정책"
+
+#: ../src/sysinfo-window.ui.h:52
+msgid "Security"
+msgstr "보안"
+
+#: ../src/sysinfo-window.ui.h:53
+msgid "Default Network"
+msgstr "기본 네트워크 허용"
+
+#: ../src/sysinfo-window.ui.h:56
+msgid "Source"
+msgstr "소스"
+
+#: ../src/sysinfo-window.ui.h:57
+msgid "Destination"
+msgstr "목적지"
+
+#: ../src/sysinfo-window.ui.h:59
+msgid "Firewall Policy - IPV4"
+msgstr "방화벽 정책 - IPV4"
+
+#: ../src/sysinfo-window.ui.h:60
+msgid "Network"
+msgstr "네트워크"
+
+#: ../src/sysinfo-window.ui.h:61
+msgid "Notification Display Condition (Log Level)"
+msgstr "알림창 표시 조건 (로그 레벨)"
+
+#: ../src/sysinfo-window.ui.h:62
+msgid "Debug"
+msgstr "디버깅 (Debug)"
+
+#: ../src/sysinfo-window.ui.h:63
+msgid "Info"
+msgstr "정보 (Info)"
+
+#: ../src/sysinfo-window.ui.h:64
+msgid "Notice"
+msgstr "알림 (Notice)"
+
+#: ../src/sysinfo-window.ui.h:65
+msgid "Warning"
+msgstr "경고 (Warning)"
+
+#: ../src/sysinfo-window.ui.h:66
+msgid "Err"
+msgstr "오류 (Err)"
+
+#: ../src/sysinfo-window.ui.h:67
+msgid "Crit"
+msgstr "위험 (Crit)"
+
+#: ../src/sysinfo-window.ui.h:68
+msgid "Alert"
+msgstr "경보 (Alert)"
+
+#: ../src/sysinfo-window.ui.h:69
+msgid "Emerg"
+msgstr "긴급 (Emerg)"
+
+#: ../src/sysinfo-window.ui.h:70
 msgid "Allow Duplicate Notifications"
 msgstr "중복 알림 허용"
 
-#: ../src/settings/settings-window.ui.h:14
+#: ../src/sysinfo-window.ui.h:71
+msgid "Notification"
+msgstr "알림"
+
+#: ../src/sysinfo-window.ui.h:72
+msgid "System Info"
+msgstr "시스템 정보"
+
+#: ../src/sysinfo-window.ui.h:73
+msgid "OS"
+msgstr "운영체제 정보"
+
+#: ../src/sysinfo-window.ui.h:74
+msgid "Kernel Version"
+msgstr "커널 정보"
+
+#: ../src/sysinfo-window.ui.h:75
+msgid "Serial Number"
+msgstr "단말 제품번호"
+
+#: ../src/sysinfo-window.ui.h:76
+msgid "Update Status"
+msgstr "업데이트 상태"
+
+#: ../src/sysinfo-window.ui.h:77
+msgid "Operation Mode"
+msgstr "운영 모드"
+
+#: ../src/sysinfo-window.ui.h:78
+msgid "Server Connecting Status"
+msgstr "서버 연결 상태"
+
+#: ../src/sysinfo-window.ui.h:79
+msgid "Management Server IP"
+msgstr "구름 관리 서버"
+
+#: ../src/sysinfo-window.ui.h:80
+msgid "Port"
+msgstr "포트"
+
+#: ../src/sysinfo-window.ui.h:81
+msgid "Show Log"
+msgstr "로그 보기"
+
+#: ../src/sysinfo-window.ui.h:82
+msgid "1 day"
+msgstr "1일"
+
+#: ../src/sysinfo-window.ui.h:83
+msgid "1 week"
+msgstr "1주일"
+
+#: ../src/sysinfo-window.ui.h:84
+msgid "1 month"
+msgstr "1개월"
+
+#: ../src/sysinfo-window.ui.h:85
+msgid "3 month"
+msgstr "3개월"
+
+#: ../src/sysinfo-window.ui.h:86
+msgid "6 month"
+msgstr "6개월"
+
+#: ../src/sysinfo-window.ui.h:87
+msgid "direct input"
+msgstr "직접 입력"
+
+#: ../src/sysinfo-window.ui.h:88
+msgid "2015-01-01"
+msgstr "2015-01-01"
+
+#: ../src/sysinfo-window.ui.h:89
+msgid "~"
+msgstr "~"
+
+#: ../src/sysinfo-window.ui.h:90
+msgid "Log Filter"
+msgstr "로그 필터"
+
+#: ../src/sysinfo-window.ui.h:91 ../src/logfilter-popover.ui.h:1
+msgid "DEBUG"
+msgstr "디버깅"
+
+#: ../src/sysinfo-window.ui.h:92 ../src/logfilter-popover.ui.h:2
+msgid "INFO"
+msgstr "정보"
+
+#: ../src/sysinfo-window.ui.h:93 ../src/logfilter-popover.ui.h:3
+msgid "NOTICE"
+msgstr "알림"
+
+#: ../src/sysinfo-window.ui.h:94 ../src/logfilter-popover.ui.h:4
+msgid "WARNING"
+msgstr "경고"
+
+#: ../src/sysinfo-window.ui.h:95 ../src/logfilter-popover.ui.h:5
+msgid "ERR"
+msgstr "오류"
+
+#: ../src/sysinfo-window.ui.h:96 ../src/logfilter-popover.ui.h:6
+msgid "CRIT"
+msgstr "위험"
+
+#: ../src/sysinfo-window.ui.h:97 ../src/logfilter-popover.ui.h:7
+msgid "ALERT"
+msgstr "경보"
+
+#: ../src/sysinfo-window.ui.h:98 ../src/logfilter-popover.ui.h:8
+msgid "EMERG"
+msgstr "긴급"
+
+#: ../src/sysinfo-window.ui.h:99
+msgid "Date"
+msgstr "기간"
+
+#: ../src/sysinfo-window.ui.h:100
+msgid "Time"
+msgstr "시간"
+
+#: ../src/sysinfo-window.ui.h:101
+msgid "Type"
+msgstr "종류"
+
+#: ../src/sysinfo-window.ui.h:102
+msgid "Description"
+msgstr "설명"
+
+#: ../src/sysinfo-window.ui.h:103
+msgid "Log Info"
+msgstr "로그 정보"
+
+#: ../src/sysinfo-window.ui.h:104
+msgid "Target packages num"
+msgstr "전체 패키지 개수"
+
+#: ../src/sysinfo-window.ui.h:105
+msgid "Qunatification score"
+msgstr "정량화 점수"
+
+#: ../src/sysinfo-window.ui.h:106
+msgid "Updating..."
+msgstr "업데이트중..."
+
+#: ../src/sysinfo-window.ui.h:107
+msgid ":"
+msgstr ":"
+
+#: ../src/sysinfo-window.ui.h:108
+msgid "Safety Quantification Score"
+msgstr "안전성 정량화 점수"
+
+#: ../src/sysinfo-window.ui.h:109
+msgid "View Log"
+msgstr "로그 보기"
+
+#: ../src/sysinfo-window.ui.h:110
+msgid "Security Status Info"
+msgstr "보안 상태 정보"
+
+#: ../src/sysinfo-window.ui.h:111
+msgid "Allow Push Update"
+msgstr "푸쉬 업데이트 허용"
+
+#: ../src/sysinfo-window.ui.h:112
+msgid "Update Policy"
+msgstr "업데이트 정책"
+
+#: ../src/sysinfo-window.ui.h:113
+msgid "Firewall Policy - IPV6"
+msgstr "방화벽 정책 - IPV6"
+
+#: ../src/sysinfo-window.ui.h:114
+msgid "Authority Policy Info"
+msgstr "권한 정책 정보"
+
+#: ../src/sysinfo-window.ui.h:115
+msgid "page"
+msgstr ""
+
+#: ../src/sysinfo-window.ui.h:116
+msgid "Details Security Status Of Gooroom System"
+msgstr "구름 시스템 보안 상태 자세히 보기"
+
+#: ../src/rpd-dialog.ui.h:1
+msgid "Unconfigured"
+msgstr "구성되지않음"
+
+msgid "Policy"
+msgstr "정책"
+
+msgid "Period"
+msgstr "기간"
+
 msgid "Notifications Settings"
 msgstr "알림설정"
 
@@ -593,17 +760,17 @@ msgstr "알림설정"
 #~ msgid "keyboard"
 #~ msgstr "USB 키보드"
 
-#~ msgid "printer"
-#~ msgstr "프린터"
-
-#~ msgid "sound"
-#~ msgstr "사운드"
+msgid "sound"
+msgstr "사운드"
 
 #~ msgid "usb_memory"
 #~ msgstr "USB 메모리"
 
-#~ msgid "usb_network"
-#~ msgstr "USB 네트워크"
+msgid "network"
+msgstr "네트워크"
+
+msgid "usb_network"
+msgstr "USB 네트워크"
 
 #~ msgid "cd_dvd"
 #~ msgstr "CD/DVD"
@@ -611,17 +778,17 @@ msgstr "알림설정"
 #~ msgid "clipboard"
 #~ msgstr "클립보드"
 
-#~ msgid "network"
-#~ msgstr "네트워크"
-
-#~ msgid "mouse"
-#~ msgstr "USB 마우스"
+msgid "mouse"
+msgstr "USB 마우스"
 
 #~ msgid "bluetooth"
 #~ msgstr "블루투스"
 
-#~ msgid "screen_capture"
-#~ msgstr "스크린캡쳐"
+msgid "printer"
+msgstr "프린터"
+
+msgid "screen_capture"
+msgstr "스크린캡쳐"
 
 #~ msgid "wireless"
 #~ msgstr "무선랜"

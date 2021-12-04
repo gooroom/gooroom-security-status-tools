@@ -1,9 +1,9 @@
 [Desktop Entry]
-_Name=Gooroom Security Status View
+_Name=Gooroom Security Status Tool
 Icon=preferences-system-firewall
-Exec=gooroom-security-status-view
+Exec=gooroom-security-status-tool
 Terminal=false
 Type=Application
 StartupNotify=true
-StartUpWMClass=gooroom-security-status-view
+StartUpWMClass=gooroom-security-status-tool
 Categories=GTK;Utility;

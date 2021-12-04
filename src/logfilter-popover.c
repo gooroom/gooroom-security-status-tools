@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2018-2019 Gooroom <gooroom@gooroom.kr>
+ * Copyright (C) 2018-2021 Gooroom <gooroom@gooroom.kr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,7 +23,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-
 struct _LogfilterPopoverPrivate {
 	GtkWidget *chk_log_debug;
 	GtkWidget *chk_log_info;
@@ -37,9 +36,22 @@ struct _LogfilterPopoverPrivate {
 	guint filter;
 };
 
+enum {
+	LOG_CHANGED,
+    LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 
 G_DEFINE_TYPE_WITH_PRIVATE (LogfilterPopover, logfilter_popover, GTK_TYPE_POPOVER)
 
+static void
+logfilter_status_changes (GtkToggleButton *button, LogfilterPopover *self)
+{
+	guint filter = logfilter_popover_get_logfilter (self);
+	g_signal_emit_by_name (G_OBJECT (self), "log-changed" , filter );
+}
 
 static void
 logfilter_popover_init (LogfilterPopover *self)
@@ -49,6 +61,23 @@ logfilter_popover_init (LogfilterPopover *self)
 	priv = self->priv = logfilter_popover_get_instance_private (self);
 
 	gtk_widget_init_template (GTK_WIDGET (self));
+
+	g_signal_connect (GTK_CHECK_BUTTON (priv->chk_log_debug), "toggled",
+					  G_CALLBACK (logfilter_status_changes), self);
+	g_signal_connect (GTK_CHECK_BUTTON (priv->chk_log_info), "toggled",
+					  G_CALLBACK (logfilter_status_changes), self);
+	g_signal_connect (GTK_CHECK_BUTTON (priv->chk_log_notice), "toggled",
+					  G_CALLBACK (logfilter_status_changes), self);
+	g_signal_connect (GTK_CHECK_BUTTON (priv->chk_log_warning), "toggled",
+					  G_CALLBACK (logfilter_status_changes), self);
+	g_signal_connect (GTK_CHECK_BUTTON (priv->chk_log_err), "toggled",
+					  G_CALLBACK (logfilter_status_changes), self);
+	g_signal_connect (GTK_CHECK_BUTTON (priv->chk_log_crit), "toggled",
+					  G_CALLBACK (logfilter_status_changes), self);
+	g_signal_connect (GTK_CHECK_BUTTON (priv->chk_log_alert), "toggled",
+					  G_CALLBACK (logfilter_status_changes), self);
+	g_signal_connect (GTK_CHECK_BUTTON (priv->chk_log_emerg), "toggled",
+					  G_CALLBACK (logfilter_status_changes), self);
 }
 
 static void
@@ -65,6 +94,16 @@ logfilter_popover_class_init (LogfilterPopoverClass *class)
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), LogfilterPopover, chk_log_crit);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), LogfilterPopover, chk_log_alert);
 	gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), LogfilterPopover, chk_log_emerg);
+
+	signals[LOG_CHANGED] = g_signal_new ("log-changed",
+						  LOGFILTER_TYPE_POPOVER,
+						  G_SIGNAL_RUN_LAST,
+						  G_STRUCT_OFFSET (LogfilterPopoverClass,
+						  log_changed),
+						  NULL, NULL,
+						  g_cclosure_marshal_VOID__POINTER,
+						  G_TYPE_NONE, 1,
+						  G_TYPE_INT);
 }
 
 LogfilterPopover *

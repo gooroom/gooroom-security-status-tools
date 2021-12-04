@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>C03242BC-072A-4709-9103-A5D18CA1CE4E</title>
+    <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icons" transform="translate(-600.000000, -3328.000000)">
+            <g id="Group" transform="translate(600.000000, 2950.000000)">
+                <g id="ic/security/safe" transform="translate(0.000000, 378.000000)">
+                    <g transform="translate(5.000000, 3.000000)">
+                        <polygon id="Rectangle" fill="#7ED321" points="0 0 14 0 14 13.5 7 18 0 13.5"></polygon>
+                        <path d="M14,0 L14,13.5 L7,18 L7,0 L14,0 Z" id="Combined-Shape" fill-opacity="0.1" fill="#000000"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
