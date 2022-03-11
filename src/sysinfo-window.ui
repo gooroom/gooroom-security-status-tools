@@ -3115,7 +3115,7 @@ controls the features available in the browser. Contact your administrator to sp
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label" translatable="yes">Allow Duplicate Notifications</property>
+                                    <property name="label" translatable="yes">Allow Duplicate Login Notifications</property>
                                     <attributes>
                                       <attribute name="scale" value="0.94545449999999998"/>
                                     </attributes>
