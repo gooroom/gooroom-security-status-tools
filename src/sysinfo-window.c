@@ -2329,7 +2329,7 @@ gooroom_browser_status_update (GtkWidget *button, gpointer user_data)
 		const gchar *val;
 		val = json_object_get_string (obj2);
 
-		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
+		if (g_strcmp0 (val, "0") != 0)
 	        gtk_label_set_text ( GTK_LABEL (priv->lbl_site_download),_("Disallow"));
 		else
 	        gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_download), markup);
@@ -2349,7 +2349,7 @@ gooroom_browser_status_update (GtkWidget *button, gpointer user_data)
 		const gchar *val;
 		val = json_object_get_string (obj4);
 
-		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
+		if (g_strcmp0 (val, "1") != 0)
 	        gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_develop), _("Disallow"));
 		else
 	        gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_develop), markup);
