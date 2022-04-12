@@ -1,5 +1,5 @@
 .text-button{
-  font-size: 13px;
+  font-size: 97%;
 }
 
 .scrolledwindow {
@@ -9,7 +9,7 @@
 } .treeview {
   background-color: rgba(106, 159, 221, 0.05);
   color: rgba(0, 1, 0, 0.5);
-  font-size: 13px;
+  font-size: 97%;
 } .treeview:hover {
   background-color: rgba(106, 159, 221, 0.1);
 } .treeview:selected {
@@ -61,7 +61,7 @@ popover {
 } #trv_sidebar_contents{
   border-radius: 10px;
   background-color: #e6e9f0;;
-  font-size: 13px;
+  font-size: 97%;
 } #trv_sidebar_contents :hover{
   border-radius: 10px;
   color: #2f58b7;
@@ -76,7 +76,7 @@ popover {
   border-radius: 10px;
   background-color: #3e6ddc;
   color: #ffffff;
-  font-size: 13px;
+  font-size: 97%;
 }
 
 .radio {
@@ -86,7 +86,7 @@ popover {
   padding-top: 7px;
   padding-bottom: 8px;
   background-color:rgba(0, 0, 0, 0);
-  font-size:13px;
+  font-size: 97%;
 }.radio:hover {
   background-color:rgba(0, 0, 0, 0.1);
 }.radio:checked {
@@ -109,7 +109,7 @@ popover {
   background-color:rgba(62, 109, 220, 0.2);
   border-color: #3e6ddc;
 } combobox button {
-  font-size:13px;
+  font-size: 97%;
   padding: 0px 15px;
 } popover grid {
   min-width: 380px;
