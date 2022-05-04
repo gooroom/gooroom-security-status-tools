@@ -741,7 +741,7 @@ gooroom_agent_service_status_update (gpointer data)
 	return FALSE;
 }
 
-static void
+static gboolean
 on_allow_duplicate_notification_toggled (GtkSwitch *button,
                                          gboolean   state,
                                          gpointer   data)
@@ -764,6 +764,8 @@ on_allow_duplicate_notification_toggled (GtkSwitch *button,
 
 		g_settings_set_boolean (priv->gkm_settings, "allow-duplicate-notifications", val);
 	}
+
+	return FALSE;
 }
 
 static void
