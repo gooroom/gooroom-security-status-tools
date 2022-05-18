@@ -111,7 +111,9 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *lbl_site_printer;
 	GtkWidget *lbl_site_source;
 	GtkWidget *lbl_site_socket;
+	GtkWidget *lbl_untrusted_socket;
 	GtkWidget *lbl_site_worker;
+	GtkWidget *lbl_untrusted_worker;
 	GtkWidget *scl_browser_urls;
 	GtkWidget *trv_browser_urls;
 	GtkWidget *lbl_net_allow;
@@ -2283,12 +2285,29 @@ gooroom_browser_status_update (GtkWidget *button, gpointer user_data)
 	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 		return;
 
+	markup = g_strdup_printf("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
 	if (button == priv->rdo_trusted) {
 		file = g_strdup_printf (GOOROOM_BROWSER_TRUST);
 		gtk_widget_show (priv->box_trust_list);
+		gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
+		gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_worker), markup);
+
 	} else if (button == priv->rdo_untrusted) {
 		file = g_strdup_printf (GOOROOM_BROWSER_UNTRUST);
 		gtk_widget_hide (priv->box_trust_list);
+
+		if (gtk_label_get_use_markup (GTK_LABEL (priv->lbl_untrusted_socket)))
+			gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
+		else
+			gtk_label_set_text (GTK_LABEL (priv->lbl_site_socket),
+								gtk_label_get_text (GTK_LABEL (priv->lbl_untrusted_socket)));
+
+		if (gtk_label_get_use_markup (GTK_LABEL (priv->lbl_untrusted_worker)))
+			gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_worker), markup);
+		else
+			gtk_label_set_text (GTK_LABEL (priv->lbl_site_worker),
+								gtk_label_get_text (GTK_LABEL (priv->lbl_untrusted_worker)));
+
 	} else {
 		return;
 	}
@@ -2316,7 +2335,6 @@ gooroom_browser_status_update (GtkWidget *button, gpointer user_data)
 	json_object *obj3 = JSON_OBJECT_GET (root_obj, "PrintingEnabled");
 	json_object *obj4 = JSON_OBJECT_GET (root_obj, "DeveloperToolsAvailability");
 
-	markup = g_strdup_printf("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
 	if (obj1){
 		const gchar *val;
 		val = json_object_get_string (obj1);
@@ -2426,16 +2444,17 @@ system_browser_policy_update (SysinfoWindow *window)
 	}
 
     markup = g_strdup_printf("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+
 	if (obj2_2){
 		const gchar *val;
 		val = json_object_get_string (obj2_2);
 
 		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
-			gtk_label_set_text ( GTK_LABEL (priv->lbl_site_socket), _("Disallow"));
+			gtk_label_set_text ( GTK_LABEL (priv->lbl_untrusted_socket), _("Disallow"));
 		else if (g_strcmp0 (val, "true") == 0 || g_strcmp0 (val, "1") == 0)
-            gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
+			gtk_label_set_markup ( GTK_LABEL (priv->lbl_untrusted_socket), markup);
 		else
-			gtk_label_set_text ( GTK_LABEL (priv->lbl_site_socket), _("Unknown"));
+			gtk_label_set_text ( GTK_LABEL (priv->lbl_untrusted_socket), _("Unknown"));
 	}
 
 	if (obj2_3){
@@ -2443,11 +2462,11 @@ system_browser_policy_update (SysinfoWindow *window)
 		val = json_object_get_string (obj2_3);
 
 		if (g_strcmp0 (val, "false") == 0 || g_strcmp0 (val, "0") == 0)
-			gtk_label_set_text ( GTK_LABEL (priv->lbl_site_worker), _("Disallow"));
+			gtk_label_set_text ( GTK_LABEL (priv->lbl_untrusted_worker), _("Disallow"));
 		else if (g_strcmp0 (val, "true") == 0 || g_strcmp0 (val, "1") == 0)
-            gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
+			gtk_label_set_markup ( GTK_LABEL (priv->lbl_untrusted_worker), markup);
 		else
-			gtk_label_set_text ( GTK_LABEL (priv->lbl_site_worker), _("Unknown"));
+			gtk_label_set_text ( GTK_LABEL (priv->lbl_untrusted_worker), _("Unknown"));
 	}
 
 	json_object_put (root_obj);
@@ -3272,6 +3291,10 @@ sysinfo_window_init (SysinfoWindow *self)
 	priv->prev_log_filter = 0;
 	priv->settings = NULL;
 
+	priv->lbl_untrusted_socket = gtk_label_new(NULL);
+	priv->lbl_untrusted_worker = gtk_label_new(NULL);
+
+
     /* for settings */
 	schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
                                               "apps.gooroom-security-status", TRUE);
@@ -3427,6 +3450,9 @@ sysinfo_window_finalize (GObject *object)
 
 	g_object_unref (priv->settings);
 	g_object_unref (priv->gkm_settings);
+
+	gtk_widget_destroy (priv->lbl_untrusted_socket);
+	gtk_widget_destroy (priv->lbl_untrusted_worker);
 
 	G_OBJECT_CLASS (sysinfo_window_parent_class)->finalize (object);
 }
