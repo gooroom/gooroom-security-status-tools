@@ -792,7 +792,10 @@ settings_update_ui (SysinfoWindow *window)
 
 		if (g_key_file_has_group (keyfile, "certificate")) {
 			svr_crt = g_key_file_get_string (keyfile, "certificate", "server_crt", NULL);
-			client_name = g_key_file_get_string (keyfile, "certificate", "client_name", NULL);
+			if ( g_key_file_has_key (keyfile, "certificate", "simplified_id", NULL))
+				client_name = g_key_file_get_string (keyfile, "certificate", "simplified_id", NULL);
+			else
+				client_name = g_key_file_get_string (keyfile, "certificate", "client_name", NULL);
 			group = g_key_file_get_string (keyfile, "certificate", "organizational_unit", NULL);
 			client_crt = g_key_file_get_string (keyfile, "certificate", "client_crt", NULL);
 		}
@@ -2062,7 +2065,11 @@ system_basic_info_update (SysinfoWindow *window)
 
 			if (error == NULL) {
 				if (g_key_file_has_group (keyfile, "certificate")) {
-					device_id = g_key_file_get_string (keyfile, "certificate", "client_name", NULL);
+					if ( g_key_file_has_key (keyfile, "certificate", "simplified_id", NULL))
+						device_id = g_key_file_get_string (keyfile, 
+														"certificate", "simplified_id", NULL);
+					else
+						device_id = g_key_file_get_string (keyfile, "certificate", "client_name", NULL);
 				}
 
 				if (g_key_file_has_group (keyfile, "domain")) {
