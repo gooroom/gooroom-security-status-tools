@@ -1,3 +1,17 @@
+gooroom-security-status-tools (0.3.1+grm3u1) unstable; urgency=medium
+
+  [ boyeon.choi ]
+  * [f9471ee6] [Bug:5069] Changed the term: '중복 알림 허용' to '중복 로그인 알림 허용'
+  * [565c731d] [Bug:5103] Changed font-size from fixed size to ratio
+  * [6f07cf23] [Bug:5068] Added chk_adn status
+  * [3f2606f9] [Bug: 3951] Fixed the issue that can not get information about web socket & web worker
+  * [2aae2c46] Made Simplified ID enable
+
+  [ donghun lee ]
+  * [c2e498a2] [Bug:5140]Fixed browser policy settings error
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 26 May 2022 15:52:49 +0900
+
 gooroom-security-status-tools (0.3.0+grm3u1) unstable; urgency=medium
 
   [ jongkyung.woo ]
