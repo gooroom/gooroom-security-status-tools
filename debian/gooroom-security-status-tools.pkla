@@ -1,0 +1,13 @@
+[Gooroom Security Status Vunlerable Helper]
+Identity=unix-group:sudo;unix-group:gpms
+Action=kr.gooroom.security.status.tools.security-status-vulnerable-helper;
+ResultActive=yes
+ResultInactive=no
+ResultAny=no
+
+[Gooroom Iptables Wrapper]
+Identity=unix-group:sudo;unix-group:gpms
+Action=kr.gooroom.security.status.tools.iptables-wrapper;kr.gooroom.security.status.tools.ip6tables-wrapper;
+ResultActive=yes
+ResultInactive=no
+ResultAnt=no
