@@ -1,3 +1,10 @@
+gooroom-security-status-tools (0.3.2+grm3u1) unstable; urgency=medium
+
+  [ heejun.jang ]
+  * [ca474297] 보안 취약점 패치 구름 공통버전 적용
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Mon, 20 Jun 2022 08:33:13 +0900
+
 gooroom-security-status-tools (0.3.1+grm3u1) unstable; urgency=medium
 
   [ boyeon.choi ]
