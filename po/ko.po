@@ -432,7 +432,7 @@ msgstr "자세히 보기"
 
 #: ../src/sysinfo-window.ui.h:37
 msgid "Device"
-msgstr "단말 ID"
+msgstr "장치"
 
 #: ../src/sysinfo-window.ui.h:38
 msgid "System & Network"

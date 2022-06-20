@@ -936,7 +936,7 @@ open_help (GtkAccelGroup *accel, GObject *acceleratable,
            guint keyval, GdkModifierType modifier,
            gpointer user_data)
 {
-    gtk_show_uri_on_window (GTK_WINDOW(user_data), "help:gooroom-sysinfo",
+    gtk_show_uri_on_window (GTK_WINDOW(user_data), "help:gooroom-security-status-tool",
                             gtk_get_current_event_time(), NULL);
 }
 
@@ -3298,8 +3298,8 @@ sysinfo_window_init (SysinfoWindow *self)
 	priv->prev_log_filter = 0;
 	priv->settings = NULL;
 
-	priv->lbl_untrusted_socket = gtk_label_new(NULL);
-	priv->lbl_untrusted_worker = gtk_label_new(NULL);
+	priv->lbl_untrusted_socket = gtk_label_new(_("Unknown"));
+	priv->lbl_untrusted_worker = gtk_label_new(_("Unknown"));
 
 
     /* for settings */
@@ -3388,7 +3388,8 @@ sysinfo_window_init (SysinfoWindow *self)
 	gtk_widget_set_sensitive (priv->btn_calendar_from, FALSE);
 	gtk_widget_set_sensitive (priv->btn_calendar_to, FALSE);
 
-    accel_init (self);
+	accel_init (self);
+
 	gtk_label_set_text (GTK_LABEL (priv->lbl_title), _("Gooroom Platform Management Server"));
 
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_security_log));
