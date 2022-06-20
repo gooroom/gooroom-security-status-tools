@@ -1,3 +1,10 @@
+gooroom-security-status-tools (0.3.3+grm3u1) unstable; urgency=medium
+
+  [ boyeon.choi ]
+  * [14fcd3ec] [Bug:63,167] Enable F1 key & Show Websocket, Webworker
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Mon, 20 Jun 2022 16:28:51 +0900
+
 gooroom-security-status-tools (0.3.2+grm3u1) unstable; urgency=medium
 
   [ heejun.jang ]
