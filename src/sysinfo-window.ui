@@ -1951,7 +1951,7 @@ controls the features available in the browser. Contact your administrator to sp
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="label" translatable="yes">Unkown</property>
+                                            <property name="label" translatable="yes">Unknown</property>
                                             <attributes>
                                               <attribute name="scale" value="0.94545449999999998"/>
                                             </attributes>
@@ -1998,7 +1998,7 @@ controls the features available in the browser. Contact your administrator to sp
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="label" translatable="yes">Unkown</property>
+                                            <property name="label" translatable="yes">Unknown</property>
                                             <attributes>
                                               <attribute name="scale" value="0.94545449999999998"/>
                                             </attributes>
@@ -2048,7 +2048,7 @@ controls the features available in the browser. Contact your administrator to sp
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="label" translatable="yes">Unkown</property>
+                                            <property name="label" translatable="yes">Unknown</property>
                                             <attributes>
                                               <attribute name="scale" value="0.94545449999999998"/>
                                             </attributes>
@@ -2095,7 +2095,7 @@ controls the features available in the browser. Contact your administrator to sp
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="label" translatable="yes">Unkown</property>
+                                            <property name="label" translatable="yes">Unknown</property>
                                             <attributes>
                                               <attribute name="scale" value="0.94545449999999998"/>
                                             </attributes>
@@ -3182,6 +3182,87 @@ controls the features available in the browser. Contact your administrator to sp
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkFrame" id="frm_push_update">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label-xalign">0</property>
+                                <property name="shadow-type">none</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="height-request">50</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes">Allow Push Update</property>
+                                        <style>
+                                          <class name="desc"/>
+                                        </style>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">center</property>
+                                        <property name="margin-left">212</property>
+                                        <property name="margin-start">212</property>
+                                        <property name="spacing">20</property>
+                                        <child>
+                                          <object class="GtkSwitch" id="swt_push_update">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <style>
+                                      <class name="info_box"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child type="label">
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">Update Policy</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"/>
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="info-box"/>
+                                </style>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>
@@ -4482,65 +4563,7 @@ controls the features available in the browser. Contact your administrator to sp
                                             <property name="orientation">vertical</property>
                                             <property name="spacing">24</property>
                                             <child>
-                                              <object class="GtkFrame" id="frm_push_update">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="label-xalign">0</property>
-                                                <property name="shadow-type">none</property>
-                                                <child>
-                                                  <object class="GtkAlignment">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="top-padding">6</property>
-                                                    <property name="left-padding">12</property>
-                                                    <child>
-                                                      <object class="GtkBox">
-                                                        <property name="visible">True</property>
-                                                        <property name="can-focus">False</property>
-                                                        <property name="spacing">45</property>
-                                                        <child>
-                                                          <object class="GtkLabel">
-                                                            <property name="visible">True</property>
-                                                            <property name="can-focus">False</property>
-                                                            <property name="label" translatable="yes">Allow Push Update</property>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="expand">False</property>
-                                                            <property name="fill">True</property>
-                                                            <property name="position">0</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkSwitch" id="swt_push_update">
-                                                            <property name="visible">True</property>
-                                                            <property name="can-focus">True</property>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="expand">False</property>
-                                                            <property name="fill">True</property>
-                                                            <property name="position">1</property>
-                                                          </packing>
-                                                        </child>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                                <child type="label">
-                                                  <object class="GtkLabel">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="label" translatable="yes">Update Policy</property>
-                                                    <attributes>
-                                                      <attribute name="weight" value="bold"/>
-                                                    </attributes>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">0</property>
-                                              </packing>
+                                              <placeholder/>
                                             </child>
                                             <child>
                                               <object class="GtkFrame">

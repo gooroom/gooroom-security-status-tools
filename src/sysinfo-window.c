@@ -813,7 +813,7 @@ settings_update_ui (SysinfoWindow *window)
 	if (!client_name)
 		client_name = g_strdup (_("Unknown"));
 
-	if (!group)
+	if (!group | g_strcmp0(group, "") == 0)
 		group = g_strdup (_("Unknown"));
 
 	if (!client_crt)
