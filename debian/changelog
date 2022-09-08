@@ -1,3 +1,12 @@
+gooroom-security-status-tools (0.3.4+grm3u1) unstable; urgency=medium
+
+  [ boyeon.choi ]
+  * [6e0756f9] [Bug: 204] Fixed to print 'Unknown' when there was no information
+  * [68c379bb] Show the port number for grm on system info page
+  * [3dbfeb61] [HGOOROOM-551]Changed the way to show the enable security functions
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 08 Sep 2022 15:40:44 +0900
+
 gooroom-security-status-tools (0.3.3+grm3u1) unstable; urgency=medium
 
   [ boyeon.choi ]
