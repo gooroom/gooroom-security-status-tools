@@ -2074,8 +2074,17 @@ system_basic_info_update (SysinfoWindow *window)
 
 				if (g_key_file_has_group (keyfile, "domain")) {
 					gchar *grm = g_key_file_get_string (keyfile, "domain", "grm", NULL);
-					if (grm) ip = g_strdup (grm);
-					port = g_strdup ("443");
+					if (grm) {
+						if (g_strrstr (grm, ":") == NULL) {
+							ip = g_strdup (grm);
+							port = g_strdup ("443");
+						} else {
+							gchar **data = g_strsplit(grm, ":", -1);
+							ip = g_strdup (data[0]);
+							port = g_strdup (data[1]);
+							g_free (data);
+						}
+					}
 					g_free (grm);
 				}
 			}
