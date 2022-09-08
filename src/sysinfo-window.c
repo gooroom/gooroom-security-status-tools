@@ -1729,7 +1729,7 @@ system_security_function_update (SysinfoWindow *window)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->chk_boot), priv->security_item_run & SECURITY_ITEM_BOOT_RUN);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->chk_media), priv->security_item_run & SECURITY_ITEM_MEDIA_RUN);
 
-	if (priv->security_item_run & SECURITY_ITEM_OS_RUN)
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->chk_os)))
     {
 		//gtk_label_set_text (GTK_LABEL(priv->lbl_security_os), _("Allow"));
 		markup = g_markup_printf_escaped ("<span foreground=\"#5ea80d\">%s</span>", _("Allow"));
@@ -1738,7 +1738,7 @@ system_security_function_update (SysinfoWindow *window)
 	else
 		gtk_label_set_text (GTK_LABEL(priv->lbl_security_os), _("Disallow"));
 
-	if (priv->security_item_run & SECURITY_ITEM_EXE_RUN)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (priv->chk_exe)))
     {
 		//gtk_label_set_text (GTK_LABEL(priv->lbl_security_files), _("Allow"));
 		markup = g_markup_printf_escaped ("<span foreground=\"#5ea80d\">%s</span>", _("Allow"));
@@ -1747,7 +1747,7 @@ system_security_function_update (SysinfoWindow *window)
 	else
 		gtk_label_set_text (GTK_LABEL(priv->lbl_security_files), _("Disallow"));
 
-	if (priv->security_item_run & SECURITY_ITEM_BOOT_RUN)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (priv->chk_boot)))
     {
 		//gtk_label_set_text (GTK_LABEL(priv->lbl_security_booting), _("Allow"));
 		markup = g_markup_printf_escaped ("<span foreground=\"#5ea80d\">%s</span>", _("Allow"));
@@ -1756,7 +1756,7 @@ system_security_function_update (SysinfoWindow *window)
 	else
 		gtk_label_set_text (GTK_LABEL(priv->lbl_security_booting), _("Disallow"));
 
-	if (priv->security_item_run & SECURITY_ITEM_MEDIA_RUN)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (priv->chk_media)))
     {
 		//gtk_label_set_text (GTK_LABEL(priv->lbl_security_rsc), _("Allow"));
 		markup = g_markup_printf_escaped ("<span foreground=\"#5ea80d\">%s</span>", _("Allow"));
