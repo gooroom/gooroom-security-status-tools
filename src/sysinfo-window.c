@@ -2301,29 +2301,12 @@ gooroom_browser_status_update (GtkWidget *button, gpointer user_data)
 	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
 		return;
 
-	markup = g_strdup_printf("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
 	if (button == priv->rdo_trusted) {
 		file = g_strdup_printf (GOOROOM_BROWSER_TRUST);
 		gtk_widget_show (priv->box_trust_list);
-		gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
-		gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_worker), markup);
-
 	} else if (button == priv->rdo_untrusted) {
 		file = g_strdup_printf (GOOROOM_BROWSER_UNTRUST);
 		gtk_widget_hide (priv->box_trust_list);
-
-		if (gtk_label_get_use_markup (GTK_LABEL (priv->lbl_untrusted_socket)))
-			gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
-		else
-			gtk_label_set_text (GTK_LABEL (priv->lbl_site_socket),
-								gtk_label_get_text (GTK_LABEL (priv->lbl_untrusted_socket)));
-
-		if (gtk_label_get_use_markup (GTK_LABEL (priv->lbl_untrusted_worker)))
-			gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_worker), markup);
-		else
-			gtk_label_set_text (GTK_LABEL (priv->lbl_site_worker),
-								gtk_label_get_text (GTK_LABEL (priv->lbl_untrusted_worker)));
-
 	} else {
 		return;
 	}
@@ -2350,6 +2333,25 @@ gooroom_browser_status_update (GtkWidget *button, gpointer user_data)
 	json_object *obj2 = JSON_OBJECT_GET (root_obj, "DownloadRestrictions");
 	json_object *obj3 = JSON_OBJECT_GET (root_obj, "PrintingEnabled");
 	json_object *obj4 = JSON_OBJECT_GET (root_obj, "DeveloperToolsAvailability");
+
+	markup = g_strdup_printf("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+	if (button == priv->rdo_trusted) {
+		gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
+		gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_worker), markup);
+
+	} else if (button == priv->rdo_untrusted) {
+		if (gtk_label_get_use_markup (GTK_LABEL (priv->lbl_untrusted_socket)))
+			gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_socket), markup);
+		else
+			gtk_label_set_text (GTK_LABEL (priv->lbl_site_socket),
+								gtk_label_get_text (GTK_LABEL (priv->lbl_untrusted_socket)));
+
+		if (gtk_label_get_use_markup (GTK_LABEL (priv->lbl_untrusted_worker)))
+			gtk_label_set_markup ( GTK_LABEL (priv->lbl_site_worker), markup);
+		else
+			gtk_label_set_text (GTK_LABEL (priv->lbl_site_worker),
+								gtk_label_get_text (GTK_LABEL (priv->lbl_untrusted_worker)));
+	}
 
 	if (obj1){
 		const gchar *val;
