@@ -12,6 +12,7 @@ gooroom_security_status_tool_CPPFLAGS = \
 	-DGOOROOM_SECURITY_STATUS_VULNERABLE_HELPER=\"/usr/lib/gooroom-security-utils/gooroom-security-status-vulnerable-helper\" \
 	-DGCSR_WRAPPER=\"$(pkglibexecdir)/gooroom-client-server-register-wrapper\" \
 	-DGOOROOM_SYSTEMD_CONTROL_HELPER=\"$(pkglibexecdir)/gooroom-systemd-control-helper\" \
+	-DGOOROOM_NETWORK_POLICY_HELPER=\"$(pkglibexecdir)/gooroom-network-policy-helper\" \
 	$(AM_CPPFLAGS)
 
 

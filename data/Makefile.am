@@ -4,7 +4,8 @@ gooroom_security_status_tools_SCRIPTS = \
 	gooroom-update-checker	\
 	gooroom-iptables-wrapper \
 	gooroom-ip6tables-wrapper \
-    gooroom-product-uuid-helper
+    gooroom-product-uuid-helper \
+    gooroom-network-policy-helper
 
 kr.gooroom.security.status.tools.policy.in: kr.gooroom.security.status.tools.policy.in.in Makefile
 	$(AM_V_GEN) sed -e "s|\@pkglibexecdir\@|$(pkglibexecdir)|" $< >$@

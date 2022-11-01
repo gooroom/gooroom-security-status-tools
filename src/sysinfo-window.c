@@ -180,7 +180,6 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *lbl_status_crit;
 	GtkWidget *lbl_status_alert;
 	GtkWidget *lbl_status_emerg;
-	GtkWidget *btn_view_log;
 	GtkWidget *btn_safety_measure;
 	GtkWidget *lbl_update;
 	GtkWidget *swt_push_update;
@@ -1916,6 +1915,61 @@ done:
 }
 
 static gboolean
+network_default_policy_update (SysinfoWindow *window)
+{
+	SysinfoWindowPrivate *priv = window->priv;
+
+	gchar *pkexec, *cmdline, *output = NULL;
+	gchar *markup = g_markup_printf_escaped ("<span fgcolor='#494949'>%s</span>", _("Unknown"));
+
+	pkexec = g_find_program_in_path ("pkexec");
+	cmdline = g_strdup_printf ("%s %s", pkexec, GOOROOM_NETWORK_POLICY_HELPER);
+
+	if (!g_spawn_command_line_sync (cmdline, &output, NULL, NULL, NULL)) {
+		g_free (output);
+		g_free (pkexec);
+		g_free (cmdline);
+		return FALSE;
+	}
+
+	gchar **lines = g_strsplit (output, "\n", -1);
+
+	g_free (output);
+	g_free (pkexec);
+	g_free (cmdline);
+
+	if (g_strv_length (lines) <=  0) {
+		g_strfreev (lines);
+		return FALSE;
+	}
+
+	enum json_tokener_error jerr = json_tokener_success;
+	json_object *root_obj = NULL;
+
+	root_obj = json_tokener_parse_verbose (lines[0], &jerr);
+	g_strfreev (lines);
+
+	if (jerr == json_tokener_success) {
+		json_object *network = JSON_OBJECT_GET (root_obj, "network");
+		json_object *status = JSON_OBJECT_GET (network, "state");
+
+		if (g_strcmp0 (json_object_get_string(status), "accept") == 0)
+			markup = g_markup_printf_escaped ("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+		else
+			markup = g_markup_printf_escaped ("<span fgcolor='#494949'>%s</span>", _("Disallow"));
+
+		//json_object_put (status);
+		//json_object_put (network);
+	}
+	gtk_label_set_markup (GTK_LABEL (priv->lbl_net_allow), markup);
+
+	g_free (markup);
+	json_object_put (root_obj);
+
+	return FALSE;
+}
+
+static gboolean
 security_status_update_idle (gpointer data)
 {
 	gchar *seektime = NULL;
@@ -2808,18 +2862,7 @@ update_ui (gpointer data)
 	system_resource_control_update (window);
 	system_browser_policy_update (window);
 
-	system_security_log_update (window);
-
 	return FALSE;
-}
-
-static void
-on_view_log_button_clicked (GtkButton *button, gpointer data)
-{
-	SysinfoWindow *window = SYSINFO_WINDOW (data);
-	SysinfoWindowPrivate *priv = window->priv;
-
-	gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "log-page");
 }
 
 static void
@@ -3184,8 +3227,11 @@ on_stack_visible_child_notify_cb (GObject    *object,
 {
 	const gchar *name = gtk_stack_get_visible_child_name (GTK_STACK (object));
 
-	if (g_str_equal (name, "log-page"))
+	if (g_str_equal (name, "page4")) {
+		network_default_policy_update (data);
+	} else if (g_str_equal (name, "page7")) {
 		g_timeout_add (100, (GSourceFunc) update_security_log, data);
+	}
 }
 
 static void
@@ -3361,8 +3407,6 @@ sysinfo_window_init (SysinfoWindow *self)
 	}
 	g_object_unref (file);
 
-	g_signal_connect (G_OBJECT (priv->btn_view_log), "clicked",
-                      G_CALLBACK (on_view_log_button_clicked), self);
 	g_signal_connect (G_OBJECT (priv->swt_push_update), "state-set",
                       G_CALLBACK (on_push_update_changed), self);
 
@@ -3566,7 +3610,6 @@ sysinfo_window_class_init (SysinfoWindowClass *class)
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_crit);
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_alert);
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_status_emerg);
-	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_view_log);
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_safety_measure);
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_update);
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, swt_push_update);

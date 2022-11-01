@@ -6,6 +6,15 @@
 
   <vendor>The Gooroom Project</vendor>
 
+  <action id="kr.gooroom.security.status.tools.network-policy-helper">
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@pkglibexecdir@/gooroom-network-policy-helper</annotate>
+  </action>
+
   <action id="kr.gooroom.security.status.tools.product-uuid-helper">
     <defaults>
       <allow_any>no</allow_any>
