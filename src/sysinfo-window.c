@@ -222,6 +222,7 @@ struct _SysinfoWindowPrivate {
 	GtkWidget *btn_gms_settings;
 	GtkWidget *chk_adn;
 	GtkWidget *lbl_chk_adn;
+	GtkWidget *lbl_chk_push;
 
     /* for new functions */
     GtkWidget *btn_site_list;
@@ -2734,10 +2735,15 @@ system_push_update_update (gpointer data)
 
 	gint ret = check_function_from_agent (window, "get_package_operation");
 
+	gtk_label_set_text ( GTK_LABEL (priv->lbl_chk_push), _("Disallow") );
 	if (ret == -1) {
 		allow_push_update = FALSE;
 	} else if (ret == 1) {
 		allow_push_update = TRUE;
+		gchar *markup = NULL;
+		markup = g_markup_printf_escaped ("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+		gtk_label_set_markup ( GTK_LABEL (priv->lbl_chk_push), markup );
+		g_free(markup);
 	} else {
 		sensitive_swt_push_update = FALSE;
 	}
@@ -2842,6 +2848,18 @@ system_push_update_allow_or_deny (gpointer data)
 static gboolean
 on_push_update_changed (GtkSwitch *widget, gboolean state, gpointer data)
 {
+	SysinfoWindow *window = SYSINFO_WINDOW (data);
+	SysinfoWindowPrivate *priv = window->priv;
+	gboolean active = gtk_switch_get_active (GTK_SWITCH (widget));
+
+	if (active) {
+		gchar *markup = NULL;
+		markup = g_markup_printf_escaped ("<span fgcolor='#5ea80d'>%s</span>", _("Allow"));
+		gtk_label_set_markup ( GTK_LABEL (priv->lbl_chk_push), markup );
+		g_free(markup);
+	} else
+		gtk_label_set_text ( GTK_LABEL (priv->lbl_chk_push), _("Disallow") );
+
 	g_idle_add ((GSourceFunc) system_push_update_allow_or_deny, data);
 
 	return FALSE;
@@ -3634,6 +3652,7 @@ sysinfo_window_class_init (SysinfoWindowClass *class)
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_gms_settings);
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, chk_adn);
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_chk_adn);
+	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, lbl_chk_push);
 
     /* for new functions */
 	gtk_widget_class_bind_template_child_private (widget_class, SysinfoWindow, btn_site_list);

@@ -3110,6 +3110,7 @@ controls the features available in the browser. Contact your administrator to sp
                                 <property name="height-request">50</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="homogeneous">True</property>
                                 <child>
                                   <object class="GtkLabel" id="label24">
                                     <property name="visible">True</property>
@@ -3125,7 +3126,7 @@ controls the features available in the browser. Contact your administrator to sp
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">False</property>
+                                    <property name="fill">True</property>
                                     <property name="padding">10</property>
                                     <property name="position">0</property>
                                   </packing>
@@ -3136,7 +3137,6 @@ controls the features available in the browser. Contact your administrator to sp
                                     <property name="can-focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="valign">center</property>
-                                    <property name="margin-start">212</property>
                                     <property name="spacing">20</property>
                                     <child>
                                       <object class="GtkSwitch" id="chk_adn">
@@ -3156,6 +3156,7 @@ controls the features available in the browser. Contact your administrator to sp
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
                                         <property name="halign">start</property>
+                                        <property name="valign">center</property>
                                         <property name="label" translatable="yes">label</property>
                                         <attributes>
                                           <attribute name="scale" value="0.94545449999999998"/>
@@ -3170,7 +3171,7 @@ controls the features available in the browser. Contact your administrator to sp
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
@@ -3180,7 +3181,7 @@ controls the features available in the browser. Contact your administrator to sp
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="fill">False</property>
+                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -3195,11 +3196,16 @@ controls the features available in the browser. Contact your administrator to sp
                                     <property name="height-request">50</property>
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
+                                    <property name="homogeneous">True</property>
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
+                                        <property name="halign">start</property>
                                         <property name="label" translatable="yes">Allow Push Update</property>
+                                        <attributes>
+                                          <attribute name="scale" value="0.94545449999999998"/>
+                                        </attributes>
                                         <style>
                                           <class name="desc"/>
                                         </style>
@@ -3207,6 +3213,7 @@ controls the features available in the browser. Contact your administrator to sp
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
+                                        <property name="padding">10</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -3216,27 +3223,41 @@ controls the features available in the browser. Contact your administrator to sp
                                         <property name="can-focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="valign">center</property>
-                                        <property name="margin-left">212</property>
-                                        <property name="margin-start">212</property>
                                         <property name="spacing">20</property>
                                         <child>
                                           <object class="GtkSwitch" id="swt_push_update">
                                             <property name="visible">True</property>
                                             <property name="can-focus">True</property>
+                                            <property name="halign">start</property>
+                                            <property name="valign">center</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
-                                            <property name="fill">True</property>
+                                            <property name="fill">False</property>
                                             <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <placeholder/>
+                                          <object class="GtkLabel" id="lbl_chk_push">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="valign">center</property>
+                                            <property name="label" translatable="yes">label</property>
+                                            <attributes>
+                                              <attribute name="scale" value="0.94545449999999998"/>
+                                            </attributes>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">False</property>
+                                            <property name="position">1</property>
+                                          </packing>
                                         </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">False</property>
+                                        <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>

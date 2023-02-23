@@ -552,7 +552,7 @@ msgstr "긴급 (Emerg)"
 
 #: ../src/sysinfo-window.ui.h:70
 msgid "Allow Duplicate Login Notifications"
-msgstr "중복 로그인 알림 허용"
+msgstr "중복 <보안 상태> 알림 허용"
 
 #: ../src/sysinfo-window.ui.h:71
 msgid "Notification"
