@@ -3510,6 +3510,9 @@ sysinfo_window_init (SysinfoWindow *self)
 	gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
 											   GTK_STYLE_PROVIDER (provider),
 											   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+	gtk_window_present (GTK_WINDOW (self));
+
 	g_object_unref (provider);
 }
 
