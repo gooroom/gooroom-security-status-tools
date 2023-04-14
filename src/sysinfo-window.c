@@ -2659,6 +2659,19 @@ create_item_with_whitelist (SysinfoWindow *window, char *key, json_object *val, 
                                 3, FALSE,
                                 -1);
 		}
+	} else if (obj2 && !allow && more) { //usb_network
+		const char *device;
+		GtkTreeIter child_iter;
+		json_object *bus_obj = JSON_OBJECT_GET (obj2, "usbbus");
+		device = json_object_get_string (bus_obj);
+
+		gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
+		gtk_tree_store_set (GTK_TREE_STORE (model), &child_iter,
+                            0, device,
+                            1, _("Allow"),
+                            2, device,
+                            3, FALSE,
+                            -1);
 	}
 }
 
