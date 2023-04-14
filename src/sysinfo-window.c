@@ -2603,6 +2603,9 @@ create_item_with_whitelist (SysinfoWindow *window, char *key, json_object *val, 
 
 	SysinfoWindowPrivate *priv = window->priv;
 
+	if (g_str_equal (key, "network"))
+		return;
+
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_res_ctrl));
 	gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
 
@@ -2625,9 +2628,7 @@ create_item_with_whitelist (SysinfoWindow *window, char *key, json_object *val, 
 			tr_state = _("Unknown");
 		}
 
-		if (g_str_equal (key, "network") && obj2) {
-			more = TRUE;
-		} else if (g_str_equal (key, "usb_network") && obj2 && !allow) {
+		if (g_str_equal (key, "usb_network") && obj2 && !allow) {
 			more = TRUE;
 		} else {
 			more = FALSE;
