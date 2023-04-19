@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gooroom-security-status-tools 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-03 18:26+0900\n"
+"POT-Creation-Date: 2023-04-19 15:17+0900\n"
 "PO-Revision-Date: 2019-08-23 11:54+0900\n"
 "Language-Team: Gooroom <gooroom@gooroom.kr>\n"
 "Language: ko\n"
@@ -25,9 +25,10 @@ msgstr ""
 #: ../src/sysinfo-window.c:1735 ../src/sysinfo-window.c:1744
 #: ../src/sysinfo-window.c:1753 ../src/sysinfo-window.c:1762
 #: ../src/sysinfo-window.c:1958 ../src/sysinfo-window.c:2392
-#: ../src/sysinfo-window.c:2519 ../src/sysinfo-window.c:2620
-#: ../src/sysinfo-window.c:2656 ../src/sysinfo-window.c:2744
-#: ../src/sysinfo-window.c:2857 ../src/rpd-dialog.c:212
+#: ../src/sysinfo-window.c:2519 ../src/sysinfo-window.c:2617
+#: ../src/sysinfo-window.c:2652 ../src/sysinfo-window.c:2692
+#: ../src/sysinfo-window.c:2706 ../src/sysinfo-window.c:2801
+#: ../src/sysinfo-window.c:2914 ../src/rpd-dialog.c:212
 msgid "Allow"
 msgstr "허용"
 
@@ -39,8 +40,8 @@ msgstr "허용"
 #: ../src/sysinfo-window.c:2426 ../src/sysinfo-window.c:2436
 #: ../src/sysinfo-window.c:2446 ../src/sysinfo-window.c:2526
 #: ../src/sysinfo-window.c:2538 ../src/sysinfo-window.c:2581
-#: ../src/sysinfo-window.c:2623 ../src/sysinfo-window.c:2738
-#: ../src/sysinfo-window.c:2861
+#: ../src/sysinfo-window.c:2655 ../src/sysinfo-window.c:2795
+#: ../src/sysinfo-window.c:2918
 msgid "Disallow"
 msgstr "허용안함"
 
@@ -80,8 +81,8 @@ msgstr "서비스를 중지하였습니다."
 #: ../src/sysinfo-window.c:2148 ../src/sysinfo-window.c:2149
 #: ../src/sysinfo-window.c:2163 ../src/sysinfo-window.c:2327
 #: ../src/sysinfo-window.c:2530 ../src/sysinfo-window.c:2542
-#: ../src/sysinfo-window.c:2583 ../src/sysinfo-window.c:2625
-#: ../src/sysinfo-window.c:3376 ../src/sysinfo-window.c:3377
+#: ../src/sysinfo-window.c:2583 ../src/sysinfo-window.c:2657
+#: ../src/sysinfo-window.c:3433 ../src/sysinfo-window.c:3434
 #: ../src/sysinfo-window.ui.h:7
 msgid "Unknown"
 msgstr "알수없음"
@@ -192,43 +193,43 @@ msgstr "꺼짐"
 msgid "Could not find trusted urls information."
 msgstr "신뢰할 수 있는 URL 목록을 찾을 수 없습니다."
 
-#: ../src/sysinfo-window.c:2577 ../src/sysinfo-window.c:2618
+#: ../src/sysinfo-window.c:2577 ../src/sysinfo-window.c:2650
 msgid "ReadOnly"
 msgstr "읽기전용"
 
-#: ../src/sysinfo-window.c:2721 ../src/rpd-dialog.c:240
+#: ../src/sysinfo-window.c:2778 ../src/rpd-dialog.c:240
 msgid "Could not find information."
 msgstr "매체제어 정책을 찾을 수 없습니다."
 
-#: ../src/sysinfo-window.c:2790
+#: ../src/sysinfo-window.c:2847
 msgid "Do you want to allow push update?"
 msgstr "푸쉬 업데이트를 허용 하겠습니까?"
 
-#: ../src/sysinfo-window.c:2790
+#: ../src/sysinfo-window.c:2847
 msgid "Do you want to deny push update?"
 msgstr "푸쉬 업데이트를 허용하지 않겠습니까?"
 
-#: ../src/sysinfo-window.c:2801
+#: ../src/sysinfo-window.c:2858
 msgid "_Yes"
 msgstr "예"
 
-#: ../src/sysinfo-window.c:2802
+#: ../src/sysinfo-window.c:2859
 msgid "_No"
 msgstr "아니오"
 
-#: ../src/sysinfo-window.c:2805
+#: ../src/sysinfo-window.c:2862
 msgid "Push Update Settings"
 msgstr "푸쉬 업데이트 설정"
 
-#: ../src/sysinfo-window.c:2958
+#: ../src/sysinfo-window.c:3015
 msgid "Please make sure to check log search period."
 msgstr "로그 검색 기간을 확인해 주시기 바랍니다."
 
-#: ../src/sysinfo-window.c:2961
+#: ../src/sysinfo-window.c:3018
 msgid "Log Search Period Settings"
 msgstr "로그 검색 기간 설정"
 
-#: ../src/sysinfo-window.c:3466
+#: ../src/sysinfo-window.c:3523
 msgid "Gooroom Platform Management Server"
 msgstr "구름 관리 서버"
 
@@ -811,3 +812,6 @@ msgstr "오류"
 
 msgid "ALL"
 msgstr "모두"
+
+msgid "usb_etc"
+msgstr "기타 USB"

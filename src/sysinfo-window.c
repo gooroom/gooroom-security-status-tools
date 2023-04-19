@@ -1,4 +1,4 @@
-/*
+/*)
  * Copyright (C) 2018-2021 Gooroom <gooroom@gooroom.kr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -2593,6 +2593,35 @@ create_item (SysinfoWindow *window, char *key, const char *val)
 }
 
 static void
+create_item_with_etc_usb (SysinfoWindow *window, GtkTreeIter iter, json_object *val)
+{
+	SysinfoWindowPrivate *priv = window->priv;
+	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->trv_res_ctrl));
+	guint i, j, len;
+	const char *res;
+	GtkTreeIter child_iter;
+	len = json_object_array_length (val);
+	for (i = 0; i < len; i++) {
+		json_object *obj1 = json_object_array_get_idx (val, i);
+		json_object *vid, *pid;
+
+		vid = JSON_OBJECT_GET (obj1, "vid");
+		pid = JSON_OBJECT_GET (obj1, "pid");
+
+		res = g_strdup_printf("%s - %s", json_object_get_string (vid),
+										 json_object_get_string (pid));
+
+		gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
+		gtk_tree_store_set (GTK_TREE_STORE (model), &child_iter,
+		                    0, res,
+		                    1, _("Allow"),
+		                    2, res,
+		                    3, FALSE,
+		                    -1);
+	}
+}
+
+static void
 create_item_with_whitelist (SysinfoWindow *window, char *key, json_object *val, const char *wlname)
 {
 	GtkTreeIter iter;
@@ -2640,6 +2669,12 @@ create_item_with_whitelist (SysinfoWindow *window, char *key, json_object *val, 
                             2, key,
                             3, more,
                             -1);
+	}
+
+	if (g_str_equal (key, "usb_etc")) {
+		obj2 = JSON_OBJECT_GET (val, "items");
+		create_item_with_etc_usb (window, iter, obj2);
+		return;
 	}
 
 	if (obj2 && !allow && !more) {
@@ -2718,6 +2753,13 @@ system_resource_control_update (SysinfoWindow *window)
 				create_item_with_whitelist (window, key, val, "rules");
 			} else if (g_str_equal (key, "bluetooth")) {
 				create_item_with_whitelist (window, key, val, "mac_address");
+			} else if (g_str_equal (key, "usb_etc")) {
+                for (int i = 0; i < json_object_array_length (val); i++) {
+                    json_object *obj1 = json_object_array_get_idx (val, i);
+                    json_object *obj2 = JSON_OBJECT_GET (obj1,"지문인식기");
+
+				    create_item_with_whitelist (window, key, obj2, "items");
+                }
 			} else {
 			}
 		}
