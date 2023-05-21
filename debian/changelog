@@ -1,3 +1,15 @@
+gooroom-security-status-tools (0.3.7+grm3u1) unstable; urgency=medium
+
+  [ boyeon.choi ]
+  * [7d307c81] Changed the term: 무선랜 to 무선인터넷
+  * [898d69da] [HGOOROOM-1411] Changed the term: 중복 <보안 상태> 알림 허용 to <보안 상태> 중복 알림 허용
+  * [6b3e7199] Raise Window to top when initialization
+  * [308fa26e] Delete the network part of the Resources Control page
+  * [b6ee091a] Add usbbus number viewing function
+  * [d7736183] Add etc USB viewing function
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Sun, 21 May 2023 13:29:36 +0900
+
 gooroom-security-status-tools (0.3.6+grm3u1) unstable; urgency=medium
 
   [ boyeon.choi ]
