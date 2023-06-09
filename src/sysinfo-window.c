@@ -46,6 +46,8 @@
 #define	UPDATE_PACKAGES_CHECK_TIMEOUT			 60000
 #define	AGENT_CONNECTION_STATUS_CHECK_TIMEOUT	 10000
 
+#define SYNAPTIC_PATH                            "/usr/sbin/synaptic"
+
 #define GOOROOM_SECURITY_STATUS_VULNERABLE       "/var/tmp/GOOROOM-SECURITY-STATUS-VULNERABLE"
 #define GOOROOM_SECURITY_LOGPARSER_NEXT_SEEKTIME "/var/tmp/GOOROOM-SECURITY-LOGPARSER-NEXT-SEEKTIME"
 
@@ -2316,6 +2318,12 @@ system_device_security_update (SysinfoWindow *window)
 		gtk_label_set_text (GTK_LABEL (priv->lbl_screen_saver_time), text);
 		g_free (text);
 	}
+
+	GFile *synaptic = g_file_new_for_path (SYNAPTIC_PATH);
+	if (g_file_query_exists (synaptic, NULL))
+		gtk_widget_show (priv->box_pkgs_change_blocking);
+	else
+		gtk_widget_hide (priv->box_pkgs_change_blocking);
 
 	/* check function to stop changing packages */
 	gint ret = check_function_from_agent (window, "tell_update_operation");
