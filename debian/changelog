@@ -1,3 +1,10 @@
+gooroom-security-status-tools (0.3.8+grm3u1) unstable; urgency=medium
+
+  [ boyeon.choi ]
+  * [f4c0c620] Make packages_changes_blocking flexible
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 15 Jun 2023 13:42:27 +0900
+
 gooroom-security-status-tools (0.3.7+grm3u1) unstable; urgency=medium
 
   [ boyeon.choi ]
