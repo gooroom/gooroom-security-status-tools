@@ -2612,12 +2612,28 @@ create_item_with_etc_usb (SysinfoWindow *window, GtkTreeIter iter, json_object *
 	for (i = 0; i < len; i++) {
 		json_object *obj1 = json_object_array_get_idx (val, i);
 		json_object *vid, *pid;
+		const gchar *str_vid, *str_pid;
+		gboolean isvid, ispid;
 
 		vid = JSON_OBJECT_GET (obj1, "vid");
+		str_vid = g_strstrip ((gchar*)json_object_get_string (vid));
 		pid = JSON_OBJECT_GET (obj1, "pid");
+		str_pid = g_strstrip ((gchar*)json_object_get_string (pid));
 
-		res = g_strdup_printf("%s - %s", json_object_get_string (vid),
-										 json_object_get_string (pid));
+		isvid = g_strcmp0 (json_object_get_string (vid),"");
+		ispid =	g_strcmp0 (json_object_get_string (pid),"");
+
+		if (((isvid || ispid) == 0) && ((isvid && ispid) == 0))
+			return;
+		else if (((isvid || ispid) == 1) && ((isvid && ispid) == 1))
+			res = g_strdup_printf("%s - %s", json_object_get_string (vid),
+											 json_object_get_string (pid));
+		else if (((isvid || ispid) == 1) && ((isvid && ispid) == 0)) {
+			if (isvid != 0)
+				res = g_strdup_printf("%s", json_object_get_string (vid));
+			else
+				res = g_strdup_printf("%s", json_object_get_string (pid));
+		}
 
 		gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
 		gtk_tree_store_set (GTK_TREE_STORE (model), &child_iter,
