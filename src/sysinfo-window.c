@@ -294,6 +294,22 @@ stripped_double_quoations (const char *str)
 	return ret;
 }
 
+static gchar *
+get_etc_device_name (const char *str)
+{
+	gchar *ret = NULL;
+
+	if (g_str_has_prefix (str, "{")) {
+		gchar **tokens = g_strsplit (str, "\"", -1);
+		if (tokens != NULL && tokens[1] != NULL) {
+			ret = g_strdup (tokens[1]);
+		}
+
+		g_strfreev (tokens);
+	}
+	return ret;
+}
+
 static void
 populate_model (GtkTreeModel *model)
 {
@@ -2695,8 +2711,8 @@ create_item_with_whitelist (SysinfoWindow *window, char *key, json_object *val, 
                             -1);
 	}
 
-	if (g_str_equal (key, "usb_etc")) {
-		obj2 = JSON_OBJECT_GET (val, "items");
+	obj2 = JSON_OBJECT_GET (val, "items");
+	if (obj2 != NULL) {
 		create_item_with_etc_usb (window, iter, obj2);
 		return;
 	}
@@ -2779,10 +2795,12 @@ system_resource_control_update (SysinfoWindow *window)
 				create_item_with_whitelist (window, key, val, "mac_address");
 			} else if (g_str_equal (key, "usb_etc")) {
                 for (int i = 0; i < json_object_array_length (val); i++) {
+					gchar *device;
                     json_object *obj1 = json_object_array_get_idx (val, i);
-                    json_object *obj2 = JSON_OBJECT_GET (obj1,"지문인식기");
+					device = get_etc_device_name (json_object_get_string (obj1));
+					json_object *obj2 = JSON_OBJECT_GET (obj1, device);
 
-				    create_item_with_whitelist (window, key, obj2, "items");
+					create_item_with_whitelist (window, device, obj2, "items");
                 }
 			} else {
 			}

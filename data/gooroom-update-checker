@@ -21,10 +21,9 @@ if __name__ == '__main__':
 				hit[srcn] = 1
 
 		ret = len(hit)
-
+		cache.close()
 	except:
 		ret = -1
 
-	cache.close()
 	print('packages=%d' % ret)
 
