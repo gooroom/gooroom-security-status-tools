@@ -209,6 +209,7 @@ struct _SysinfoWindowPrivate {
 
 	gboolean iptable_cmd_lock;
 	gboolean setting_ipv4;
+	gboolean net_available;
 
 	gboolean log_date_from;
 
@@ -983,6 +984,13 @@ done_agent_proxy_cb (GObject *source_object, GAsyncResult *res, gpointer user_da
 	SysinfoWindowPrivate *priv = window->priv;
 
 	GDBusProxy *proxy = G_DBUS_PROXY (source_object);
+
+	//check the network status first
+	if (!priv->net_available) {
+		g_object_unref (proxy);
+		gtk_label_set_text (GTK_LABEL (priv->lbl_conn_status), _("Disconnected"));
+		return;
+	}
 
 	variant = g_dbus_proxy_call_finish (proxy, res, NULL);
 
@@ -2482,6 +2490,15 @@ error:
 }
 
 static void
+gooroom_network_status_update (GNetworkMonitor *monitor, gboolean network_available, gpointer user_data)
+{
+	SysinfoWindow *window = SYSINFO_WINDOW (user_data);
+	SysinfoWindowPrivate *priv = window->priv;
+
+	priv->net_available = network_available;
+}
+
+static void
 system_browser_policy_update (SysinfoWindow *window)
 {
 	gchar *file = NULL;
@@ -3454,6 +3471,7 @@ sysinfo_window_init (SysinfoWindow *self)
 	GtkCssProvider *provider;
 
 	SysinfoWindowPrivate *priv;
+	GNetworkMonitor *net_monitor = g_network_monitor_get_default ();
 
 	priv = self->priv = sysinfo_window_get_instance_private (self);
 
@@ -3473,7 +3491,7 @@ sysinfo_window_init (SysinfoWindow *self)
 
 	priv->lbl_untrusted_socket = gtk_label_new(_("Unknown"));
 	priv->lbl_untrusted_worker = gtk_label_new(_("Unknown"));
-
+	priv->net_available = g_network_monitor_get_network_available (net_monitor);
 
     /* for settings */
 	schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
@@ -3600,6 +3618,7 @@ sysinfo_window_init (SysinfoWindow *self)
 	g_signal_connect (G_OBJECT (priv->btn_site_list), "clicked", G_CALLBACK (site_list_clicked_cb), self);
 	g_signal_connect (G_OBJECT (priv->rdo_trusted), "toggled", G_CALLBACK (gooroom_browser_status_update), self);
 	g_signal_connect (G_OBJECT (priv->rdo_untrusted), "toggled", G_CALLBACK (gooroom_browser_status_update), self);
+	g_signal_connect (G_OBJECT (net_monitor), "network-changed", G_CALLBACK (gooroom_network_status_update), self);
 
 	g_timeout_add (500, (GSourceFunc) update_ui, self);
 
