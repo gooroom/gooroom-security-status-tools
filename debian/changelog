@@ -1,3 +1,12 @@
+gooroom-security-status-tools (0.3.9+grm3u1) unstable; urgency=medium
+
+  [ boyeon.choi ]
+  * [9b7574e5] Process strings for etc_usb
+  * [e4a6ef41] Exception handling when json object is not present when etc_usb
+  * [89b00cda] Include network status in the criteria for determining server connection status
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Fri, 28 Jul 2023 09:43:38 +0900
+
 gooroom-security-status-tools (0.3.8+grm3u1) unstable; urgency=medium
 
   [ boyeon.choi ]
